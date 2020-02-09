@@ -1,0 +1,17 @@
+---
+
+- name: install apt packages
+  become: yes
+  apt: name="apt-cacher-ng"
+
+- name: configure apt-cacher dirs
+  become: yes
+  lineinfile:
+    path: "/etc/apt-cacher-ng/acng.conf"
+    regexp: "^{{item.key}}:"
+    insertafter: "^# {{item.key}}:"
+    line: "{{item.key}}: {{item.val}}"
+  with_items:
+    - { key: "CacheDir", val: "{{apt_cacher_cache_dir}}" }
+    - { key: "LogDir", val: "{{apt_cacher_log_dir}}" }
+    - { key: "Port", val: "{{apt_cacher_port}}" }

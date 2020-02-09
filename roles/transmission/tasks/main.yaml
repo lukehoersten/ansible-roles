@@ -1,0 +1,70 @@
+---
+
+- name: install transmission
+  become: yes
+  apt: name="transmission-daemon"
+  notify: restart transmission service
+
+- name: stop transmission service
+  systemd: name="transmission-daemon" state="stopped" daemon_reload="yes"
+  become: yes
+
+- name: config ip whitelist
+  become: yes
+  lineinfile:
+    path: "{{transmission_config}}"
+    regexp: '^    "rpc-whitelist":'
+    line: '    "rpc-whitelist": "127.0.0.1,192.168.*.*",'
+  notify: restart transmission service
+
+- name: config umask
+  become: yes
+  lineinfile:
+    path: "{{transmission_config}}"
+    regexp: '^    "umask":'
+    line: '    "umask": 2,'
+  notify: restart transmission service
+
+- name: config port
+  become: yes
+  lineinfile:
+    path: "{{transmission_config}}"
+    regexp: '^    "rpc-port":'
+    line: "    \"rpc-port\": {{transmission_port}},"
+  notify: restart transmission service
+
+- name: config password
+  become: yes
+  lineinfile:
+    path: "{{transmission_config}}"
+    regexp: '^    "rpc-password":'
+    line: "    \"rpc-password\": \"{{transmission_passwd}}\","
+  notify: restart transmission service
+
+- name: config download dir
+  become: yes
+  lineinfile:
+    path: "{{transmission_config}}"
+    regexp: '^    "download-dir":'
+    line: "    \"download-dir\": \"{{transmission_download_dir}}\","
+  notify: restart transmission service
+
+- name: config disable seeding
+  become: yes
+  lineinfile:
+    path: "{{transmission_config}}"
+    regexp: '^    "idle-seeding-limit":'
+    line: "    \"idle-seeding-limit\": 0,"
+  notify: restart transmission service
+
+- name: config disable seeding
+  become: yes
+  lineinfile:
+    path: "{{transmission_config}}"
+    regexp: '^    "idle-seeding-limit-enabled":'
+    line: "    \"idle-seeding-limit-enabled\": true,"
+  notify: restart transmission service
+
+- name: start transmission service
+  systemd: name="transmission-daemon" state="started" daemon_reload="yes"
+  become: yes

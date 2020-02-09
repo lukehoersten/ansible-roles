@@ -1,0 +1,16 @@
+# {{ansible_managed}}
+
+[Unit]
+Description=Homebridge
+
+[Service]
+User={{homebridge_user}}
+Group={{homebridge_user}}
+Restart=always
+RestartSec={{homebridge_restart_sec}}
+
+WorkingDirectory={{homebridge_dir}}
+ExecStart=/usr/bin/node /opt/{{nodejs_dir}}/bin/homebridge -U {{homebridge_dir}}
+
+[Install]
+WantedBy=default.target

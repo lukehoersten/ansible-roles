@@ -1,0 +1,6 @@
+---
+
+transmission_config: "/var/lib/transmission-daemon/info/settings.json"
+transmission_port: "9091"
+transmission_passwd: "transmission"
+transmission_download_dir: "/var/lib/transmission-daemon/downloads"

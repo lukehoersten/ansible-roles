@@ -1,0 +1,13 @@
+---
+
+rpi_base_enable_wifi: True
+rpi_base_timezone: "America/Chicago"
+rpi_base_apt_packages:
+  - "log2ram"
+  - "fail2ban"
+  - "unattended-upgrades"
+  - "emacs-nox"
+  - "htop"
+  - "jq"
+  - "tree"
+  - "iperf3"

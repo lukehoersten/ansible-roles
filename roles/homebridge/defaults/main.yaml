@@ -1,0 +1,24 @@
+---
+
+homebridge_user: "homebridge"
+homebridge_dir: "/home/{{homebridge_user}}"
+homebridge_restart_sec: "10"
+
+homebridge_pin: "031-45-154"
+homebridge_port: "51900"
+
+homebridge_apt_packages:
+  - "libavahi-compat-libdnssd-dev"
+  - "ffmpeg"
+
+homebridge_npm_packages:
+  - "homebridge-camera-ffmpeg"
+  - "homebridge-roomba-stv"
+
+homebridge_rtsp_vcodec: "h264_omx"
+homebridge_rtsp_debug: "false"
+homebridge_rtsp_max_streams: 5
+
+homebridge_roomba_auto_refresh: "true"
+homebridge_roomba_keep_alive: "true"
+homebridge_roomba_cache_TTL: "30"

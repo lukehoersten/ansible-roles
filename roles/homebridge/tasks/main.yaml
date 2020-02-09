@@ -1,0 +1,56 @@
+---
+
+- name: create homebridge user
+  become: yes
+  user:
+    name: "{{homebridge_user}}"
+    comment: "Homebridge"
+    shell: "/bin/false"
+    home: "{{homebridge_dir}}"
+    groups: "video,spi,i2c,gpio"
+    move_home: yes
+  notify: restart homebridge service
+
+- name: create homebridge directory
+  become: yes
+  file:
+    path: "{{homebridge_dir}}"
+    state: "directory"
+    owner: "{{homebridge_user}}"
+    group: "{{homebridge_user}}"
+    mode: "0755"
+
+- name: install homebridge apt deps
+  become: yes
+  apt: name="{{homebridge_apt_packages}}"
+
+- name: install homebridge
+  become: yes
+  become_user: "{{homebridge_user}}"
+  npm: name="homebridge" global="yes"
+  notify: restart homebridge service
+
+- name: install platform accessories
+  become: yes
+  become_user: "{{homebridge_user}}"
+  npm: name="{{item}}" global="yes"
+  notify: restart homebridge service
+  with_items: "{{homebridge_npm_packages}}"
+
+- name: configure homebridge
+  become: yes
+  template:
+    src: "config.json.j2"
+    dest: "{{homebridge_dir}}/config.json"
+  notify: restart homebridge service
+
+- name: configure systemd service
+  become: yes
+  template:
+    src: "homebridge.service.j2"
+    dest: "/lib/systemd/system/homebridge.service"
+  notify: restart homebridge service
+
+- name: ensure homebridge is started
+  become: yes
+  systemd: name="homebridge.service" enabled="yes" state="started"

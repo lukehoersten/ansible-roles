@@ -1,0 +1,21 @@
+---
+
+- name: download and unarchive nodejs
+  become: yes
+  unarchive:
+    src: "https://nodejs.org/dist/{{nodejs_tag}}/{{nodejs_dir}}.tar.xz"
+    dest: "/opt/"
+    remote_src: yes
+    creates: "/opt/{{nodejs_dir}}"
+
+# sudo update-alternatives --install "/usr/bin/node" "node" "/opt/node/bin/node" 1
+- name: update node alterantives
+  become: yes
+  alternatives:
+    link: "/usr/bin/{{item}}"
+    name: "{{item}}"
+    path: "/opt/{{nodejs_dir}}/bin/{{item}}"
+    priority: "1"
+  with_items:
+    - "node"
+    - "npm"

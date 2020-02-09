@@ -1,0 +1,42 @@
+---
+
+- name: turn swap off
+  become: yes
+  command: "swapoff -a"
+  changed_when: false
+
+- name: remove swap apt package
+  become: yes
+  apt: state="absent" name="dphys-swapfile"
+
+- name: add log2ram apt key
+  become: yes
+  apt_key: url="https://azlux.fr/repo.gpg.key"
+
+- name: add log2ram apt repo
+  become: yes
+  apt_repository: repo="deb http://packages.azlux.fr/debian/ buster main"
+
+- name: set timezone
+  become: yes
+  timezone: name="{{rpi_base_timezone}}"
+
+- name: setup wifi
+  become: yes
+  template: src="wpa_supplicant.conf.j2" dest="/etc/wpa_supplicant/wpa_supplicant.conf" mode="0644"
+
+- name: update apt package cache
+  become: yes
+  apt: upgrade="dist" autoremove="yes" autoclean="yes" update_cache="yes" cache_valid_time="3600"
+
+- name: install extra apt packages
+  become: yes
+  apt: name="{{rpi_base_apt_packages}}" state="latest"
+
+- name: install fail2ban config
+  become: yes
+  copy: src="jail.local" dest="/etc/fail2ban/jail.local"
+
+- name: authorize admin ssh keys
+  become: yes
+  authorized_key: user="{{ansible_user}}" key="https://github.com/{{github_user}}.keys"

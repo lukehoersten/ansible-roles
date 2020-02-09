@@ -1,0 +1,7 @@
+---
+
+nodejs_tag: "latest-v11.x"
+nodejs_version: "11.15.0"
+nodejs_arch: "{{ansible_architecture}}"
+nodejs_dir: "node-v{{nodejs_version}}-{{ansible_system | lower}}-{{nodejs_arch}}"
+nodejs_src: "https://nodejs.org/dist/{{nodejs_tag}}/{{nodejs_dir}}.tar.gz"
