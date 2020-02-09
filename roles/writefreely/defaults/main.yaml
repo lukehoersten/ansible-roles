@@ -1,0 +1,9 @@
+---
+
+writefreely_version: "0.11.2"
+writefreely_release: "https://github.com/writeas/writefreely/releases/download/v{{writefreely_version}}/writefreely_{{writefreely_version}}_linux_arm7.tar.gz"
+
+writefreely_install_path: "/opt/writefreely"
+
+writefreely_apt_packages:
+  - "mysql"

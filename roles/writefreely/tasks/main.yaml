@@ -1,0 +1,8 @@
+---
+
+- name: install apt packages
+  apt: name="{{writefreely_apt_packages}}"
+
+- name: download writefreely
+  archive:
+    src: "{{writefreely_release}}"
