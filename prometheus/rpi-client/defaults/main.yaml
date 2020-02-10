@@ -1,0 +1,5 @@
+---
+
+prometheus_client_rpi_exporter_version: "0.6.0"
+prometheus_client_arch: "{{ansible_architecture}}"
+prometheus_client_rpi_dest: "rpi_exporter-{{prometheus_client_rpi_exporter_version}}.linux-{{prometheus_client_arch}}"
