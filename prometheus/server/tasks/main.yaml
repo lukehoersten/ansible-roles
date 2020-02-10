@@ -17,6 +17,8 @@
   template:
     src: "{{prometheus_server_conf}}"
     dest: "/etc/prometheus/prometheus.yml"
-  notify: restart prometheus service
+  notify:
+    - restart prometheus service
+    - restart grafana service
 
 # /etc/grafana/grafana.ini
