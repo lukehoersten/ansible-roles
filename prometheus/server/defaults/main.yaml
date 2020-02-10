@@ -1,0 +1,6 @@
+---
+
+prometheus_server_conf: "prometheus.yml.j2"
+prometheus_server_apt_packages:
+  - "prometheus"
+  - "grafana"

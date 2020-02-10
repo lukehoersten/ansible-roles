@@ -1,4 +1,34 @@
 ---
 
 - name: install prometheus node exporter
-  apt: name="prometheus-node-exportery"
+  become: yes
+  apt: name="{{prometheus_client_apt_packages}}"
+
+- name: add prometheus user to video group for GPU stats
+  become: yes
+  user: name="prometheus" groups="video" append="yes"
+
+- name: install prometheus rpi exporter
+  unarchive:
+    src: "https://github.com/lukasmalkmus/rpi_exporter/releases/download/v{{prometheus_client_rpi_exporter_version}}/rpi_exporter-{{prometheus_client_rpi_exporter_version}}.linux-{{prometheus_client_arch}}.tar.gz"
+    remote_src: yes
+    dest: "/tmp/"
+
+- name: install systemd service for rpi exporter
+  become: yes
+  copy:
+    src: "/tmp/{{prometheus_client_rpi_dest}}/rpi_exporter.service"
+    remote_src: yes
+    dest: "/lib/systemd/system/rpi_exporter.service"
+
+- name: install rpi exporter binary
+  become: yes
+  copy:
+    src: "/tmp/{{prometheus_client_rpi_dest}}/rpi_exporter"
+    remote_src: yes
+    dest: "/usr/local/bin/rpi_exporter"
+    mode: "0755"
+
+- name: ensure systemd services are started
+  become: yes
+  systemd: name="rpi_exporter.service" enabled="yes" state="started"

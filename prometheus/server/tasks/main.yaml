@@ -10,10 +10,13 @@
 
 - name: install prometheus and grafana
   become: yes
-  apt: name="{{item}}" state="latest"
-  with_items:
-    - "prometheus"
-    - "grafana"
+  apt: name="{{prometheus_server_apt_packages}}" state="latest"
 
-# /etc/prometheus/prometheus.yml
+- name: configure prometheus
+  become: yes
+  template:
+    src: "{{prometheus_server_conf}}"
+    dest: "/etc/prometheus/prometheus.yml"
+  notify: restart prometheus service
+
 # /etc/grafana/grafana.ini
