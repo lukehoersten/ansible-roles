@@ -10,7 +10,7 @@
 
 - name: create aws config dir for root
   become: yes
-  file: path="/root/.aws/" state="directory" mode="0755"
+  file: path="/root/.aws/" state="directory" mode="0700"
 
 - name: configure aws credentials for root
   become: yes

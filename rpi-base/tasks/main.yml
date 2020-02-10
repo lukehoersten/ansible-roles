@@ -23,7 +23,7 @@
 
 - name: setup wifi
   become: yes
-  template: src="wpa_supplicant.conf.j2" dest="/etc/wpa_supplicant/wpa_supplicant.conf" mode="0644"
+  template: src="wpa_supplicant.conf.j2" dest="/etc/wpa_supplicant/wpa_supplicant.conf" mode="0600"
 
 - name: update apt package cache
   become: yes
