@@ -1,0 +1,9 @@
+---
+
+- name: install custom DNS names
+  become: yes
+  copy:
+    src: "{{pihole_custom_dns_list}}"
+    dest: "/etc/pihole/custom.list"
+    mode: "0644"
+  notify: restart pihole-ftl

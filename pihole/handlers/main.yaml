@@ -1,0 +1,5 @@
+---
+
+- name: restart pihole-ftl
+  systemd: name="pihole-FTL.service" state="restarted" daemon_reload="yes"
+  become: yes
