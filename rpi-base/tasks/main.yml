@@ -37,6 +37,32 @@
   become: yes
   copy: src="jail.local" dest="/etc/fail2ban/jail.local"
 
+- name: add users
+  become: yes
+  user:
+    name: "{{admin_user_name}}"
+    password: "{{admin_user_password}}"
+    groups: "sudo,users"
+    append: yes
+
 - name: authorize admin ssh keys
   become: yes
+  authorized_key: user="{{admin_user_name}}" key="https://github.com/{{github_user}}.keys"
+
+- name: authorize pi ssh keys
+  become: yes
   authorized_key: user="{{ansible_user}}" key="https://github.com/{{github_user}}.keys"
+
+- name: nopasswd sudo for admin user
+  become: yes
+  template:
+    src: "010_admin-nopasswd"
+    dest: "/etc/sudoers.d/010_admin-nopasswd"
+
+- name: disable ssh password login
+  become: yes
+  lineinfile:
+    path: "/etc/ssh/sshd_config"
+    regexp: "^PasswordAuthentication"
+    insertafter: "^#PasswordAuthentication"
+    line: "PasswordAuthentication no"
