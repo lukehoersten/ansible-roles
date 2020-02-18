@@ -7,3 +7,6 @@
     dest: "/etc/pihole/custom.list"
     mode: "0644"
   notify: restart pihole-ftl
+
+- name: update pihole
+  command: "pihole -up"
