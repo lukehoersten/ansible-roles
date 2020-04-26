@@ -26,7 +26,7 @@ server {
 
     ssl_certificate {{nginx_ssl_cert}};
     ssl_certificate_key {{nginx_ssl_privkey}};
-    include /etc/letsencrypt/options-ssl-nginx.conf;
+    # include /etc/letsencrypt/options-ssl-nginx.conf;
     # ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
     ssl_ecdh_curve X25519:prime256v1:secp384r1:secp521r1;
