@@ -26,13 +26,11 @@
 
 - name: install homebridge
   become: yes
-  become_user: "{{homebridge_user}}"
   npm: name="homebridge" global="yes"
   notify: restart homebridge service
 
 - name: install platform accessories
   become: yes
-  become_user: "{{homebridge_user}}"
   npm: name="{{item}}" global="yes"
   notify: restart homebridge service
   with_items: "{{homebridge_npm_packages}}"

@@ -15,7 +15,7 @@ homebridge_npm_packages:
   - "homebridge-camera-ffmpeg"
   - "homebridge-roomba-stv"
 
-homebridge_rtsp_vcodec: "h264_omx"
+homebridge_rtsp_vcodec: "copy"
 homebridge_rtsp_debug: "false"
 homebridge_rtsp_max_streams: 5
 
