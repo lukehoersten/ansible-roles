@@ -6,7 +6,7 @@
 
 - name: install prometheus rpi-exporter
   unarchive:
-    src: "https://github.com/lukasmalkmus/rpi_exporter/releases/download/v{{prometheus_client_rpi_exporter_version}}/rpi_exporter-{{prometheus_client_rpi_exporter_version}}.linux-{{prometheus_client_arch}}.tar.gz"
+    src: "{{prometheus_client_rpi_src}}"
     remote_src: yes
     dest: "/tmp/"
 

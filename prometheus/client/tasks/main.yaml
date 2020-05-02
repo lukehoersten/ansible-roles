@@ -4,6 +4,10 @@
   become: yes
   apt: name="prometheus-node-exporter"
 
+- name: ensure prometheus node exporter is started
+  become: yes
+  systemd: name="prometheus-node-exporter.service" enabled="yes" state="started"
+
 #   # Nginx
 # - name: check if running nginx
 #   stat: path="/etc/nginx/"
