@@ -51,6 +51,7 @@
     name: "{{admin_user_name}}"
     password: "{{admin_user_password}}"
     groups: "sudo,users"
+    shell: "/bin/bash"
     append: yes
 
 - name: authorize admin ssh keys
