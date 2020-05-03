@@ -16,8 +16,13 @@
 
 - name: install writefreely binary
   become: yes
-  command: "install -m 0755 -o {{writefreely_user}} -g {{writefreely_user}} -t /usr/local/bin /tmp/writefreely/writefreely"
-  changed_when: false
+  copy:
+    src: "/tmp/writefreely/writefreely"
+    dest: "/usr/local/bin/"
+    remote_src: yes
+    owner: "{{writefreely_user}}"
+    group: "{{writefreely_user}}"
+    mode: "0755"
 
 - name: create root dir
   become: yes
