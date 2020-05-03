@@ -3,9 +3,10 @@ Description=WriteFreely %I Instance
 After=syslog.target network.target
 
 [Service]
-WorkingDirectory=/run/writefreely/%i
-ExecStart=/usr/local/bin/writefreely -c /etc/writefreely/%i.conf
+WorkingDirectory={{writefreely_dir}}/%i/
+ExecStart=/usr/local/bin/writefreely
 Restart=always
+User={{writefreely_user}}
 
 [Install]
 WantedBy=multi-user.target

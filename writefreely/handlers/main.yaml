@@ -1,0 +1,5 @@
+---
+
+- name: reload service
+  become: yes
+  systemd: name="writefreely@{{writefreely_instance}}.service" enabled="yes" daemon_reload="yes"
