@@ -17,6 +17,13 @@
     remote_src: yes
     dest: "/lib/systemd/system/rpi_exporter.service"
 
+- name: disable GPU temp scraping
+  become: yes
+  lineinfile:
+    path: "/lib/systemd/system/rpi_exporter.service"
+    regexp: "^ExecStart=/usr/local/bin/rpi_exporter"
+    line: "ExecStart=/usr/local/bin/rpi_exporter --collector.gpu=false"
+
 - name: install rpi-exporter binary
   become: yes
   copy:
