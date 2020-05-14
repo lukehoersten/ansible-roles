@@ -1,0 +1,26 @@
+---
+
+- name: install prosody
+  become: yes
+  apt: name="prosody"
+  notify: restart prosody
+
+- name: configure prosody
+  become: yes
+  template:
+    src: "prosody.cfg.lua.j2"
+    dest: "/etc/prosody/conf.avail/{{prosody_vhost}}.cfg.lua"
+  notify: restart prosody
+
+- name: install prosody site
+  become: yes
+  template: src="prosody.cfg.lua.j2" dest="/etc/prosody/conf.avail/{{prosody_vhost}}.cfg.lua"
+  notify: restart prosody
+
+- name: enable prosody site
+  become: yes
+  file:
+    src:  "/etc/prosody/conf.avail/{{prosody_vhost}}.cfg.lua"
+    dest: "/etc/prosody/conf.d/{{prosody_vhost}}.cfg.lua"
+    state: "link"
+  notify: restart prosody
