@@ -23,6 +23,7 @@
     owner: "{{writefreely_user}}"
     group: "{{writefreely_user}}"
     mode: "0755"
+  notify: migrate db
 
 - name: create root dir
   become: yes
@@ -64,12 +65,18 @@
     group: "{{writefreely_user}}"
   notify: reload service
 
+- name: check if keys exists
+  stat:
+    path: "{{writefreely_dir}}/{{writefreely_instance}}/keys/cookies_auth.aes256"
+  register: keys_file
+
 - name: generate keys
   become: yes
   become_user: "{{writefreely_user}}"
   command: "writefreely keys gen"
   args:
     chdir: "{{writefreely_dir}}/{{writefreely_instance}}/"
+  when: not key_file.stat.exists
 
 - name: check if db exists
   stat:
@@ -91,14 +98,6 @@
   args:
     chdir: "{{writefreely_dir}}/{{writefreely_instance}}/"
   when: not db_file.stat.exists
-
-- name: migrate db
-  become: yes
-  become_user: "{{writefreely_user}}"
-  command: "writefreely db migrate"
-  args:
-    chdir: "{{writefreely_dir}}/{{writefreely_instance}}/"
-  when: db_file.stat.exists
 
 - name: install systemd service
   become: yes
