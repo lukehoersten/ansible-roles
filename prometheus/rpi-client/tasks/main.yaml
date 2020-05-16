@@ -11,6 +11,14 @@
     dest: "/tmp/"
   notify: restart rpi_exporter
 
+- name: disable GPU temp scraping
+  become: yes
+  lineinfile:
+    path: "/tmp/{{prometheus_client_rpi_dest}}/rpi_exporter.service"
+    regexp: "^ExecStart=/usr/local/bin/rpi_exporter"
+    line: "ExecStart=/usr/local/bin/rpi_exporter --no-collector.gpu"
+  when: not prometheus_client_rpi_collect_gpu_temp
+
 - name: install systemd service for rpi-exporter
   become: yes
   copy:
@@ -18,16 +26,6 @@
     remote_src: yes
     dest: "/lib/systemd/system/rpi_exporter.service"
   notify: restart rpi_exporter
-
-- name: disable GPU temp scraping
-  become: yes
-  lineinfile:
-    path: "/lib/systemd/system/rpi_exporter.service"
-    regexp: "^ExecStart=/usr/local/bin/rpi_exporter"
-    line: "ExecStart=/usr/local/bin/rpi_exporter --no-collector.gpu"
-  when: not prometheus_client_rpi_collect_gpu_temp
-  notify: restart rpi_exporter
-
 
 - name: install rpi-exporter binary
   become: yes
