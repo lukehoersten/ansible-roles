@@ -72,7 +72,7 @@
     dest: "/opt/pleroma/"
     owner: "pleroma"
     group: "pleroma"
-  notify: restart pleroma instance
+  changed_when: false
 
 - name: remove tmp release folder
   become: yes
