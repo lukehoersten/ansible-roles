@@ -26,7 +26,9 @@
   loop:
     - "eula.txt"
     - "ops.json"
+  notify: restart minecraft
 
+# minecraft server writes a timtestamp to the config every time it starts so this always generates a change.
 - name: configure minecraft
   become: yes
   template:
@@ -34,13 +36,14 @@
     dest: "{{minecraft_dir}}/server.properties"
     owner: "{{minecraft_user}}"
     group: "{{minecraft_user}}"
-  notify: restart minecraft
+  changed_when: false
 
 - name: install systemd service
   become: yes
   template:
     src: "minecraft.service.j2"
     dest: "/lib/systemd/system/minecraft.service"
+  notify: restart minecraft
 
 - name: ensure service is started
   become: yes

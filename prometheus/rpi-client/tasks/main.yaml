@@ -18,6 +18,7 @@
     regexp: "^ExecStart=/usr/local/bin/rpi_exporter"
     line: "ExecStart=/usr/local/bin/rpi_exporter --no-collector.gpu"
   when: not prometheus_client_rpi_collect_gpu_temp
+  changed_when: false
 
 - name: install systemd service for rpi-exporter
   become: yes

@@ -76,7 +76,7 @@
   command: "writefreely keys gen"
   args:
     chdir: "{{writefreely_dir}}/{{writefreely_instance}}/"
-  when: not key_file.stat.exists
+  when: not keys_file.stat.exists
 
 - name: check if db exists
   stat:
