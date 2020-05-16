@@ -8,6 +8,7 @@
 - name: stop transmission service
   systemd: name="transmission-daemon" state="stopped" daemon_reload="yes"
   become: yes
+  changed_when: false
 
 - name: config ip whitelist
   become: yes
@@ -33,13 +34,14 @@
     line: "    \"rpc-port\": {{transmission_port}},"
   notify: restart transmission service
 
+# the password is hashed at start of server so this always changes
 - name: config password
   become: yes
   lineinfile:
     path: "{{transmission_config}}"
     regexp: '^    "rpc-password":'
     line: "    \"rpc-password\": \"{{transmission_passwd}}\","
-  notify: restart transmission service
+  changed_when: false
 
 - name: config download dir
   become: yes
@@ -68,3 +70,4 @@
 - name: start transmission service
   systemd: name="transmission-daemon" state="started" daemon_reload="yes"
   become: yes
+  changed_when: false
