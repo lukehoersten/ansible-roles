@@ -10,3 +10,4 @@
 
 - name: update pihole
   command: "pihole -up"
+  changed_when: false
