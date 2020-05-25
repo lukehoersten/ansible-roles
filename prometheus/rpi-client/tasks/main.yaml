@@ -8,7 +8,8 @@
   unarchive:
     src: "{{prometheus_client_rpi_src}}"
     remote_src: yes
-    dest: "/tmp/"
+    dest: "/tmp"
+    creates: "/tmp/{{prometheus_client_rpi_dest}}"
   notify: restart rpi_exporter
 
 - name: disable GPU temp scraping
