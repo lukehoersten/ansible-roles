@@ -32,13 +32,13 @@
 - name: install platform accessories
   become: yes
   npm: name="{{item}}" global="yes"
-  notify: restart homebridge service
   with_items: "{{homebridge_npm_packages}}"
+  notify: restart homebridge service
 
 - name: configure homebridge
   become: yes
   template:
-    src: "config.json.j2"
+    src: "{{homebridge_config_template}}"
     dest: "{{homebridge_dir}}/config.json"
   notify: restart homebridge service
 
