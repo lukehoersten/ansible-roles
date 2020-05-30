@@ -7,7 +7,7 @@
     comment: "Homebridge"
     shell: "/bin/false"
     home: "{{homebridge_dir}}"
-    groups: "video,spi,i2c,gpio"
+    groups: "video,spi,i2c,gpio,bluetooth"
     move_home: yes
   notify: restart homebridge service
 
