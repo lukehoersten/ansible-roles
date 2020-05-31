@@ -1,0 +1,5 @@
+---
+
+- name: restart papermc
+  become: yes
+  systemd: name="papermc.service" state="restarted" daemon_reload="yes"

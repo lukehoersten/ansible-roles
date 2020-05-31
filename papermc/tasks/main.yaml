@@ -1,0 +1,66 @@
+---
+
+- name: add papermc user
+  become: yes
+  user: name="{{papermc_user}}" home="{{papermc_dir}}"
+
+- name: install jre
+  become: yes
+  apt: name="default-jre-headless"
+
+- name: download papermc
+  become: yes
+  get_url:
+    url: "{{papermc_url}}"
+    dest: "{{papermc_dir}}/server.jar"
+    mode: "0755"
+  notify: restart papermc
+
+- name: configure eula and ops
+  become: yes
+  copy:
+    src: "{{item}}"
+    dest: "{{papermc_dir}}/{{item}}"
+    owner: "{{papermc_user}}"
+    group: "{{papermc_user}}"
+  loop:
+    - "eula.txt"
+    - "ops.json"
+  notify: restart papermc
+
+- name: set motd
+  become: yes
+  lineinfile:
+    path: "{{papermc_dir}}/server.properties"
+    regexp: "^motd="
+    line: "motd={{papermc_motd}}"
+  notify: restart papermc
+
+- name: create world file directory
+  become: yes
+  file:
+    path: "{{papermc_world_dir}}"
+    state: "directory"
+    owner: "{{papermc_user}}"
+    group: "{{papermc_user}}"
+    mode: "0755"
+
+- name: set world files
+  become: yes
+  lineinfile:
+    path: "{{papermc_dir}}/bukkit.yml"
+    regexp: "^  world-container:"
+    line: "  world-container: {{papermc_world_dir}}"
+    insertbefore: "^  permissions-file:"
+  notify: restart papermc
+
+- name: install systemd service
+  become: yes
+  template:
+    src: "papermc.service.j2"
+    dest: "/lib/systemd/system/papermc.service"
+  notify: restart papermc
+
+- name: ensure service is started
+  become: yes
+  systemd: name="papermc.service" enabled="yes" state="started"

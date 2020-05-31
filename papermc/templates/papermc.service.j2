@@ -1,0 +1,22 @@
+[Unit]
+Description=PaperMC Server
+Documentation=https://paper.readthedocs.io/en/latest/server/getting-started.html
+
+Wants=network.target
+After=network.target
+
+[Service]
+User={{papermc_user}}
+Group={{papermc_user}}
+WorkingDirectory={{papermc_dir}}
+Restart=on-failure
+RestartSec=20 5
+ExecStart=/usr/bin/java -Xms{{papermc_mem}} -Xmx{{papermc_mem}} -jar server.jar
+
+PrivateTmp=true
+ProtectSystem=full
+NoNewPrivileges=true
+PrivateDevices=true
+
+[Install]
+WantedBy=multi-user.target
