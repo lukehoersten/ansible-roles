@@ -1,6 +1,7 @@
 ---
 
 homebridge_user: "homebridge"
+homebridge_groups: "video"
 homebridge_dir: "/home/{{homebridge_user}}"
 homebridge_restart_sec: "10"
 

@@ -17,14 +17,6 @@
   become: yes
   apt_repository: repo="deb http://packages.azlux.fr/debian/ buster main"
 
-- name: configure log2ram disk size
-  become: yes
-  lineinfile:
-    path: "/etc/log2ram.conf"
-    regexp: "^SIZE="
-    line: "SIZE={{rpi_base_log_size}}"
-  notify: restart log2ram service
-
 - name: set timezone
   become: yes
   timezone: name="{{rpi_base_timezone}}"
@@ -41,7 +33,15 @@
   become: yes
   apt: name="{{rpi_base_apt_packages}}" state="latest"
 
-- name: install fail2ban config
+- name: configure log2ram disk size
+  become: yes
+  lineinfile:
+    path: "/etc/log2ram.conf"
+    regexp: "^SIZE="
+    line: "SIZE={{rpi_base_log_size}}"
+  notify: restart log2ram service
+
+- name: configure fail2ban
   become: yes
   copy: src="jail.local" dest="/etc/fail2ban/jail.local"
 

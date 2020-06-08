@@ -16,6 +16,7 @@
     path: "{{transmission_config}}"
     regexp: '^    "rpc-whitelist":'
     line: '    "rpc-whitelist": "127.0.0.1,192.168.*.*",'
+    insertafter: ",$"
   notify: restart transmission service
 
 - name: config umask
@@ -24,6 +25,7 @@
     path: "{{transmission_config}}"
     regexp: '^    "umask":'
     line: '    "umask": 2,'
+    insertafter: ",$"
   notify: restart transmission service
 
 - name: config port
@@ -32,6 +34,7 @@
     path: "{{transmission_config}}"
     regexp: '^    "rpc-port":'
     line: "    \"rpc-port\": {{transmission_port}},"
+    insertafter: ",$"
   notify: restart transmission service
 
 # the password is hashed at start of server so this always changes
@@ -41,6 +44,7 @@
     path: "{{transmission_config}}"
     regexp: '^    "rpc-password":'
     line: "    \"rpc-password\": \"{{transmission_passwd}}\","
+    insertafter: ",$"
   changed_when: false
 
 - name: config download dir
@@ -49,6 +53,7 @@
     path: "{{transmission_config}}"
     regexp: '^    "download-dir":'
     line: "    \"download-dir\": \"{{transmission_download_dir}}\","
+    insertafter: ",$"
   notify: restart transmission service
 
 - name: config disable seeding
@@ -57,6 +62,7 @@
     path: "{{transmission_config}}"
     regexp: '^    "idle-seeding-limit":'
     line: "    \"idle-seeding-limit\": 0,"
+    insertafter: ",$"
   notify: restart transmission service
 
 - name: config disable seeding
@@ -65,6 +71,7 @@
     path: "{{transmission_config}}"
     regexp: '^    "idle-seeding-limit-enabled":'
     line: "    \"idle-seeding-limit-enabled\": true,"
+    insertafter: ",$"
   notify: restart transmission service
 
 - name: start transmission service
