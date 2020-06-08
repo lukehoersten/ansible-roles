@@ -40,10 +40,8 @@ server {
     # the nginx default is 1m, not enough for large media uploads
     client_max_body_size 16m;
 
-    root {{nginx_html_root}};
-
     location = / {
-        index index.html;
+        return 301 http://www.$host$request_uri;
     }
 
     location / {
