@@ -1,0 +1,5 @@
+---
+
+- name: restart matrix synapse service
+  systemd: name="matrix-synapse.service" state="restarted" daemon_reload="yes"
+  become: yes

@@ -1,0 +1,6 @@
+---
+
+matrix_synapse_enable_registrations: "false"
+matrix_synapse_db: "/var/lib/matrix-synapse/homeserver.db"
+matrix_synapse_media_store: "/var/lib/matrix-synapse/media"
+matrix_synapse_uploads: "/var/lib/matrix-synapse/uploads"

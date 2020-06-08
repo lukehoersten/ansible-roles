@@ -1,0 +1,23 @@
+---
+
+- name: install matrix synapse
+  become: yes
+  apt: name="matrix-synapse"
+
+- name: configure matrix synapse
+  become: yes
+  template:
+    src: "homeserver.yaml.j2"
+    dest: "/etc/matrix-synapse/homeserver.yaml"
+  notify: restart matrix synapse service
+
+- name: configure matrix synapse server name
+  become: yes
+  template:
+    src: "server_name.yaml.j2"
+    dest: "/etc/matrix-synapse/conf.d/server_name.yaml"
+  notify: restart matrix synapse service
+
+- name: ensure matrix synapse is started
+  become: yes
+  systemd: name="matrix-synapse.service" enabled="yes" state="started"
