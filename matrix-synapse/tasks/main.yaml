@@ -1,8 +1,25 @@
 ---
 
+- name: add debian backports keys
+  become: yes
+  apt_key:
+    keyserver: "keyserver.ubuntu.com "
+    id: "{{item}}"
+  loop:
+    - "04EE7237B7D453EC"
+    - "648ACFD622F3D138"
+
+- name: add matrix repo
+  become: yes
+  apt_repository: repo="deb http://deb.debian.org/debian buster-backports main"
+
 - name: install matrix synapse
   become: yes
-  apt: name="matrix-synapse"
+  apt:
+    name: "matrix-synapse"
+    state: "latest"
+    default_release: "buster-backports"
+  notify: restart matrix synapse service
 
 - name: configure matrix synapse
   become: yes
