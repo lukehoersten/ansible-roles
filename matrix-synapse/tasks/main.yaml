@@ -3,7 +3,7 @@
 - name: add debian backports keys
   become: yes
   apt_key:
-    keyserver: "keyserver.ubuntu.com "
+    keyserver: "keyserver.ubuntu.com"
     id: "{{item}}"
   loop:
     - "04EE7237B7D453EC"
@@ -24,16 +24,29 @@
 - name: configure matrix synapse
   become: yes
   template:
-    src: "homeserver.yaml.j2"
-    dest: "/etc/matrix-synapse/homeserver.yaml"
+    src: "{{item.src}}"
+    dest: "{{item.dest}}"
   notify: restart matrix synapse service
+  loop:
+    - { src: "homeserver.yaml.j2", dest: "/etc/matrix-synapse/homeserver.yaml" }
+    - { src: "log.yaml.j2", dest: "/etc/matrix-synapse/log.yaml" }
+    - { src: "server_name.yaml.j2", dest: "/etc/matrix-synapse/conf.d/server_name.yaml" }
 
-- name: configure matrix synapse server name
+- name: install db schema file
   become: yes
   template:
-    src: "server_name.yaml.j2"
-    dest: "/etc/matrix-synapse/conf.d/server_name.yaml"
-  notify: restart matrix synapse service
+    src: "setup_db.psql.j2"
+    dest: "/tmp/setup_db_{{matrix_synapse_pgsql_db}}.psql"
+    owner: "postgres"
+    group: "postgres"
+    mode: "0600"
+  changed_when: false
+
+- name: install psql
+  become: yes
+  become_user: "postgres"
+  command: "psql -f /tmp/setup_db_{{matrix_synapse_pgsql_db}}.psql"
+  changed_when: false
 
 - name: ensure matrix synapse is started
   become: yes

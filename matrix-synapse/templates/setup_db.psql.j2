@@ -1,0 +1,2 @@
+CREATE USER {{matrix_synapse_pgsql_user}} WITH ENCRYPTED PASSWORD '{{matrix_synapse_pgsql_pass}}';
+CREATE DATABASE {{matrix_synapse_pgsql_db}} ENCODING 'UTF8' LC_COLLATE='C' LC_CTYPE='C' template=template0 WITH OWNER {{matrix_synapse_pgsql_user}};

@@ -13,7 +13,7 @@
 # e.g. matrix.org, localhost:8080, etc.
 # This is also the last part of your UserID.
 #
-server_name: "{{nginx_server_name}}"
+server_name: "{{matrix_synapse_server_name}}"
 
 # When running as a daemon, the file to store the pid in
 #
@@ -437,11 +437,11 @@ retention:
 # instance, if using certbot, use `fullchain.pem` as your certificate,
 # not `cert.pem`).
 #
-#tls_certificate_path: "/home/lhoersten/nth.io.tls.crt"
+#tls_certificate_path: "path/to/homeserver.tls.crt"
 
 # PEM-encoded private key for TLS
 #
-#tls_private_key_path: "/home/lhoersten/nth.io.tls.key"
+#tls_private_key_path: "path/to/homeserver.tls.key"
 
 # Whether to verify TLS server certificates for outbound federation requests.
 #
@@ -558,7 +558,7 @@ acme:
     #
     # If unspecified, we will use CONFDIR/client.key.
     #
-    account_key_file: /home/lhoersten/acme_account.key
+    account_key_file: path/to/homeserver/acme_account.key
 
 # List of allowed TLS fingerprints for this server to publish along
 # with the signing keys for this server. Other matrix servers that
@@ -627,10 +627,20 @@ acme:
 #
 # For more information on using Synapse with Postgres, see `docs/postgres.md`.
 #
+# database:
+#   name: sqlite3
+#   args:
+#     database: "{{matrix_synapse_sqlite_db}}"
+
 database:
-  name: sqlite3
-  args:
-    database: "{{matrix_synapse_db}}"
+ name: psycopg2
+ args:
+   user: "{{matrix_synapse_pgsql_user}}"
+   password: "{{matrix_synapse_pgsql_pass}}"
+   database: "{{matrix_synapse_pgsql_db}}"
+   host: "{{matrix_synapse_pgsql_host}}"
+   cp_min: 5
+   cp_max: 10
 
 # Number of events to cache in memory.
 #
@@ -1377,7 +1387,7 @@ saml2_config:
   # Instead of putting the config inline as above, you can specify a
   # separate pysaml2 configuration file:
   #
-  #config_path: "/home/lhoersten/sp_conf.py"
+  #config_path: "path/to/homeserver/sp_conf.py"
 
   # The lifetime of a SAML session. This defines how long a user has to
   # complete the authentication process, if allow_unsolicited is unset.
