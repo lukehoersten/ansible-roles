@@ -19,3 +19,7 @@
   become: yes
   apt: name="plexmediaserver"
   notify: restart plex service
+
+- name: ensure plex service is running
+  become: yes
+  systemd: name="plexmediaserver.service" state="started" daemon_reload="yes"

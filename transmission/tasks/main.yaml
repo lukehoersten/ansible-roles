@@ -5,6 +5,16 @@
   apt: name="transmission-daemon"
   notify: restart transmission service
 
+- name: create data dir
+  become: yes
+  file:
+    path: "{{transmission_download_dir}}"
+    state: "directory"
+    owner: "{{transmission_user}}"
+    group: "{{transmission_user}}"
+    mode: "0755"
+    recurse: "yes"
+
 - name: stop transmission service
   systemd: name="transmission-daemon" state="stopped" daemon_reload="yes"
   become: yes
@@ -75,6 +85,6 @@
   notify: restart transmission service
 
 - name: start transmission service
-  systemd: name="transmission-daemon" state="started" daemon_reload="yes"
   become: yes
+  systemd: name="transmission-daemon" state="started" daemon_reload="yes"
   changed_when: false
