@@ -1,8 +1,19 @@
 VirtualHost "{{prosody_vhost}}"
-        ssl = {
-                key = "{{prosody_ssl_privkey}}";
-                certificate = "{{prosody_ssl_cert}}";
-                }
+
+ssl = {
+    key = "{{prosody_ssl_privkey}}";
+    certificate = "{{prosody_ssl_cert}}";
+}
+
+storage = "sql"
+sql = {
+    driver = "PostgreSQL";
+    database = "{{prosody_db}}";
+    host = "localhost";
+    port = {{prosody_db_port}};
+    username = "{{prosody_db}}";
+    password = "{{prosody_db_pass}}";
+}
 
 ------ Components ------
 -- You can specify components to add hosts that provide special services,
