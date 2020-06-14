@@ -1,0 +1,26 @@
+---
+
+- name: apt install ngircd
+  become: yes
+  apt: name="ngircd"
+  notify: restart ngircd
+
+- name: config server name
+  become: yes
+  lineinfile:
+    path: "/etc/ngircd/ngircd.conf"
+    regexp: '^	Name ='
+    line: "	Name = {{ngircd_name}}"
+  notify: restart ngircd
+
+- name: set motd
+  become: yes
+  copy:
+    src: "{{ngircd_motd_src}}"
+    dest: "/etc/ngircd/ngircd.motd"
+    mode: "0644"
+  notify: restart ngircd
+
+- name: start ngircd service
+  become: yes
+  systemd: name="ngircd" state="started" daemon_reload="yes"

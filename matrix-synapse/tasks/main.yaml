@@ -21,6 +21,26 @@
     default_release: "buster-backports"
   notify: restart matrix synapse service
 
+- name: create log file
+  become: yes
+  file:
+    path: "/var/log/matrix-synapse/homeserver.log"
+    owner: "matrix-synapse"
+    group: "root"
+    state: "touch"
+    mode: "0644"
+  changed_when: false
+
+- name: create media data dir
+  become: yes
+  file:
+    path: "{{matrix_synapse_media_store}}"
+    owner: "matrix-synapse"
+    group: "root"
+    state: "directory"
+    recurse: yes
+    mode: "0750"
+
 - name: configure matrix synapse
   become: yes
   template:

@@ -1,6 +1,6 @@
 ---
 
-postgresql_version: "11"
+postgresql_version: "12"
 postgresql_config_path: "/etc/postgresql/{{postgresql_version}}/main/postgresql.conf"
 postgresql_data_dir: "/var/lib/postgresql/{{postgresql_version}}/main"
 postgresql_apt_packages:

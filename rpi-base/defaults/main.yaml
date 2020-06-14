@@ -13,3 +13,5 @@ rpi_base_apt_packages:
   - "jq"
   - "tree"
   - "iperf3"
+  - "python3-pip"
+  - "unzip"
