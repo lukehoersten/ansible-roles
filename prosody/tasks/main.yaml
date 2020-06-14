@@ -17,6 +17,20 @@
   template: src="prosody.cfg.lua.j2" dest="/etc/prosody/conf.avail/{{prosody_vhost}}.cfg.lua"
   notify: restart prosody
 
+- name: copy ssl keys
+  become: yes
+  copy:
+    src: "{{item}}"
+    dest: "{{prosody_ssl_dir}}/"
+    remote_src: yes
+    mode: "0640"
+    owner: "root"
+    group: "prosody"
+  notify: restart prosody
+  loop:
+    - "{{prosody_ssl_privkey_src}}"
+    - "{{prosody_ssl_cert_src}}"
+
 - name: enable prosody site
   become: yes
   file:
