@@ -4,6 +4,10 @@
   become: yes
   user: name="pleroma" shell="/bin/false" home="/opt/pleroma" system="yes"
 
+- name: apt install pleroma dependencies
+  become: yes
+  apt: name="libtinfo5"
+
 - name: create config and data directory
   become: yes
   file:
