@@ -13,7 +13,24 @@
     line: "	Name = {{ngircd_name}}"
   notify: restart ngircd
 
-- name: set motd
+- name: config server local listen
+  become: yes
+  lineinfile:
+    path: "/etc/ngircd/ngircd.conf"
+    regexp: '^	Listen ='
+    line: "	Listen = 127.0.0.1"
+    insertafter: "^	;Listen ="
+  notify: restart ngircd
+
+- name: config motd
+  become: yes
+  lineinfile:
+    path: "/etc/ngircd/ngircd.conf"
+    regexp: '^	Info ='
+    line: "	Info = {{ngircd_motd}}"
+  notify: restart ngircd
+
+- name: copy motd file
   become: yes
   copy:
     src: "{{ngircd_motd_src}}"
