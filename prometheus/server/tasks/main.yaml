@@ -21,4 +21,31 @@
     - restart prometheus service
     - restart grafana service
 
-# /etc/grafana/grafana.ini
+- name: install grafana prometheus data source
+  become: yes
+  grafana_datasource:
+    name: "Prometheus"
+    ds_type: "prometheus"
+    ds_url: "http://localhost:9090"
+    grafana_url: "http://localhost:3000"
+    is_default: yes
+
+- name: install grafana plugins
+  become: yes
+  grafana_plugin: name="{{item}}"
+  loop: "{{prometheus_server_grafana_plugins}}"
+
+- name: copy dashboards to target
+  become: yes
+  copy:
+    src: "{{prometheus_server_grafana_dashboard_src}}/{{item}}"
+    dest: "/tmp/"
+    mode: "0640"
+  loop: "{{prometheus_server_grafana_dashboards}}"
+
+- name: install grafana dashboards
+  become: yes
+  grafana_dashboard:
+    grafana_url: "http://localhost:3000"
+    path: "/tmp/{{item}}"
+  loop: "{{prometheus_server_grafana_dashboards}}"
