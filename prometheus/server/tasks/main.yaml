@@ -33,6 +33,7 @@
     ds_url: "http://localhost:9090"
     grafana_url: "http://localhost:3000"
     is_default: yes
+  changed_when: false
 
 - name: install grafana plugins
   become: yes

@@ -69,18 +69,13 @@ tls:
   certificate_path: ""
   private_key_path: ""
 filters:
+{% for filter in adguard_home_filters %}
 - enabled: true
-  url: https://adguardteam.github.io/AdGuardSDNSFilter/Filters/filter.txt
-  name: AdGuard Simplified Domain Names filter
-  id: 1
-- enabled: false
-  url: https://adaway.org/hosts.txt
-  name: AdAway
-  id: 2
-- enabled: false
-  url: https://www.malwaredomainlist.com/hostslist/hosts.txt
-  name: MalwareDomainList.com Hosts List
-  id: 4
+  url: {{filter.url}}
+  name: {{filter.name}}
+  id: {{filter.id}}
+{% else %}  []
+{% endfor %}
 whitelist_filters: []
 user_rules: []
 dhcp:
@@ -92,7 +87,22 @@ dhcp:
   range_end: ""
   lease_duration: 86400
   icmp_timeout_msec: 1000
-clients: []
+clients:
+{% for client in adguard_home_clients %}
+- name: {{client.name}}
+  tags: []
+  ids:
+  - {{client.ip}}
+  use_global_settings: {{not client.bypass}}
+  filtering_enabled: false
+  parental_enabled: false
+  safesearch_enabled: false
+  safebrowsing_enabled: false
+  use_global_blocked_services: {{not client.bypass}}
+  blocked_services: []
+  upstreams: []
+{% else %}  []
+{% endfor %}
 log_file: ""
 verbose: false
 schema_version: 6
