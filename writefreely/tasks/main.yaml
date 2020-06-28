@@ -25,25 +25,18 @@
     mode: "0755"
   notify: migrate db
 
-- name: create root dir
-  become: yes
-  file:
-    path: "{{writefreely_dir}}"
-    state: "directory"
-    owner: "{{writefreely_user}}"
-    group: "{{writefreely_user}}"
-    mode: "0755"
-  notify: reload service
-
 - name: create instance dir
   become: yes
   file:
-    path: "{{writefreely_dir}}/{{writefreely_instance}}"
+    path: "{{item}}"
     state: "directory"
     owner: "{{writefreely_user}}"
     group: "{{writefreely_user}}"
     mode: "0755"
   notify: reload service
+  loop:
+    - "{{writefreely_dir}}"
+    - "{{writefreely_dir}}/{{writefreely_instance}}"
 
 - name: install static content
   become: yes
