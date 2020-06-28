@@ -21,6 +21,10 @@
     - restart prometheus service
     - restart grafana service
 
+- name: ensure grafana is started
+  become: yes
+  systemd: name="grafana-server.service" enabled="yes" state="started"
+
 - name: install grafana prometheus data source
   become: yes
   grafana_datasource:
@@ -43,9 +47,9 @@
     mode: "0640"
   loop: "{{prometheus_server_grafana_dashboards}}"
 
-- name: install grafana dashboards
-  become: yes
-  grafana_dashboard:
-    grafana_url: "http://localhost:3000"
-    path: "/tmp/{{item}}"
-  loop: "{{prometheus_server_grafana_dashboards}}"
+# - name: install grafana dashboards
+#   become: yes
+#   grafana_dashboard:
+#     grafana_url: "http://localhost:3000"
+#     path: "/tmp/{{item}}"
+#   loop: "{{prometheus_server_grafana_dashboards}}"

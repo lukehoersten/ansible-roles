@@ -44,6 +44,10 @@
   template: src="AdGuardHome.yaml.j2" dest="/etc/AdGuardHome/AdGuardHome.yaml"
   notify: restart adguard home
 
+- name: disable systemd-resolved service
+  become: yes
+  systemd: name="systemd-resolved.service" enabled="no" state="stopped"
+
 - name: ensure adguard home is started
   become: yes
   systemd: name="AdGuardHome.service" enabled="yes" state="started"
