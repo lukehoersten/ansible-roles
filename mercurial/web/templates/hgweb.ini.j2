@@ -1,0 +1,8 @@
+[uwsgi]
+processes = 2
+socket = unix:/run/uwsgi/app/hgweb/socket
+chdir = {{mercurial_uwsgi_root}}
+wsgi-file = hgweb.wsgi
+uid = www-data
+gid = www-data
+plugins = python3

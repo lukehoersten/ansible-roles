@@ -1,9 +1,5 @@
 ---
 
-- name: install mercurial
-  become: yes
-  apt: name="mercurial"
-
 - name: create mercurial s3 backup shell script
   become: yes
   copy:
