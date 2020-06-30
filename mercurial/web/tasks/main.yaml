@@ -10,6 +10,7 @@
   loop:
     - "uwsgi"
     - "uwsgi-plugin-python3"
+    - "python3-pygments"
   notify: restart uwsgi
 
 - name: configure hgweb

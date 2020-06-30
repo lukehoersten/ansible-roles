@@ -9,7 +9,7 @@ config = "{{mercurial_uwsgi_root}}/hgweb.config"
 #import sys; sys.path.insert(0, "/path/to/python/lib")
 
 # Uncomment to send python tracebacks to the browser if an error occurs:
-import cgitb; cgitb.enable()
+#import cgitb; cgitb.enable()
 
 # enable demandloading to reduce startup time
 from mercurial import demandimport; demandimport.enable()
