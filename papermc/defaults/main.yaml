@@ -1,8 +1,8 @@
 ---
 
 papermc_user: "papermc"
-papermc_version: "1.15.2"
-papermc_build: "327"
+papermc_version: "1.16.1"
+papermc_build: "34"
 papermc_url: "https://papermc.io/api/v1/paper/{{papermc_version}}/{{papermc_build}}/download"
 papermc_dir: "/opt/papermc"
 papermc_motd: "A Minecraft Server"
