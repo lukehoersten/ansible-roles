@@ -28,31 +28,24 @@
     - "ops.json"
   notify: restart papermc
 
-- name: set motd
+- name: create server.properties
+  become: yes
+  file:
+    path: "{{papermc_dir}}/server.properties"
+    state: "touch"
+    owner: "{{papermc_user}}"
+    group: "{{papermc_user}}"
+
+- name: configure server.properties
   become: yes
   lineinfile:
     path: "{{papermc_dir}}/server.properties"
-    regexp: "^motd="
-    line: "motd={{papermc_motd}}"
+    regexp: "^{{item.key}}="
+    line: "{{item.key}}={{item.value}}"
   notify: restart papermc
-
-- name: create world file directory
-  become: yes
-  file:
-    path: "{{papermc_world_dir}}"
-    state: "directory"
-    owner: "{{papermc_user}}"
-    group: "{{papermc_user}}"
-    mode: "0755"
-
-- name: set world files
-  become: yes
-  lineinfile:
-    path: "{{papermc_dir}}/bukkit.yml"
-    regexp: "^  world-container:"
-    line: "  world-container: {{papermc_world_dir}}"
-    insertbefore: "^  permissions-file:"
-  notify: restart papermc
+  loop:
+    - {key: "motd", value: "{{papermc_motd}}"}
+    - {key: "level-seed", value: "{{papermc_seed}}"}
 
 - name: install systemd service
   become: yes

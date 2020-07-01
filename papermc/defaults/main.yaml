@@ -7,4 +7,4 @@ papermc_url: "https://papermc.io/api/v1/paper/{{papermc_version}}/{{papermc_buil
 papermc_dir: "/opt/papermc"
 papermc_motd: "A Minecraft Server"
 papermc_mem: "2G"
-papermc_world_dir: "{{papermc_dir}}"
+papermc_seed: ""
