@@ -24,3 +24,6 @@ cp -r $STATIC_DIR "$BACKUP_DIR/"
 tar -zc -f $BACKUP_TAR $BACKUP_DIR
 aws s3 mb "s3://$BUCKET/"
 aws s3 cp $BACKUP_TAR "s3://$BUCKET/"
+
+rm $BACKUP_TAR
+rm -r $BACKUP_DIR
