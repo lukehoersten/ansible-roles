@@ -86,9 +86,6 @@
     - "/tmp/release/"
   when: pleroma_cleanup_tmp
 
-- import_tasks: s3-backup.yaml
-  when: pleroma_s3_backup_enabled
-
 - name: configure pleroma systemd service
   become: yes
   copy:

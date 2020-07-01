@@ -24,5 +24,4 @@ pleroma_db: "pleroma_{{pleroma_instance}}"
 pleroma_db_user: "pleroma_{{pleroma_instance}}"
 pleroma_data_dir: "/var/lib/pleroma/instance_data"
 
-pleroma_s3_backup_enabled: true
 pleroma_cleanup_tmp: false
