@@ -43,7 +43,6 @@
     state: "directory"
     owner: "{{papermc_user}}"
     group: "{{papermc_user}}"
-    recurse: "yes"
     mode: "0755"
 
 - name: set world files
