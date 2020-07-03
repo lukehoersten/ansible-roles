@@ -1,10 +1,12 @@
 ---
 
-papermc_user: "papermc"
-papermc_version: "1.16.1"
-papermc_build: "34"
-papermc_url: "https://papermc.io/api/v1/paper/{{papermc_version}}/{{papermc_build}}/download"
-papermc_dir: "/opt/papermc"
-papermc_motd: "A Minecraft Server"
-papermc_mem: "2G"
-papermc_seed: ""
+minecraft_user: "minecraft"
+minecraft_fork: "vanilla" # paper
+minecraft_parent_dir: "/opt"
+minecraft_motd: "A Minecraft Server"
+minecraft_mem: "2G"
+minecraft_seed: ""
+
+minecraft_paper_version: "1.16.1"
+minecraft_paper_build: "34"
+minecraft_vanilla_hash: "a412fd69db1f81db3f511c1463fd304675244077"

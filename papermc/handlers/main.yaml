@@ -1,5 +1,5 @@
 ---
 
-- name: restart papermc
+- name: restart minecraft
   become: yes
-  systemd: name="papermc.service" state="restarted" daemon_reload="yes"
+  systemd: name="minecraft.service" state="restarted" daemon_reload="yes"

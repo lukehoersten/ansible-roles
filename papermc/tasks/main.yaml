@@ -1,59 +1,78 @@
 ---
 
-- name: add papermc user
+- name: add minecraft user
   become: yes
-  user: name="{{papermc_user}}" home="{{papermc_dir}}"
+  user: name="{{minecraft_user}}" home="{{minecraft_dir}}"
 
 - name: install jre
   become: yes
   apt: name="default-jre-headless"
 
-- name: download papermc
+- name: set minecraft fork
+  set_fact: minecraft_url="{{minecraft_vanilla_url}}"
+  when: minecraft_fork == "vanilla"
+
+- name: set minecraft fork
+  set_fact: minecraft_url="{{minecraft_paper_url}}"
+  when: minecraft_fork == "paper"
+
+- name: create minecraft dir
+  become: yes
+  file:
+    path: "{{minecraft_dir}}"
+    owner: "{{minecraft_user}}"
+    group: "{{minecraft_user}}"
+    mode: "0755"
+    state: "directory"
+
+- name: download minecraft
   become: yes
   get_url:
-    url: "{{papermc_url}}"
-    dest: "{{papermc_dir}}/server.jar"
+    url: "{{minecraft_url}}"
+    dest: "{{minecraft_dir}}/server.jar"
     mode: "0755"
-  notify: restart papermc
+  notify: restart minecraft
 
-- name: configure eula and ops
+- name: configure minecraft eula and ops
   become: yes
   copy:
     src: "{{item}}"
-    dest: "{{papermc_dir}}/{{item}}"
-    owner: "{{papermc_user}}"
-    group: "{{papermc_user}}"
+    dest: "{{minecraft_dir}}/{{item}}"
+    owner: "{{minecraft_user}}"
+    group: "{{minecraft_user}}"
   loop:
     - "eula.txt"
     - "ops.json"
-  notify: restart papermc
+  notify: restart minecraft
 
 - name: create server.properties
   become: yes
   file:
-    path: "{{papermc_dir}}/server.properties"
+    path: "{{minecraft_dir}}/server.properties"
     state: "touch"
-    owner: "{{papermc_user}}"
-    group: "{{papermc_user}}"
+    access_time: "preserve"
+    modification_time: "preserve"
+    owner: "{{minecraft_user}}"
+    group: "{{minecraft_user}}"
 
 - name: configure server.properties
   become: yes
   lineinfile:
-    path: "{{papermc_dir}}/server.properties"
+    path: "{{minecraft_dir}}/server.properties"
     regexp: "^{{item.key}}="
     line: "{{item.key}}={{item.value}}"
-  notify: restart papermc
+  notify: restart minecraft
   loop:
-    - {key: "motd", value: "{{papermc_motd}}"}
-    - {key: "level-seed", value: "{{papermc_seed}}"}
+    - {key: "motd", value: "{{minecraft_motd}}"}
+    - {key: "level-seed", value: "{{minecraft_seed}}"}
 
 - name: install systemd service
   become: yes
   template:
-    src: "papermc.service.j2"
-    dest: "/lib/systemd/system/papermc.service"
-  notify: restart papermc
+    src: "minecraft.service.j2"
+    dest: "/lib/systemd/system/minecraft.service"
+  notify: restart minecraft
 
 - name: ensure service is started
   become: yes
-  systemd: name="papermc.service" enabled="yes" state="started"
+  systemd: name="minecraft.service" enabled="yes" state="started"
