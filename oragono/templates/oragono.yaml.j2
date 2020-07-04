@@ -364,7 +364,7 @@ accounts:
     # (and sign into them using SASL) to connect to the server
     require-sasl:
         # if this is enabled, all clients must authenticate with SASL while connecting
-        enabled: false
+        enabled: true
 
         # IPs/CIDRs which are exempted from the account requirement
         exempted:
@@ -459,7 +459,7 @@ accounts:
         user-requests:
             # can users request vhosts at all? if this is false, operators with the
             # 'vhosts' capability can still assign vhosts manually
-            enabled: false
+            enabled: true
 
             # if uncommented, all new vhost requests will be dumped into the given
             # channel, so opers can review them as they are sent in. ensure that you
