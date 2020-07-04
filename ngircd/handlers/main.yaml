@@ -1,5 +1,0 @@
----
-
-- name: restart ngircd
-  become: yes
-  systemd: name="ngircd.service" state="restarted" daemon_reload="yes"

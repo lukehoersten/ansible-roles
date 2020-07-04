@@ -1,5 +1,0 @@
----
-
-- name: restart atheme
-  become: yes
-  systemd: name="atheme-services.service" enabled="yes" daemon_reload="yes" state="restarted"
