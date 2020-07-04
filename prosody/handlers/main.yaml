@@ -2,4 +2,4 @@
 
 - name: restart prosody
   become: yes
-  systemd: name="prosody.service" enabled="yes" daemon_reload="yes"
+  systemd: name="prosody.service" state="restarted" daemon_reload="yes"
