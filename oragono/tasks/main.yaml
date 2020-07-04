@@ -1,0 +1,66 @@
+---
+
+- name: add oragono user
+  become: yes
+  user: name="oragono"
+
+- name: download oragono
+  become: yes
+  unarchive:
+    remote_src: yes
+    src: "{{oragono_url}}"
+    dest: "/tmp"
+    creates: "/tmp/{{oragono_tar_name}}/"
+
+- name: install oragono
+  become: yes
+  copy:
+    src: "/tmp/{{oragono_tar_name}}/oragono"
+    dest: "/usr/local/bin/"
+    remote_src: yes
+    owner: "root"
+    group: "root"
+    mode: "0755"
+  notify: restart oragono
+
+- name: create oragono dirs
+  become: yes
+  file:
+    path: "{{item}}/oragono"
+    owner: "oragono"
+    group: "oragono"
+    mode: "0755"
+    state: "directory"
+  loop:
+    - "/etc"
+    - "/var"
+    - "/run"
+
+- name: configure oragono
+  become: yes
+  template:
+    src: "oragono.yaml.j2"
+    dest: "/etc/oragono/oragono.yaml"
+    owner: "oragono"
+    group: "oragono"
+    mode: "0644"
+  notify: restart oragono
+
+- name: copy motd file
+  become: yes
+  copy:
+    src: "{{oragono_motd}}"
+    dest: "/etc/oragono/oragono.motd"
+  notify: restart oragono
+
+- name: install oragono service
+  become: yes
+  template:
+    src: "oragono.service.j2"
+    dest: "/lib/systemd/system/oragono.service"
+    mode: "0644"
+  notify: restart oragono
+
+- name: ensure oragono is started
+  become: yes
+  systemd: service="oragono.service" enabled="yes" state="started" daemon_reload="yes"

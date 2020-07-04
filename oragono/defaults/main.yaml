@@ -1,0 +1,8 @@
+---
+
+oragono_user: "oragono"
+oragono_version: "2.1.0"
+oragono_arch: "arm64"
+oragono_tar_name: "oragono-{{oragono_version}}-linux-{{oragono_arch}}"
+oragono_tar: "{{oragono_tar_name}}.tar.gz"
+oragono_url: "https://github.com/oragono/oragono/releases/download/v{{oragono_version}}/{{oragono_tar}}"
