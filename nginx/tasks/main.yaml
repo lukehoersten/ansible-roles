@@ -3,27 +3,30 @@
 - name: apt install nginx
   become: yes
   apt: name="nginx"
+  notify: restart nginx
 
 - name: disable default site
   become: yes
   file: path="/etc/nginx/sites-enabled/default" state="absent"
+  notify: reload nginx
 
 - name: install base config
   become: yes
   copy: src="nginx.conf" dest="/etc/nginx/nginx.conf"
-  notify: restart nginx
+  notify: reload nginx
 
 - name: make stream dirs
   become: yes
   file: path="/etc/nginx/streams-{{item}}" state="directory"
   loop: ["available", "enabled"]
+  notify: reload nginx
 
 - name: make config available
   become: yes
   template:
     src:  "{{nginx_conf_src}}"
     dest: "/etc/nginx/{{nginx_server_type}}s-available/{{nginx_server_name}}.conf"
-  notify: restart nginx
+  notify: reload nginx
 
 - name: enable config
   become: yes
@@ -31,14 +34,14 @@
     src:  "/etc/nginx/{{nginx_server_type}}s-available/{{nginx_server_name}}.conf"
     dest: "/etc/nginx/{{nginx_server_type}}s-enabled/{{nginx_server_name}}.conf"
     state: "link"
-  notify: restart nginx
+  notify: reload nginx
 
 - name: copy root files
   become: yes
   copy: src="{{nginx_root_src}}" dest="{{nginx_root_dest}}/"
   when: nginx_root
-  notify: restart nginx
+  notify: reload nginx
 
 - name: enable nginx service
   become: yes
-  systemd: name="nginx" enabled="yes" state="started"
+  systemd: name="nginx.service" enabled="yes" state="started" daemon_reload="yes"

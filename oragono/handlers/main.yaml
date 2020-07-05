@@ -3,3 +3,7 @@
 - name: restart oragono
   become: yes
   systemd: name="oragono.service" state="restarted" daemon_reload="yes"
+
+- name: reload oragono
+  become: yes
+  systemd: name="oragono.service" state="reloaded"

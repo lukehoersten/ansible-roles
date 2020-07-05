@@ -288,7 +288,7 @@ server:
     # oragono will write files to disk under certain circumstances, e.g.,
     # CPU profiling or data export. by default, these files will be written
     # to the working directory. set this to customize:
-    # output-path: "/home/oragono/out"
+    output-path: "/var/oragono"
 
 # account options
 accounts:
@@ -606,7 +606,7 @@ opers:
         whois-line: "server admin"
 
         # custom hostname
-        vhost: "ops.{{oragono_network_name}}"
+        vhost: "opr.{{oragono_network_name}}"
 
         # modes are the modes to auto-set upon opering-up
         modes: +is acjknoqtuxv

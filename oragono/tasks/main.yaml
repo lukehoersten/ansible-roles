@@ -44,14 +44,14 @@
     owner: "oragono"
     group: "oragono"
     mode: "0644"
-  notify: restart oragono
+  notify: reload oragono
 
 - name: copy motd file
   become: yes
   copy:
     src: "{{oragono_motd}}"
     dest: "/etc/oragono/oragono.motd"
-  notify: restart oragono
+  notify: reload oragono
 
 - name: install oragono service
   become: yes
