@@ -1,0 +1,29 @@
+---
+
+- name: download and unarchive soapbox frontend
+  unarchive:
+    src: "{{pleroma_soapbox_download_url}}"
+    dest: "/tmp/"
+    creates: "/tmp/static"
+    remote_src: yes
+
+- name: install soapbox frontend
+  become: yes
+  copy:
+    remote_src: true
+    src: "/tmp/static/"
+    dest: "{{pleroma_data_dir}}/{{pleroma_instance}}/static/"
+    owner: "pleroma"
+    group: "pleroma"
+    mode: "0755"
+  changed_when: false
+
+- name: install soapbox config
+  become: yes
+  copy:
+    src: "files/{{pleroma_link_host}}/soapbox.json"
+    dest: "{{pleroma_data_dir}}/{{pleroma_instance}}/static/instance/soapbox.json"
+    owner: "pleroma"
+    group: "pleroma"
+    mode: "0755"
+  changed_when: false
