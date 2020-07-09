@@ -77,8 +77,7 @@
     group: "pleroma"
   changed_when: false
 
-- name: install soapbox frontend
-  include_tasks: soapbox.yaml
+- include_tasks: soapbox.yaml
   when: pleroma_soapbox
 
 - name: configure pleroma systemd service

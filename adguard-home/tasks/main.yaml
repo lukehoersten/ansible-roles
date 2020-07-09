@@ -44,16 +44,20 @@
   template: src="AdGuardHome.yaml.j2" dest="/etc/AdGuardHome/AdGuardHome.yaml"
   notify: restart adguard home
 
-- name: disable systemd-resolved service
-  become: yes
-  systemd: name="systemd-resolved.service" enabled="no" state="stopped"
+- stat: "path=/etc/resolv.conf"
+  register: sym
 
 - name: replace systemd-resolved conf stub
   become: yes
-  file:
+  copy:
+    remote_src: yes
     src:  "/run/systemd/resolve/resolv.conf"
     dest: "/etc/resolv.conf"
-    state: "link"
+  when: sym.stat.islnk is defined and sym.stat.islnk
+
+- name: disable systemd-resolved service
+  become: yes
+  systemd: name="systemd-resolved.service" enabled="no" state="stopped"
 
 - name: ensure adguard home is started
   become: yes
