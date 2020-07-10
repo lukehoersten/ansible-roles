@@ -2,7 +2,7 @@ import Config
 
 config :pleroma, Pleroma.Web.Endpoint,
   url: [host: "{{pleroma_link_host}}", scheme: "{{pleroma_link_scheme}}", port: {{pleroma_link_port}}],
-  http: [port: {{pleroma_port}}, ip: {127, 0, 0, 1}],
+  http: [port: {{pleroma_port}}, ip: {0, 0, 0, 0}],
   secret_key_base: "{{pleroma_secret_key}}",
   secure_cookie_flag: true
 
@@ -30,7 +30,6 @@ config :pleroma, Pleroma.Uploaders.Local,
 config :pleroma, :media_proxy,
   enabled: true,
   redirect_on_failure: true
-  #base_url: "https://cache.pleroma.social"
 
 config :pleroma, Pleroma.Repo,
   adapter: Ecto.Adapters.Postgres,

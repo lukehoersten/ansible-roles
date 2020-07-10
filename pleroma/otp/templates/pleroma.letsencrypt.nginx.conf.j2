@@ -69,4 +69,9 @@ server {
         proxy_ignore_client_abort on;
         proxy_pass {{pleroma_proxy_pass}};
     }
+
+    # don't expose prometheus stats publicly
+    location /api/pleroma/app_metrics {
+        return 404;
+    }
 }
