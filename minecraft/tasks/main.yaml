@@ -45,6 +45,10 @@
     - "ops.json"
   notify: restart minecraft
 
+- name: install plugins
+  include_tasks: dynmap.yaml
+  when: minecraft_fork == "paper"
+
 - name: create server.properties
   become: yes
   file:
