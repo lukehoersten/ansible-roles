@@ -33,6 +33,10 @@
   become: yes
   apt: name="{{rpi_base_apt_packages}}" state="latest"
 
+- name: configure auto upgrades
+  become: yes
+  copy: src="20auto-upgrades" dest="/etc/apt/apt.conf.d/20auto-upgrades"
+
 - name: configure log2ram disk size
   become: yes
   lineinfile:
