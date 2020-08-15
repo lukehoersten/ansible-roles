@@ -4,7 +4,6 @@ Description=GoAccess
 [Service]
 Type=oneshot
 ExecStart=/usr/bin/goaccess {{goaccess_http_log}} -o {{goaccess_output_dest}} --log-format=COMBINED --no-progress --no-parsing-spinner
-RemainAfterExit=true
 Environment=HOME=/var/run
 
 [Install]
