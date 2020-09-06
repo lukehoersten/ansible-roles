@@ -20,19 +20,17 @@
   template: src="prosody.cfg.lua.j2" dest="/etc/prosody/conf.avail/{{prosody_vhost}}.cfg.lua"
   notify: restart prosody
 
-- name: copy ssl keys
+- name: install letsencrypt ssl deploy hook
   become: yes
   copy:
-    src: "{{item}}"
-    dest: "{{prosody_ssl_dir}}/"
-    remote_src: yes
-    mode: "0640"
-    owner: "root"
-    group: "prosody"
+    src: "prosody.sh"
+    dest: "/etc/letsencrypt/renewal-hooks/deploy/prosody.sh"
+    mode: "0755"
+
+- name: run letsencrypt ssl deploy hook
+  become: yes
+  command: "/etc/letsencrypt/renewal-hooks/deploy/prosody.sh"
   notify: restart prosody
-  loop:
-    - "{{prosody_ssl_privkey_src}}"
-    - "{{prosody_ssl_cert_src}}"
 
 - name: install db schema file
   become: yes

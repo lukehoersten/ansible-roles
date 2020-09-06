@@ -1,10 +1,5 @@
 VirtualHost "{{prosody_vhost}}"
 
-ssl = {
-    key = "{{prosody_ssl_privkey}}";
-    certificate = "{{prosody_ssl_cert}}";
-}
-
 storage = "sql"
 sql = {
     driver = "PostgreSQL";
