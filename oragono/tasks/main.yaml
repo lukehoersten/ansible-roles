@@ -34,7 +34,6 @@
   loop:
     - "/etc"
     - "/var"
-    - "/run"
 
 - name: configure oragono
   become: yes
@@ -55,8 +54,8 @@
 
 - name: install oragono service
   become: yes
-  template:
-    src: "oragono.service.j2"
+  copy:
+    src: "oragono.service"
     dest: "/lib/systemd/system/oragono.service"
     mode: "0644"
   notify: restart oragono
