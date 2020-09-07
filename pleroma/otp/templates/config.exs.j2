@@ -39,3 +39,9 @@ config :pleroma, Pleroma.Repo,
   hostname: "{{pleroma_db_host}}",
   pool_size: 10,
   timeout: 60000
+
+# config :logger,
+#   backends: [{ExSyslogger, :ex_syslogger}]
+
+# config :logger, :ex_syslogger,
+#   level: :debug
