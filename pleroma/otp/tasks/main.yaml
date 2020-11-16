@@ -6,7 +6,10 @@
 
 - name: apt install pleroma dependencies
   become: yes
-  apt: name="libtinfo5"
+  apt: name="{{item}}"
+  loop:
+    - "libmagic-dev"
+    - "libtinfo5"
 
 - name: create pleroma config and data directories
   become: yes
@@ -14,7 +17,7 @@
     path: "{{item}}"
     state: "directory"
     mode: "0755"
-  with_items:
+  loop:
     - "{{pleroma_data_dir}}"
     - "/etc/pleroma"
     - "/opt/pleroma"

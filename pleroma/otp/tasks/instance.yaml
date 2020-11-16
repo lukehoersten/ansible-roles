@@ -18,7 +18,7 @@
     owner: "pleroma"
     group: "pleroma"
     mode: "0755"
-  with_items:
+  loop:
     - "{{pleroma_data_dir}}/{{pleroma_instance}}"
     - "{{pleroma_data_dir}}/{{pleroma_instance}}/uploads"
     - "{{pleroma_data_dir}}/{{pleroma_instance}}/static"
