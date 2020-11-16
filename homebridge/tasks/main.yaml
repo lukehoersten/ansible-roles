@@ -32,7 +32,7 @@
 - name: install platform accessories
   become: yes
   npm: name="{{item}}" global="yes"
-  with_items: "{{homebridge_npm_packages}}"
+  loop: "{{homebridge_npm_packages}}"
   notify: restart homebridge service
 
 - name: configure homebridge

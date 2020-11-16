@@ -15,7 +15,7 @@
 - name: configure aws credentials for root
   become: yes
   template: src="aws-{{item}}.j2" dest="/root/.aws/{{item}}" mode="0600"
-  with_items:
+  loop:
     - "credentials"
     - "config"
 

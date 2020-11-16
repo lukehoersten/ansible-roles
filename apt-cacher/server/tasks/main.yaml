@@ -11,7 +11,7 @@
     regexp: "^{{item.key}}:"
     insertafter: "^# {{item.key}}:"
     line: "{{item.key}}: {{item.val}}"
-  with_items:
+  loop:
     - { key: "CacheDir", val: "{{apt_cacher_cache_dir}}" }
     - { key: "LogDir", val: "{{apt_cacher_log_dir}}" }
     - { key: "Port", val: "{{apt_cacher_port}}" }
