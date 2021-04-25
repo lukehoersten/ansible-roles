@@ -8,7 +8,7 @@ minecraft_mem: "2G"
 minecraft_seed: ""
 
 minecraft_paper_version: "1.16.5"
-minecraft_paper_build: "455"
+minecraft_paper_build: "629"
 minecraft_vanilla_hash: "1b557e7b033b583cd9f66746b7a9ab1ec1673ced"
 
-minecraft_dynmap_version: "3.1-beta6-spigot"
+minecraft_dynmap_version: "3.1-spigot"
