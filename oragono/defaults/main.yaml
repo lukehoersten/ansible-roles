@@ -1,9 +1,9 @@
 ---
 
 oragono_user: "oragono"
-oragono_version: "2.6.0"
+oragono_version: "2.6.1"
 oragono_arch: "arm64"
 oragono_tar_name: "oragono-{{oragono_version}}-linux-{{oragono_arch}}"
 oragono_tar: "{{oragono_tar_name}}.tar.gz"
-oragono_url: "https://github.com/oragono/oragono/releases/download/v{{oragono_version}}/{{oragono_tar}}"
+oragono_url: "https://github.com/ergochat/ergo/releases/download/v{{oragono_version}}/{{oragono_tar}}"
 oragono_force_nick_equals_account: false
