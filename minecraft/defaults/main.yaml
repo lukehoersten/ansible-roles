@@ -7,8 +7,7 @@ minecraft_motd: "A Minecraft Server"
 minecraft_mem: "2G"
 minecraft_seed: ""
 
-minecraft_paper_version: "1.16.5"
-minecraft_paper_build: "629"
-minecraft_vanilla_hash: "1b557e7b033b583cd9f66746b7a9ab1ec1673ced"
-
-minecraft_dynmap_version: "3.1-spigot"
+minecraft_paper_version: "1.17"
+minecraft_paper_build: "53"
+minecraft_vanilla_hash: "0a269b5f2c5b93b1712d0f5dc43b6182b9ab254e"
+minecraft_dynmap_version: "3.2-beta-1-spigot"

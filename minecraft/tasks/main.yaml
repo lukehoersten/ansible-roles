@@ -4,9 +4,8 @@
   become: yes
   user: name="{{minecraft_user}}" home="{{minecraft_dir}}"
 
-- name: install jre
-  become: yes
-  apt: name="default-jre-headless"
+- name: install adoptopenjdk
+  include_tasks: adoptopenjdk.yaml
 
 - name: set minecraft fork
   set_fact: minecraft_url="{{minecraft_vanilla_url}}"
