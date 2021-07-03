@@ -68,6 +68,7 @@
   loop:
     - {key: "motd", value: "{{minecraft_motd}}"}
     - {key: "level-seed", value: "{{minecraft_seed}}"}
+    - {key: "difficulty", value: "{{minecraft_difficulty}}"}
 
 - name: install systemd service
   become: yes

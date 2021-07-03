@@ -6,6 +6,7 @@ minecraft_parent_dir: "/opt"
 minecraft_motd: "A Minecraft Server"
 minecraft_mem: "2G"
 minecraft_seed: ""
+minecraft_difficulty: "hard"
 
 minecraft_paper_version: "1.17"
 minecraft_paper_build: "53"
