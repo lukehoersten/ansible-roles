@@ -7,6 +7,13 @@
     dest: "/usr/local/bin/minecraft-s3-backup.sh"
     mode: "0755"
 
+- name: create s3 backup lifesycle json file
+  become: yes
+  copy:
+    src: "minecraft-s3-backup-lifecycle.json"
+    dest: "/usr/local/share/minecraft-s3-backup-lifecycle.json"
+    mode: "0755"
+
 - name: configure minecraft s3 backup systemd service
   become: yes
   template:

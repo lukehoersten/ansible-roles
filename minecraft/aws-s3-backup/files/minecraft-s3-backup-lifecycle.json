@@ -5,7 +5,7 @@
 				"Filter": {},
 				"Status": "Enabled",
 				"NoncurrentVersionExpiration": {
-					 "NoncurrentDays": 30
+					 "NoncurrentDays": 5
 				}
 		  }
 	 ]
