@@ -1,0 +1,19 @@
+---
+
+- name: create minecraft s3 backup shell script
+  become: yes
+  copy:
+    src: "minecraft-s3-backup.sh"
+    dest: "/usr/local/bin/minecraft-s3-backup.sh"
+    mode: "0755"
+
+- name: configure minecraft s3 backup systemd service
+  become: yes
+  template:
+    src: "minecraft-s3-backup@.service.j2"
+    dest: "/lib/systemd/system/minecraft-s3-backup@{{minecraft_s3_backup_bucket}}.service"
+  notify: reload s3 backup service
+
+- name: ensure minecraft s3 backup service is started
+  become: yes
+  systemd: name="minecraft-s3-backup@{{minecraft_s3_backup_bucket}}.service" enabled="yes"
