@@ -32,7 +32,7 @@
     mode: "0755"
   notify: restart minecraft
 
-- name: configure minecraft eula and ops
+- name: configure minecraft eula
   become: yes
   copy:
     src: "{{item}}"
@@ -41,7 +41,15 @@
     group: "{{minecraft_user}}"
   loop:
     - "eula.txt"
-    - "ops.json"
+  notify: restart minecraft
+
+- name: configure minecraft ops
+  become: yes
+  template:
+    src: "ops.json.j2"
+    dest: "{{minecraft_dir}}/ops.json"
+    owner: "{{minecraft_user}}"
+    group: "{{minecraft_user}}"
   notify: restart minecraft
 
 - name: install plugins
