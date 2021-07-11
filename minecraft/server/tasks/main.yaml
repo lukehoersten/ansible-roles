@@ -52,8 +52,18 @@
     group: "{{minecraft_user}}"
   notify: restart minecraft
 
+- name: create minecraft plugins dir
+  become: yes
+  file:
+    path: "{{minecraft_dir}}/plugins"
+    owner: "{{minecraft_user}}"
+    group: "{{minecraft_user}}"
+    mode: "0755"
+    state: "directory"
+
 - name: install plugins
-  include_tasks: dynmap.yaml
+  include_tasks: "{{item}}.yaml"
+  loop: "{{minecreat_paper_plugins_enabled}}"
   when: minecraft_fork == "paper"
 
 - name: create server.properties

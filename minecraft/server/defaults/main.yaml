@@ -8,7 +8,18 @@ minecraft_mem: "2G"
 minecraft_seed: ""
 minecraft_difficulty: "hard"
 
-minecraft_paper_version: "1.17.1"
-minecraft_paper_build: "87"
 minecraft_vanilla_hash: "0a269b5f2c5b93b1712d0f5dc43b6182b9ab254e"
-minecraft_dynmap_version: "3.2-beta-1-spigot"
+
+# https://papermc.io
+minecraft_paper_version: "1.17.1"
+minecraft_paper_build: "98"
+
+minecreat_paper_plugins_enabled:
+  - "dynmap"
+  - "geyser"
+
+# https://www.reddit.com/r/Dynmap/
+minecraft_dynmap_version: "3.2-beta-2"
+
+# https://geysermc.org
+minecraft_geyser_vesrion: "752"

@@ -1,16 +1,13 @@
 ---
 
-- name: create minecraft plugins dir
+- name: create minecraft dynmap plugin dir
   become: yes
   file:
-    path: "{{minecraft_dir}}/{{item}}"
+    path: "{{minecraft_dir}}/dynmap"
     owner: "{{minecraft_user}}"
     group: "{{minecraft_user}}"
     mode: "0755"
     state: "directory"
-  loop:
-    - "plugins"
-    - "plugins/dynmap"
 
 - name: download dynmap
   become: yes

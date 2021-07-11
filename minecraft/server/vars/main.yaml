@@ -3,4 +3,7 @@
 minecraft_dir: "{{minecraft_parent_dir}}/minecraft/{{minecraft_fork}}"
 minecraft_paper_url: "https://papermc.io/api/v1/paper/{{minecraft_paper_version}}/{{minecraft_paper_build}}/download"
 minecraft_vanilla_url: "https://launcher.mojang.com/v1/objects/{{minecraft_vanilla_hash}}/server.jar"
-minecraft_dynmap_url: "http://dynmap.us/builds/dynmap/Dynmap-{{minecraft_dynmap_version}}.jar"
+
+# paper is a spigot derivative
+minecraft_dynmap_url: "http://dynmap.us/builds/dynmap/Dynmap-{{minecraft_dynmap_version}}-spigot.jar"
+minecraft_geyser_url: "https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/master/{{minecraft_geyser_vesrion}}/artifact/bootstrap/spigot/target/Geyser-Spigot.jar"
