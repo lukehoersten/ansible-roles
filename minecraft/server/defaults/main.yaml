@@ -7,6 +7,8 @@ minecraft_motd: "A Minecraft Server"
 minecraft_mem: "2G"
 minecraft_seed: ""
 minecraft_difficulty: "hard"
+minecraft_whitelist: "true"
+minecraft_view_distance: "10"
 
 minecraft_vanilla_hash: "0a269b5f2c5b93b1712d0f5dc43b6182b9ab254e"
 

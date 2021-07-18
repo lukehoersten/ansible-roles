@@ -35,21 +35,30 @@
 - name: configure minecraft eula
   become: yes
   copy:
-    src: "{{item}}"
-    dest: "{{minecraft_dir}}/{{item}}"
+    src: "eula.txt"
+    dest: "{{minecraft_dir}}/eula.txt"
     owner: "{{minecraft_user}}"
     group: "{{minecraft_user}}"
-  loop:
-    - "eula.txt"
   notify: restart minecraft
 
 - name: configure minecraft ops
   become: yes
-  template:
-    src: "ops.json.j2"
+  copy:
+    src: "{{minecraft_ops_file}}"
     dest: "{{minecraft_dir}}/ops.json"
     owner: "{{minecraft_user}}"
     group: "{{minecraft_user}}"
+  when: minecraft_ops_file is defined
+  notify: restart minecraft
+
+- name: configure minecraft whitelist
+  become: yes
+  copy:
+    src: "{{minecraft_whitelist_file}}"
+    dest: "{{minecraft_dir}}/whitelist.json"
+    owner: "{{minecraft_user}}"
+    group: "{{minecraft_user}}"
+  when: minecraft_whitelist_file is defined and minecraft_whitelist == "true"
   notify: restart minecraft
 
 - name: create minecraft plugins dir
@@ -87,6 +96,10 @@
     - {key: "motd", value: "{{minecraft_motd}}"}
     - {key: "level-seed", value: "{{minecraft_seed}}"}
     - {key: "difficulty", value: "{{minecraft_difficulty}}"}
+    - {key: "white-list", value: "{{minecraft_whitelist}}"}
+    - {key: "enforce-whitelist", value: "{{minecraft_whitelist}}"}
+    - {key: "view-distance", value: "{{minecraft_view_distance}}"}
+    - {key: "snooper-enabled", value: "false"}
 
 - name: install systemd service
   become: yes

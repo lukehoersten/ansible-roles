@@ -32,7 +32,7 @@
     group: "postgres"
     mode: "0600"
 
-- name: install pleroma psql
+- name: install miniflux psql
   become: yes
   become_user: "postgres"
   command: "psql -f /tmp/setup_db_miniflux.psql"

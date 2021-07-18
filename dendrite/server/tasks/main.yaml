@@ -1,0 +1,103 @@
+---
+
+- name: add dendrite user
+  become: yes
+  user: name="{{dendrite_user}}"
+
+# build
+- name: snap install golang
+  become: yes
+  snap: name="go" classic="yes"
+
+- name: unarchive dendrite
+  become: yes
+  unarchive:
+    remote_src: yes
+    src: "{{dendrite_tar}}"
+    dest: "/tmp/"
+    creates: "{{dendrite_build_dir}}"
+    owner: "{{dendrite_user}}"
+    group: "{{dendrite_user}}"
+
+- name: check if dendrite build exists
+  stat:
+    path: "{{dendrite_build_dir}}/bin"
+  register: build_file
+
+- name: build dendrite
+  become: yes
+  become_user: "{{dendrite_user}}"
+  command: "{{dendrite_build_dir}}/build.sh"
+  args:
+    chdir: "{{dendrite_build_dir}}"
+  when: not build_file.stat.exists
+  notify: restart service
+
+# install
+- name: install dendrite binary
+  become: yes
+  copy:
+    src: "{{dendrite_build_dir}}/bin/dendrite-monolith-server"
+    dest: "/usr/local/bin/dendrite-monolith-server"
+    remote_src: yes
+    owner: "root"
+    group: "root"
+    mode: "0755"
+
+- name: create instance dir
+  become: yes
+  file:
+    path: "{{item}}"
+    state: "directory"
+    owner: "{{dendrite_user}}"
+    group: "{{dendrite_user}}"
+    mode: "0755"
+  notify: reload service
+  loop:
+    - "{{dendrite_dir}}"
+    - "{{dendrite_dir}}/{{dendrite_instance}}"
+
+- name: install keys
+  become: yes
+  copy:
+    src: "{{item}}"
+    dest: "{{dendrite_dir}}/{{dendrite_instance}}/"
+    owner: "{{dendrite_user}}"
+    group: "{{dendrite_user}}"
+    mode: "0600"
+  loop: "{{dendrite_keys}}"
+
+- name: copy db schema file
+  become: yes
+  template:
+    src: "setup_db.psql.j2"
+    dest: "/tmp/setup_db_dendrite_{{dendrite_instance}}.psql"
+    owner: "postgres"
+    group: "postgres"
+    mode: "0600"
+
+- name: install db schema psql
+  become: yes
+  become_user: "postgres"
+  command: "psql -f /tmp/setup_db_dendrite_{{dendrite_instance}}.psql"
+  changed_when: false
+
+- name: configure dendrite
+  become: yes
+  template:
+    src: "dendrite.yaml.j2"
+    dest: "{{dendrite_dir}}/{{dendrite_instance}}/dendrite.yaml"
+    mode: "0644"
+    owner: "{{dendrite_user}}"
+    group: "{{dendrite_user}}"
+  notify: reload service
+
+- name: install systemd service
+  become: yes
+  template:
+    src: "dendrite@.service.j2"
+    dest: "/lib/systemd/system/dendrite@.service"
+
+- name: ensure service is started
+  become: yes
+  systemd: name="dendrite@{{dendrite_instance}}.service" enabled="yes" state="started"

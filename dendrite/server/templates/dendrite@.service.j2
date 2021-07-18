@@ -1,0 +1,12 @@
+[Unit]
+Description=Dendrite %I Instance
+After=syslog.target network.target postgresql.service
+
+[Service]
+WorkingDirectory={{dendrite_dir}}/%i/
+ExecStart=/usr/local/bin/dendrite-monolith-server --http-bind-address ":{{dendrite_port}}"
+Restart=always
+User={{dendrite_user}}
+
+[Install]
+WantedBy=multi-user.target
