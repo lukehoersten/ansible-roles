@@ -14,13 +14,20 @@
     dest: "/usr/local/share/minecraft-s3-backup-lifecycle.json"
     mode: "0755"
 
+- name: create minecraft tar dir
+  become: yes
+  file:
+    path: "{{minecraft_s3_backup_tar_dir}}"
+    mode: "0755"
+    state: "directory"
+
 - name: configure minecraft s3 backup systemd service
   become: yes
   template:
     src: "minecraft-s3-backup@.service.j2"
-    dest: "/lib/systemd/system/minecraft-s3-backup@{{minecraft_s3_backup_bucket}}.service"
+    dest: "/lib/systemd/system/minecraft-s3-backup@{{minecraft_s3_backup_world_name}}.service"
   notify: reload s3 backup service
 
 - name: ensure minecraft s3 backup service is started
   become: yes
-  systemd: name="minecraft-s3-backup@{{minecraft_s3_backup_bucket}}.service" enabled="yes"
+  systemd: name="minecraft-s3-backup@{{minecraft_s3_backup_world_name}}.service" enabled="yes"

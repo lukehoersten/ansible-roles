@@ -1,8 +1,7 @@
 ---
 
-minecraft_dir: "{{minecraft_parent_dir}}/minecraft/{{minecraft_fork}}"
-minecraft_paper_url: "https://papermc.io/api/v1/paper/{{minecraft_paper_version}}/{{minecraft_paper_build}}/download"
-minecraft_vanilla_url: "https://launcher.mojang.com/v1/objects/{{minecraft_vanilla_hash}}/server.jar"
+minecraft_dir: "{{minecraft_parent_dir}}/minecraft/{{minecraft_world_name}}"
+minecraft_url: "https://papermc.io/api/v1/paper/{{minecraft_paper_version}}/{{minecraft_paper_build}}/download"
 
 # paper is a spigot derivative
 minecraft_dynmap_url: "http://dynmap.us/builds/dynmap/Dynmap-{{minecraft_dynmap_version}}-spigot.jar"

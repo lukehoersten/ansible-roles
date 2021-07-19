@@ -2,18 +2,10 @@
 
 - name: add minecraft user
   become: yes
-  user: name="{{minecraft_user}}" home="{{minecraft_dir}}"
+  user: name="{{minecraft_user}}" home="{{minecraft_parent_dir}}/minecraft"
 
 - name: install adoptopenjdk
   include_tasks: adoptopenjdk.yaml
-
-- name: set minecraft fork
-  set_fact: minecraft_url="{{minecraft_vanilla_url}}"
-  when: minecraft_fork == "vanilla"
-
-- name: set minecraft fork
-  set_fact: minecraft_url="{{minecraft_paper_url}}"
-  when: minecraft_fork == "paper"
 
 - name: create minecraft dir
   become: yes
@@ -72,8 +64,7 @@
 
 - name: install plugins
   include_tasks: "{{item}}.yaml"
-  loop: "{{minecreat_paper_plugins_enabled}}"
-  when: minecraft_fork == "paper"
+  loop: "{{minecreat_plugins_enabled}}"
 
 - name: create server.properties
   become: yes
@@ -94,6 +85,7 @@
   notify: restart minecraft
   loop:
     - {key: "motd", value: "{{minecraft_motd}}"}
+    - {key: "level-name", value: "{{minecraft_world_name}}"}
     - {key: "level-seed", value: "{{minecraft_seed}}"}
     - {key: "difficulty", value: "{{minecraft_difficulty}}"}
     - {key: "white-list", value: "{{minecraft_whitelist}}"}
@@ -104,10 +96,10 @@
 - name: install systemd service
   become: yes
   template:
-    src: "minecraft.service.j2"
-    dest: "/lib/systemd/system/minecraft.service"
+    src: "minecraft@.service.j2"
+    dest: "/lib/systemd/system/minecraft@.service"
   notify: restart minecraft
 
 - name: ensure service is started
   become: yes
-  systemd: name="minecraft.service" enabled="yes" state="started"
+  systemd: name="minecraft@{{minecraft_world_name}}.service" enabled="yes" state="started"

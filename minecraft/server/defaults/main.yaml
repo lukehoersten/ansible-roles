@@ -1,7 +1,6 @@
 ---
 
 minecraft_user: "minecraft"
-minecraft_fork: "vanilla" # paper
 minecraft_parent_dir: "/opt"
 minecraft_motd: "A Minecraft Server"
 minecraft_mem: "2G"
@@ -9,14 +8,13 @@ minecraft_seed: ""
 minecraft_difficulty: "hard"
 minecraft_whitelist: "true"
 minecraft_view_distance: "10"
-
-minecraft_vanilla_hash: "0a269b5f2c5b93b1712d0f5dc43b6182b9ab254e"
+minecraft_world_name: "world"
 
 # https://papermc.io
 minecraft_paper_version: "1.17.1"
 minecraft_paper_build: "98"
 
-minecreat_paper_plugins_enabled:
+minecreat_plugins_enabled:
   - "dynmap"
   - "geyser"
 
