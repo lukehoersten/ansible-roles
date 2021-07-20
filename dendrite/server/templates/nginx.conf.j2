@@ -39,4 +39,11 @@ server {
     location /_matrix {
         proxy_pass http://127.0.0.1:{{nginx_proxy_port}};
     }
+
+    root /var/www/{{nginx_server_name}};
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
 }
