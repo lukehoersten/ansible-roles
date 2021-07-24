@@ -23,7 +23,9 @@
     owner: "root"
     group: "root"
     mode: "0755"
-  notify: migrate db
+  notify:
+    - migrate db
+    - restart service
 
 - name: create instance dir
   become: yes
@@ -33,7 +35,7 @@
     owner: "{{writefreely_user}}"
     group: "{{writefreely_user}}"
     mode: "0755"
-  notify: reload service
+  notify: restart service
   loop:
     - "{{writefreely_dir}}"
     - "{{writefreely_dir}}/{{writefreely_instance}}"
@@ -47,6 +49,7 @@
     owner: "{{writefreely_user}}"
     group: "{{writefreely_user}}"
     mode: "0755"
+  notify: restart service
 
 - name: configure
   become: yes
@@ -56,12 +59,7 @@
     mode: "0644"
     owner: "{{writefreely_user}}"
     group: "{{writefreely_user}}"
-  notify: reload service
-
-- name: check if keys exists
-  stat:
-    path: "{{writefreely_dir}}/{{writefreely_instance}}/keys/cookies_auth.aes256"
-  register: keys_file
+  notify: restart service
 
 - name: generate keys
   become: yes
@@ -69,7 +67,7 @@
   command: "writefreely keys generate"
   args:
     chdir: "{{writefreely_dir}}/{{writefreely_instance}}/"
-  # when: not keys_file.stat.exists
+  chaned_when: false
 
 - name: check if db exists
   stat:
@@ -97,6 +95,7 @@
   template:
     src: "writefreely@.service.j2"
     dest: "/lib/systemd/system/writefreely@.service"
+  notify: reload service
 
 - name: ensure service is started
   become: yes

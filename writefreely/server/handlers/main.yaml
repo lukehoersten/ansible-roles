@@ -4,6 +4,10 @@
   become: yes
   systemd: name="writefreely@{{writefreely_instance}}.service" enabled="yes" daemon_reload="yes"
 
+- name: restart service
+  become: yes
+  systemd: name="writefreely@{{writefreely_instance}}.service" state="restarted" enabled="yes" daemon_reload="yes"
+
 - name: migrate db
   become: yes
   become_user: "{{writefreely_user}}"
