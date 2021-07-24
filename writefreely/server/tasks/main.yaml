@@ -67,7 +67,7 @@
   command: "writefreely keys generate"
   args:
     chdir: "{{writefreely_dir}}/{{writefreely_instance}}/"
-  chaned_when: false
+  changed_when: false
 
 - name: check if db exists
   stat:
