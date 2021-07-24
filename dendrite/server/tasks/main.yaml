@@ -87,7 +87,7 @@
   template:
     src: "dendrite.yaml.j2"
     dest: "{{dendrite_dir}}/{{dendrite_instance}}/dendrite.yaml"
-    mode: "0644"
+    mode: "0600"
     owner: "{{dendrite_user}}"
     group: "{{dendrite_user}}"
   notify: reload service
