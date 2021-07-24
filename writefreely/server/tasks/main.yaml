@@ -66,10 +66,10 @@
 - name: generate keys
   become: yes
   become_user: "{{writefreely_user}}"
-  command: "writefreely keys gen"
+  command: "writefreely keys generate"
   args:
     chdir: "{{writefreely_dir}}/{{writefreely_instance}}/"
-  when: not keys_file.stat.exists
+  # when: not keys_file.stat.exists
 
 - name: check if db exists
   stat:

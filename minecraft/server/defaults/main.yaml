@@ -12,7 +12,7 @@ minecraft_world_name: "world"
 
 # https://papermc.io
 minecraft_paper_version: "1.17.1"
-minecraft_paper_build: "98"
+minecraft_paper_build: "127"
 
 minecreat_plugins_enabled:
   - "dynmap"
@@ -22,4 +22,4 @@ minecreat_plugins_enabled:
 minecraft_dynmap_version: "3.2-beta-2"
 
 # https://geysermc.org
-minecraft_geyser_vesrion: "752"
+minecraft_geyser_vesrion: "778"

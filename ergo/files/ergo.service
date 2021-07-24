@@ -1,17 +1,17 @@
 [Unit]
-Description=oragono
-After=network.target
+Description=ergo
+#After=network.target
 # If you are using MySQL for history storage, comment out the above line
 # and uncomment these two instead (you must independently install and configure
 # MySQL for your system):
-# Wants=mysql.service
-# After=network.target mysql.service
+Wants=mysql.service
+After=network.target mysql.service
 
 [Service]
 Type=simple
-User=oragono
-WorkingDirectory=/var/oragono
-ExecStart=/usr/local/bin/oragono run --conf /etc/oragono/oragono.yaml
+User=ergo
+WorkingDirectory=/var/ergo
+ExecStart=/usr/local/bin/ergo run --conf /etc/ergo/config.yaml
 ExecReload=/bin/kill -HUP $MAINPID
 Restart=on-failure
 LimitNOFILE=1048576

@@ -1,9 +1,9 @@
-# This is the default config file for Oragono.
+# This is the default config file for Ergo.
 # It contains recommended defaults for all settings, including some behaviors
 # that differ from conventional ircds. See conventional.yaml for a config
 # with more "mainstream" behavior.
 #
-# If you are setting up a new oragono server, you should copy this file
+# If you are setting up a new ergo server, you should copy this file
 # to a new one named 'ircd.yaml', then read the whole file to see which
 # settings you want to customize. If you don't understand a setting, or
 # aren't sure what behavior you want, most of the defaults are fine
@@ -25,12 +25,12 @@
 # network configuration
 network:
     # name of the network
-    name: {{oragono_network_name}}
+    name: {{ergo_network_name}}
 
 # server configuration
 server:
     # server name
-    name: {{oragono_server_name}}
+    name: {{ergo_server_name}}
 
     # addresses to listen on
     listeners:
@@ -58,12 +58,12 @@ server:
         #         proxy: false
 
         # Example of a Unix domain socket for proxying:
-        "/var/oragono/oragono.socket":
+        "/var/ergo/socket":
 
         # Example of a Tor listener: any connection that comes in on this listener will
         # be considered a Tor connection. It is strongly recommended that this listener
         # *not* be on a public interface --- it should be on 127.0.0.0/8 or unix domain:
-        # "/hidden_service_sockets/oragono_tor_sock":
+        # "/hidden_service_sockets/ergo_tor_sock":
         #     tor: true
 
         # Example of a WebSocket listener:
@@ -116,13 +116,13 @@ server:
 
     websockets:
         # Restrict the origin of WebSocket connections by matching the "Origin" HTTP
-        # header. This settings makes oragono reject every WebSocket connection,
+        # header. This settings makes ergo reject every WebSocket connection,
         # except when it originates from one of the hosts in this list. Use this to
-        # prevent malicious websites from making their visitors connect to oragono
+        # prevent malicious websites from making their visitors connect to ergo
         # without their knowledge. An empty list means that there are no restrictions.
         allowed-origins:
-            # - "https://oragono.io"
-            # - "https://*.oragono.io"
+            # - "https://ergo.io"
+            # - "https://*.ergo.io"
 
     # casemapping controls what kinds of strings are permitted as identifiers (nicknames,
     # channel names, account names, etc.), and how they are normalized for case.
@@ -149,12 +149,12 @@ server:
     check-ident: false
 
     # password to login to the server
-    # generated using  "oragono genpasswd"
+    # generated using  "ergo genpasswd"
     #password: ""
 
     # motd filename
     # if you change the motd, you should move it to ircd.motd
-    motd: "/etc/oragono/oragono.motd"
+    motd: "/etc/ergo/motd"
 
     # motd formatting codes
     # if this is true, the motd is escaped using formatting codes like $c, $b, and $i
@@ -177,7 +177,7 @@ server:
             # (comment this out to use passwords only)
             fingerprint: "abcdef0123456789abcdef0123456789abcdef0123456789abcdef0123456789"
 
-            # password the gateway uses to connect, made with oragono genpasswd
+            # password the gateway uses to connect, made with ergo genpasswd
             password: "$2a$04$abcdef0123456789abcdef0123456789abcdef0123456789abcde"
 
             # addresses/CIDRs that can use this webirc command
@@ -199,7 +199,7 @@ server:
     compatibility:
         # many clients require that the final parameter of certain messages be an
         # RFC1459 trailing parameter, i.e., prefixed with :, whether or not this is
-        # actually required. this forces Oragono to send those parameters
+        # actually required. this forces Ergo to send those parameters
         # as trailings. this is recommended unless you're testing clients for conformance;
         # defaults to true when unset for that reason.
         force-trailing: true
@@ -250,7 +250,7 @@ server:
     # IP cloaking hides users' IP addresses from other users and from channel admins
     # (but not from server admins), while still allowing channel admins to ban
     # offending IP addresses or networks. In place of hostnames derived from reverse
-    # DNS, users see fake domain names like pwbs2ui4377257x8.oragono. These names are
+    # DNS, users see fake domain names like pwbs2ui4377257x8.ergo. These names are
     # generated deterministically from the underlying IP address, but if the underlying
     # IP is not already known, it is infeasible to recover it from the cloaked name.
     ip-cloaking:
@@ -259,7 +259,7 @@ server:
 
         # fake TLD at the end of the hostname, e.g., pwbs2ui4377257x8.irc
         # you may want to use your network name here
-        netname: "usr.{{oragono_network_name}}"
+        netname: "usr.{{ergo_network_name}}"
 
         # the cloaked hostname is derived only from the CIDR (most significant bits
         # of the IP address), up to a configurable number of bits. this is the
@@ -285,10 +285,10 @@ server:
     secure-nets:
         # - "10.0.0.0/8"
 
-    # oragono will write files to disk under certain circumstances, e.g.,
+    # ergo will write files to disk under certain circumstances, e.g.,
     # CPU profiling or data export. by default, these files will be written
     # to the working directory. set this to customize:
-    output-path: "/var/oragono"
+    output-path: "/var/ergo"
 
 # account options
 accounts:
@@ -417,9 +417,9 @@ accounts:
         # account name as their nickname. when combined with strict nickname
         # enforcement, this lets users treat nicknames and account names
         # as equivalent for the purpose of ban/invite/exception lists.
-        force-nick-equals-account: {{oragono_force_nick_equals_account}}
+        force-nick-equals-account: {{ergo_force_nick_equals_account}}
 
-    # multiclient controls whether oragono allows multiple connections to
+    # multiclient controls whether ergo allows multiple connections to
     # attach to the same client/nickname identity; this is part of the
     # functionality traditionally provided by a bouncer like ZNC
     multiclient:
@@ -474,7 +474,7 @@ accounts:
 
         # vhosts that users can take without approval, using `/HS TAKE`
         offer-list:
-            #- "oragono.test"
+            #- "ergo.test"
 
     # modes that are set by default when a user connects
     # if unset, no user modes will be set by default
@@ -606,7 +606,7 @@ opers:
         whois-line: "server admin"
 
         # custom hostname
-        vhost: "opr.{{oragono_network_name}}"
+        vhost: "opr.{{ergo_network_name}}"
 
         # modes are the modes to auto-set upon opering-up
         modes: +is acjknoqtuxv
@@ -614,8 +614,8 @@ opers:
         # operators can be authenticated either by password (with the /OPER command),
         # or by certificate fingerprint, or both. if a password hash is set, then a
         # password is required to oper up (e.g., /OPER dan mypassword). to generate
-        # the hash, use `oragono genpasswd`.
-        password: "{{oragono_oper_pass_hash}}"
+        # the hash, use `ergo genpasswd`.
+        password: "{{ergo_oper_pass_hash}}"
 
         # if a SHA-256 certificate fingerprint is configured here, then it will be
         # required to /OPER. if you comment out the password hash above, then you can
@@ -668,7 +668,7 @@ logging:
 
 # debug options
 debug:
-    # when enabled, oragono will attempt to recover from certain kinds of
+    # when enabled, ergo will attempt to recover from certain kinds of
     # client-triggered runtime errors that would normally crash the server.
     # this makes the server more resilient to DoS, but could result in incorrect
     # behavior. deployments that would prefer to "start from scratch", e.g., by
@@ -685,7 +685,7 @@ debug:
 # datastore configuration
 datastore:
     # path to the datastore
-    path: "/var/oragono/oragono.db"
+    path: "/var/ergo/ergo.db"
 
     # if the database schema requires an upgrade, `autoupgrade` will attempt to
     # perform it automatically on startup. the database will be backed
@@ -699,9 +699,9 @@ datastore:
         port: 3306
         # if socket-path is set, it will be used instead of host:port
         #socket-path: "/var/run/mysqld/mysqld.sock"
-        user: "oragono"
+        user: "ergo"
         password: "hunter2"
-        history-database: "oragono_history"
+        history-database: "ergo_history"
         timeout: 3s
 
 # languages config
