@@ -1,26 +1,27 @@
 ---
 
-- name: create writefreely s3 backup shell script
+- name: create s3 backup shell script
   become: yes
   copy:
-    src: "writefreely-s3-backup.sh"
-    dest: "/usr/local/bin/writefreely-s3-backup.sh"
+    src: "dendrite-s3-backup.sh"
+    dest: "/usr/local/bin/dendrite-s3-backup.sh"
     mode: "0755"
 
 - name: create s3 backup lifesycle json file
   become: yes
   copy:
-    src: "writefreely-s3-backup-lifecycle.json"
-    dest: "/usr/local/share/writefreely-s3-backup-lifecycle.json"
+    src: "dendrite-s3-backup-lifecycle.json"
+    dest: "/usr/local/share/dendrite-s3-backup-lifecycle.json"
     mode: "0755"
 
-- name: configure writefreely s3 backup systemd service
+- name: configure s3 backup systemd service
   become: yes
-  template:
-    src: "writefreely-s3-backup@.service.j2"
-    dest: "/lib/systemd/system/writefreely-s3-backup@{{writefreely_s3_backup_bucket}}.service"
-  notify: reload s3 backup service
+  copy:
+    src: "dendrite-s3-backup@.service"
+    dest: "/lib/systemd/system/dendrite-s3-backup@.service"
+    mode: "0644"
+  notify: restart dendrite instance s3 backup
 
-- name: ensure writefreely s3 backup service is started
+- name: ensure s3 backup is enabled
   become: yes
-  systemd: name="writefreely-s3-backup@{{writefreely_s3_backup_bucket}}.service" enabled="yes"
+  systemd: name="dendrite-s3-backup@{{dendrite_instance}}.service" enabled="yes"

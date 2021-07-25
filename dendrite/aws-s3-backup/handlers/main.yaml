@@ -1,5 +1,5 @@
 ---
 
-- name: reload s3 backup service
-  systemd: name="writefreely-s3-backup@{{writefreely_s3_backup_bucket}}.service" enabled="yes" daemon_reload="yes"
+- name: restart dendrite instance s3 backup
   become: yes
+  systemd: name="dendrite-s3-backup@{{dendrite_instance}}.service" enabled="yes" daemon_reload="yes"

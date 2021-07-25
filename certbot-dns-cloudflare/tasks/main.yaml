@@ -21,3 +21,14 @@
     mode: "0644"
     owner: "root"
     group: "root"
+
+- name: check if cert exists
+  become: yes
+  stat: path="/etc/letsencrypt/live/{{certbot_dns_cloudflare_domain}}/cert.pem"
+  register: cert
+
+- name: run certbot
+  become: yes
+  command: "certbot certonly -n --dns-cloudflare --dns-cloudflare-credentials /etc/letsencrypt/cred.conf -d {{certbot_dns_cloudflare_domain}}"
+  when: not cert.stat.exists
+  changed_when: false

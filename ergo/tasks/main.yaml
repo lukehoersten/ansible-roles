@@ -2,7 +2,7 @@
 
 - name: add ergo user
   become: yes
-  user: name="ergo"
+  user: name="ergo" shell="/bin/false" system="yes" create_home="no"
 
 - name: download ergo
   become: yes

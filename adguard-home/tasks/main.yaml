@@ -44,7 +44,8 @@
   template: src="AdGuardHome.yaml.j2" dest="/etc/AdGuardHome/AdGuardHome.yaml"
   notify: restart adguard home
 
-- stat: "path=/etc/resolv.conf"
+- name: check if resolv.conf exists
+  stat: path="/etc/resolv.conf"
   register: sym
 
 - name: replace systemd-resolved conf stub

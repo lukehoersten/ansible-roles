@@ -2,7 +2,7 @@
 
 - name: add minecraft user
   become: yes
-  user: name="{{minecraft_user}}" home="{{minecraft_parent_dir}}/minecraft"
+  user: name="{{minecraft_user}}" home="{{minecraft_parent_dir}}/minecraft" shell="/bin/false" system="yes"
 
 - name: install adoptopenjdk
   include_tasks: adoptopenjdk.yaml

@@ -2,7 +2,7 @@
 
 - name: add miniflux user
   become: yes
-  user: name="miniflux" system="yes" create_home="no"
+  user: name="miniflux" shell="/bin/false" system="yes" create_home="no"
 
 - name: download miniflux
   become: yes

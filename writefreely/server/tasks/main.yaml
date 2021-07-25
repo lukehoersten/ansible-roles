@@ -2,7 +2,7 @@
 
 - name: add writefreely user
   become: yes
-  user: name="{{writefreely_user}}"
+  user: name="{{writefreely_user}}" shell="/bin/false" system="yes" create_home="no"
 
 - name: unarchive writefreely
   become: yes

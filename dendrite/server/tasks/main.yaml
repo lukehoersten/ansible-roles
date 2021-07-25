@@ -2,7 +2,7 @@
 
 - name: add dendrite user
   become: yes
-  user: name="{{dendrite_user}}"
+  user: name="{{dendrite_user}}" shell="/bin/false" system="yes"
 
 # build
 - name: snap install golang
