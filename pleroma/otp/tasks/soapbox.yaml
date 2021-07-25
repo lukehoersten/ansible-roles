@@ -11,7 +11,7 @@
   become: yes
   file:
     path: "{{pleroma_data_dir}}/{{pleroma_instance}}/static/"
-    status: "absent"
+    state: "absent"
   changed_when: false
 
 - name: install soapbox frontend
