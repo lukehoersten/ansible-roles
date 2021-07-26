@@ -40,7 +40,6 @@
   become: yes
   copy: src="{{nginx_root_src}}" dest="{{nginx_root_dest}}/"
   when: nginx_root
-  notify: reload nginx
 
 - name: enable nginx service
   become: yes
