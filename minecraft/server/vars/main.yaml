@@ -6,6 +6,3 @@ minecraft_url: "https://papermc.io/api/v2/projects/paper/versions/{{minecraft_pa
 # paper is a spigot derivative
 minecraft_dynmap_url: "http://dynmap.us/builds/dynmap/Dynmap-{{minecraft_dynmap_version}}-spigot.jar"
 minecraft_geyser_url: "https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/master/{{minecraft_geyser_vesrion}}/artifact/bootstrap/spigot/target/Geyser-Spigot.jar"
-
-# Java - https://adoptium.net/releases.html
-minecraft_java_url: "https://github.com/adoptium/temurin{{minecraft_java_major}}-binaries/releases/download/jdk-{{minecraft_java_version}}%2B{{minecraft_java_build}}/OpenJDK{{minecraft_java_major}}U-jdk_{{minecraft_java_arch}}_linux_hotspot_{{minecraft_java_version}}_{{minecraft_java_build}}.tar.gz"

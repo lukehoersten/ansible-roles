@@ -1,11 +1,5 @@
 ---
 
-minecraft_java_arch: "aarch64"
-minecraft_java_major: "17"
-minecraft_java_version: "{{minecraft_java_major}}.0.1"
-minecraft_java_build: "12"
-
-
 minecraft_user: "minecraft"
 minecraft_parent_dir: "/opt"
 minecraft_motd: "A Minecraft Server"

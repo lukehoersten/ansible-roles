@@ -4,16 +4,9 @@
   become: yes
   user: name="{{minecraft_user}}" home="{{minecraft_parent_dir}}/minecraft" shell="/bin/false" system="yes"
 
-- name: install adoptium java
+- name: install java
   become: yes
-  unarchive:
-    remote_src: yes
-    src: "{{minecraft_java_url}}"
-    dest: "/opt/"
-    creates: "/opt/jdk-{{minecraft_java_version}}+{{minecraft_java_build}}/"
-    owner: "root"
-    group: "root"
-  notify: restart minecraft
+  apt: name="openjdk-17-jre-headless"
 
 - name: create minecraft dir
   become: yes
