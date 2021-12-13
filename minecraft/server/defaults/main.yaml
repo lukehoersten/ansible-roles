@@ -1,5 +1,11 @@
 ---
 
+minecraft_java_arch: "aarch64"
+minecraft_java_major: "17"
+minecraft_java_version: "{{minecraft_java_major}}.0.1"
+minecraft_java_build: "12"
+
+
 minecraft_user: "minecraft"
 minecraft_parent_dir: "/opt"
 minecraft_motd: "A Minecraft Server"
@@ -11,15 +17,15 @@ minecraft_view_distance: "10"
 minecraft_world_name: "world"
 
 # https://papermc.io
-minecraft_paper_version: "1.17.1"
-minecraft_paper_build: "353"
+minecraft_paper_version: "1.18.1"
+minecraft_paper_build: "68"
 
 minecreat_plugins_enabled:
   - "dynmap"
   - "geyser"
 
 # https://www.reddit.com/r/Dynmap/
-minecraft_dynmap_version: "3.2.1"
+minecraft_dynmap_version: "3.3-SNAPSHOT"
 
 # https://geysermc.org
-minecraft_geyser_vesrion: "911"
+minecraft_geyser_vesrion: "961"

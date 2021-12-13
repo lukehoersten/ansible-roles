@@ -4,8 +4,16 @@
   become: yes
   user: name="{{minecraft_user}}" home="{{minecraft_parent_dir}}/minecraft" shell="/bin/false" system="yes"
 
-- name: install adoptopenjdk
-  include_tasks: adoptopenjdk.yaml
+- name: install adoptium java
+  become: yes
+  unarchive:
+    remote_src: yes
+    src: "{{minecraft_java_url}}"
+    dest: "/opt/"
+    creates: "/opt/jdk-{{minecraft_java_version}}+{{minecraft_java_build}}/"
+    owner: "root"
+    group: "root"
+  notify: restart minecraft
 
 - name: create minecraft dir
   become: yes
