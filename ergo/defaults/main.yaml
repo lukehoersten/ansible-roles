@@ -1,7 +1,7 @@
 ---
 
 ergo_user: "ergo"
-ergo_version: "2.8.0"
+ergo_version: "2.9.1"
 ergo_arch: "arm64"
 ergo_tar_name: "ergo-{{ergo_version}}-linux-{{ergo_arch}}"
 ergo_tar: "{{ergo_tar_name}}.tar.gz"

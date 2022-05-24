@@ -11,15 +11,15 @@ minecraft_view_distance: "10"
 minecraft_world_name: "world"
 
 # https://papermc.io
-minecraft_paper_version: "1.18.1"
-minecraft_paper_build: "68"
+minecraft_paper_version: "1.18.2"
+minecraft_paper_build: "341"
 
 minecreat_plugins_enabled:
   - "dynmap"
   - "geyser"
 
 # https://www.reddit.com/r/Dynmap/
-minecraft_dynmap_version: "3.3-SNAPSHOT"
+minecraft_dynmap_version: "3.3.2"
 
 # https://geysermc.org
-minecraft_geyser_vesrion: "961"
+minecraft_geyser_version: "1103"

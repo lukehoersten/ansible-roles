@@ -5,4 +5,4 @@ minecraft_url: "https://papermc.io/api/v2/projects/paper/versions/{{minecraft_pa
 
 # paper is a spigot derivative
 minecraft_dynmap_url: "http://dynmap.us/builds/dynmap/Dynmap-{{minecraft_dynmap_version}}-spigot.jar"
-minecraft_geyser_url: "https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/master/{{minecraft_geyser_vesrion}}/artifact/bootstrap/spigot/target/Geyser-Spigot.jar"
+minecraft_geyser_url: "https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/master/{{minecraft_geyser_version}}/artifact/bootstrap/spigot/target/Geyser-Spigot.jar"
