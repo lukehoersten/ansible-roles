@@ -7,6 +7,8 @@ WorkingDirectory={{dendrite_dir}}/%i/
 ExecStart=/usr/local/bin/dendrite-monolith-server --http-bind-address ":{{dendrite_port}}"
 Restart=always
 User={{dendrite_user}}
+LimitNOFILE=65535
+LimitNPROC=65535
 
 [Install]
 WantedBy=multi-user.target
