@@ -1,7 +1,7 @@
 ---
 
 dendrite_user: "dendrite"
-dendrite_version: "0.8.5"
+dendrite_version: "0.8.9"
 dendrite_tar: "https://github.com/matrix-org/dendrite/archive/refs/tags/v{{dendrite_version}}.tar.gz"
 dendrite_build_dir: "/tmp/dendrite-{{dendrite_version}}"
 dendrite_old_key: false

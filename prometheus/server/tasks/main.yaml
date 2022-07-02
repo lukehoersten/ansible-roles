@@ -25,15 +25,17 @@
   become: yes
   systemd: name="grafana-server.service" enabled="yes" state="started"
 
-- name: install grafana prometheus data source
-  become: yes
-  grafana_datasource:
-    name: "Prometheus"
-    ds_type: "prometheus"
-    ds_url: "http://localhost:9090"
-    grafana_url: "http://localhost:3000"
-    is_default: yes
-  changed_when: false
+### TODO: This is broken and not sure why. Started having errors one day. I
+### supect bug with anisble module
+# - name: install grafana prometheus data source
+#   become: yes
+#   grafana_datasource:
+#     name: "Prometheus"
+#     ds_type: "prometheus"
+#     ds_url: "http://localhost:9090"
+#     grafana_url: "http://localhost:3000"
+#     is_default: yes
+#   changed_when: false
 
 - name: install grafana plugins
   become: yes
