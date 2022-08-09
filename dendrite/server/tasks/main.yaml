@@ -50,7 +50,6 @@
     - {"src": "dendrite-upgrade-tests"   , "dest": "dendrite-upgrade-tests"}
     - {"src": "generate-config"          , "dest": "dendrite-generate-config"}
     - {"src": "generate-keys"            , "dest": "dendrite-generate-keys"}
-    - {"src": "goose"                    , "dest": "dendrite-goose"}
     - {"src": "resolve-state"            , "dest": "dendrite-resolve-state"}
 
 - name: create instance dir
@@ -65,6 +64,17 @@
   loop:
     - "{{dendrite_dir}}"
     - "{{dendrite_dir}}/{{dendrite_instance}}"
+
+- name: create instance port symlink
+  become: yes
+  file:
+    src: "{{dendrite_dir}}/{{dendrite_instance}}"
+    dest: "{{dendrite_dir}}/{{dendrite_port}}"
+    state: "link"
+    owner: "{{dendrite_user}}"
+    group: "{{dendrite_user}}"
+    mode: "0755"
+  notify: restart service
 
 - name: install keys
   become: yes
@@ -107,6 +117,10 @@
     src: "dendrite@.service.j2"
     dest: "/lib/systemd/system/dendrite@.service"
 
+- name: ensure instance service is stopped
+  become: yes
+  systemd: name="dendrite@{{dendrite_instance}}.service" enabled="no" state="stopped" daemon_reload="yes"
+
 - name: ensure service is started
   become: yes
-  systemd: name="dendrite@{{dendrite_instance}}.service" enabled="yes" state="started"
+  systemd: name="dendrite@{{dendrite_port}}.service" enabled="yes" state="started"
