@@ -12,6 +12,24 @@
   become: yes
   apt: name="{{prometheus_server_apt_packages}}" state="latest"
 
+- name: make prometheus data dir
+  become: yes
+  file:
+    path: "{{prometheus_server_data_dir}}"
+    state: "directory"
+    owner: "prometheus"
+    group: "prometheus"
+    recurse: yes
+  notify: restart prometheus service
+
+- name: configure prometheus data dir
+  become: yes
+  lineinfile:
+    path: "/etc/default/prometheus"
+    regexp: '^ARGS="'
+    line: 'ARGS="--storage.tsdb.path={{prometheus_server_data_dir}}"'
+  notify: restart prometheus service
+
 - name: configure prometheus
   become: yes
   template:
@@ -37,10 +55,10 @@
 #     is_default: yes
 #   changed_when: false
 
-- name: install grafana plugins
-  become: yes
-  grafana_plugin: name="{{item}}"
-  loop: "{{prometheus_server_grafana_plugins}}"
+# - name: install grafana plugins
+#   become: yes
+#   grafana_plugin: name="{{item}}"
+#   loop: "{{prometheus_server_grafana_plugins}}"
 
 - name: copy dashboards to target
   become: yes
@@ -50,9 +68,10 @@
     mode: "0640"
   loop: "{{prometheus_server_grafana_dashboards}}"
 
-# - name: install grafana dashboards
-#   become: yes
-#   grafana_dashboard:
-#     grafana_url: "http://localhost:3000"
-#     path: "/tmp/{{item}}"
-#   loop: "{{prometheus_server_grafana_dashboards}}"
+- name: install grafana dashboards
+  become: yes
+  grafana_dashboard:
+    grafana_url: "http://localhost:3000"
+    path: "/tmp/{{item}}"
+    overwrite: yes
+  loop: "{{prometheus_server_grafana_dashboards}}"

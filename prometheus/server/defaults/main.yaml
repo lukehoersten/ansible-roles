@@ -5,5 +5,4 @@ prometheus_server_apt_packages:
   - "prometheus"
   - "grafana"
 
-prometheus_server_grafana_plugins:
-  - "flant-statusmap-panel"
+prometheus_server_data_dir: "/var/lib/prometheus/metrics2"
