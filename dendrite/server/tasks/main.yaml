@@ -116,6 +116,7 @@
   template:
     src: "dendrite@.service.j2"
     dest: "/lib/systemd/system/dendrite@.service"
+  notify: restart service
 
 - name: ensure instance service is stopped
   become: yes

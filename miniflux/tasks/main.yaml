@@ -43,9 +43,6 @@
   copy:
     src: "miniflux.service"
     dest: "/lib/systemd/system/miniflux.service"
-    owner: "root"
-    group: "root"
-    mode: "0755"
   notify: restart miniflux service
 
 - name: ensure service is started
