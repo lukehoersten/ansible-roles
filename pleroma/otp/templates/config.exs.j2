@@ -46,8 +46,8 @@ config :prometheus, Pleroma.Web.Endpoint.MetricsExporter,
 #   path: "/api/pleroma/app_metrics",
 #   format: :text
 
-# config :logger,
-#   backends: [{ExSyslogger, :ex_syslogger}]
+config :logger,
+  backends: [{ExSyslogger, :ex_syslogger}]
 
-# config :logger, :ex_syslogger,
-#   level: :debug
+config :logger, :ex_syslogger,
+  level: :warn

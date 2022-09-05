@@ -22,7 +22,6 @@
     - "{{pleroma_data_dir}}/{{pleroma_instance}}"
     - "{{pleroma_data_dir}}/{{pleroma_instance}}/uploads"
     - "{{pleroma_data_dir}}/{{pleroma_instance}}/static"
-    - "{{pleroma_data_dir}}/{{pleroma_instance}}/static/emoji"
 
 - name: install pleroma db schema file
   become: yes
