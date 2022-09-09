@@ -1,5 +1,4 @@
 syntax: regexp
-~$
 \#.*\#$
 \.\#
 \.DS_Store$
