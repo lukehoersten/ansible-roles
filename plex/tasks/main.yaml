@@ -4,7 +4,10 @@
 
 - name: add plex apt key
   become: yes
-  apt_key: url="https://downloads.plex.tv/plex-keys/PlexSign.key"
+  get_url:
+    url: "https://downloads.plex.tv/plex-keys/PlexSign.key"
+    dest: /etc/apt/trusted.gpg.d/plex.asc
+    mode: "0644"
 
 - name: add plex apt repo
   become: yes

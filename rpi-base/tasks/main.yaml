@@ -11,7 +11,10 @@
 
 - name: add log2ram apt key
   become: yes
-  apt_key: url="https://azlux.fr/repo.gpg.key"
+  get_url:
+    url: "https://azlux.fr/repo.gpg.key"
+    dest: /etc/apt/trusted.gpg.d/log2ram.asc
+    mode: "0644"
 
 - name: add log2ram apt repo
   become: yes

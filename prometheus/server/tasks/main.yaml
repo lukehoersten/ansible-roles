@@ -2,7 +2,10 @@
 
 - name: add grafana apt key
   become: yes
-  apt_key: url="https://packages.grafana.com/gpg.key"
+  get_url:
+    url: "https://packages.grafana.com/gpg.key"
+    dest: /etc/apt/trusted.gpg.d/grafana.asc
+    mode: "0644"
 
 - name: add grafana apt repo
   become: yes
