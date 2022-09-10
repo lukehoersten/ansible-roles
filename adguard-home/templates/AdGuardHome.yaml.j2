@@ -93,12 +93,12 @@ clients:
   tags: []
   ids:
   - {{client.ip}}
-  use_global_settings: {{not client.bypass}}
+  use_global_settings: {{not client.bypass|default(true)}}
   filtering_enabled: false
   parental_enabled: false
   safesearch_enabled: false
   safebrowsing_enabled: false
-  use_global_blocked_services: {{not client.bypass}}
+  use_global_blocked_services: {{not client.bypass|default(true)}}
   blocked_services: []
   upstreams: []
 {% else %}  []
