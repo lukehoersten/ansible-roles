@@ -8,6 +8,7 @@
     shell: "/bin/false"
     home: "{{homebridge_dir}}"
     groups: "{{homebridge_groups}}"
+    append: yes
     move_home: yes
   notify: restart homebridge service
 
