@@ -1,13 +1,10 @@
 ---
 
-- name: pip install mercurial
-  become: yes
-  pip: name="mercurial" executable="pip3"
-
 - name: apt install uwsgi
   become: yes
   apt: name="{{item}}"
   loop:
+    - "mercurial"
     - "uwsgi"
     - "uwsgi-plugin-python3"
     - "python3-pygments"
@@ -36,4 +33,8 @@
 
 - name: ensure uwsgi service is started
   become: yes
-  systemd: name="uwsgi.service" enabled="yes"
+  systemd: name="uwsgi-app@hgweb.socket" enabled="yes"
+
+- name: ensure uwsgi service is started
+  become: yes
+  systemd: name="uwsgi-app@hgweb.service" enabled="yes"
