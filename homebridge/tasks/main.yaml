@@ -1,54 +1,38 @@
 ---
 
-- name: create homebridge user
+- name: add homebridge apt key
   become: yes
-  user:
-    name: "{{homebridge_user}}"
-    comment: "Homebridge"
-    shell: "/bin/false"
-    home: "{{homebridge_dir}}"
-    groups: "{{homebridge_groups}}"
-    append: yes
-    move_home: yes
-  notify: restart homebridge service
+  get_url:
+    url: "https://repo.homebridge.io/KEY.gpg"
+    dest: /etc/apt/trusted.gpg.d/homebridge.asc
+    mode: "0644"
 
-- name: create homebridge directory
+- name: add homebridge apt repo
   become: yes
-  file:
-    path: "{{homebridge_dir}}"
-    state: "directory"
-    owner: "{{homebridge_user}}"
-    group: "{{homebridge_user}}"
-    mode: "0755"
+  apt_repository: repo="deb https://repo.homebridge.io stable main"
+
+- name: apt install homebridge
+  become: yes
+  apt: name="homebridge"
+  notify: restart homebridge service
 
 - name: install homebridge apt deps
   become: yes
   apt: name="{{homebridge_apt_packages}}"
-
-- name: install homebridge
-  become: yes
-  npm: name="homebridge" global="yes"
   notify: restart homebridge service
 
-- name: install platform accessories
-  become: yes
-  npm: name="{{item}}" global="yes"
-  loop: "{{homebridge_npm_packages}}"
-  notify: restart homebridge service
+# - name: install platform accessories
+#   become: yes
+#   npm: name="{{item}}" global="yes"
+#   loop: "{{homebridge_npm_packages}}"
+#   notify: restart homebridge service
 
-- name: configure homebridge
-  become: yes
-  template:
-    src: "{{homebridge_config_template}}"
-    dest: "{{homebridge_dir}}/config.json"
-  notify: restart homebridge service
-
-- name: configure systemd service
-  become: yes
-  template:
-    src: "homebridge.service.j2"
-    dest: "/lib/systemd/system/homebridge.service"
-  notify: restart homebridge service
+# - name: configure homebridge
+#   become: yes
+#   template:
+#     src: "{{homebridge_config_template}}"
+#     dest: "{{homebridge_dir}}/config.json"
+#   notify: restart homebridge service
 
 - name: ensure homebridge is started
   become: yes
