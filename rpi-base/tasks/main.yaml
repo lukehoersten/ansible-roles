@@ -18,7 +18,7 @@
 
 - name: add log2ram apt repo
   become: yes
-  apt_repository: repo="deb [signed-by=/etc/apt/trusted.gpg.d/log2ram.asc] http://packages.azlux.fr/debian/ buster main"
+  apt_repository: repo="deb [signed-by=/etc/apt/trusted.gpg.d/log2ram.asc] https://packages.azlux.fr/debian/ buster main"
 
 - name: set timezone
   become: yes
