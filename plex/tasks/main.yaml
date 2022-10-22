@@ -6,12 +6,12 @@
   become: yes
   get_url:
     url: "https://downloads.plex.tv/plex-keys/PlexSign.key"
-    dest: /etc/apt/trusted.gpg.d/plex.asc
+    dest: "/etc/apt/trusted.gpg.d/plex.asc"
     mode: "0644"
 
 - name: add plex apt repo
   become: yes
-  apt_repository: repo="deb http://downloads.plex.tv/repo/deb public main"
+  apt_repository: repo="deb [signed-by=/etc/apt/trusted.gpg.d/plex.asc] http://downloads.plex.tv/repo/deb public main"
   notify: restart plex service
 
 - name: update apt package cache

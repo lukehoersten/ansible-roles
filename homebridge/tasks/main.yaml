@@ -4,12 +4,12 @@
   become: yes
   get_url:
     url: "https://repo.homebridge.io/KEY.gpg"
-    dest: /etc/apt/trusted.gpg.d/homebridge.asc
+    dest: "/etc/apt/trusted.gpg.d/homebridge.asc"
     mode: "0644"
 
 - name: add homebridge apt repo
   become: yes
-  apt_repository: repo="deb https://repo.homebridge.io stable main"
+  apt_repository: repo="deb [signed-by=/etc/apt/trusted.gpg.d/homebridge.asc] https://repo.homebridge.io stable main"
 
 - name: apt install homebridge
   become: yes
