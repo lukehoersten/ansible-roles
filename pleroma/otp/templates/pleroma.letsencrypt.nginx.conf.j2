@@ -58,8 +58,7 @@ server {
         proxy_set_header Connection "upgrade";
         proxy_set_header Host $http_host;
 
-        set $upstream {{pleroma_proxy_pass}};
-        proxy_pass $upstream;
+        proxy_pass {{pleroma_proxy_pass}};
 
         client_max_body_size 16m;
     }
@@ -68,9 +67,7 @@ server {
         proxy_cache {{pleroma_instance}}-pleroma_media_cache;
         proxy_cache_lock on;
         proxy_ignore_client_abort on;
-
-        set $upstream {{pleroma_proxy_pass}};
-        proxy_pass $upstream;
+        proxy_pass {{pleroma_proxy_pass}};
     }
 
     # don't expose prometheus stats publicly

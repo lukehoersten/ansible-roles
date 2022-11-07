@@ -37,8 +37,7 @@ server {
     proxy_read_timeout                 600;
 
     location /_matrix {
-        set $upstream http://127.0.0.1:{{nginx_proxy_port}};
-        proxy_pass $upstream;
+        proxy_pass http://127.0.0.1:{{nginx_proxy_port}};
     }
 
     root /var/www/{{nginx_server_name}};
