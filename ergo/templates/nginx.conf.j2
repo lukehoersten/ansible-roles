@@ -1,9 +1,6 @@
 server {
       listen 6697 ssl;
-
-      set $upstream unix:/var/ergo/socket;
-      proxy_pass $upstream;
-
+      proxy_pass unix:/var/ergo/socket;
       proxy_protocol on;
 
       ssl_certificate {{nginx_ssl_cert}};
