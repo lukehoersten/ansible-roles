@@ -25,7 +25,7 @@
   lineinfile:
     path: "{{transmission_config}}"
     regexp: '^    "rpc-whitelist":'
-    line: '    "rpc-whitelist": "127.0.0.1,192.168.*.*",'
+    line: '    "rpc-whitelist": "127.0.0.1,192.168.*.*,10.0.*.*",'
     insertafter: ",$"
   notify: restart transmission service
 
