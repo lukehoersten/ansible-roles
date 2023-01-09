@@ -5,6 +5,7 @@ dendrite_version: "0.10.8"
 dendrite_tar: "https://github.com/matrix-org/dendrite/archive/refs/tags/v{{dendrite_version}}.tar.gz"
 dendrite_build_dir: "/tmp/dendrite-{{dendrite_version}}"
 dendrite_old_key: false
+dendrite_registration_disabled: true
 dendrite_registration_secret: ""
 
 dendrite_db_user: "dendrite_{{dendrite_instance}}"
