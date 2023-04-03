@@ -1,5 +1,6 @@
 ---
 
+# https://github.com/lukasmalkmus/rpi_exporter/releases
 prometheus_client_rpi_exporter_version: "0.8.0"
 prometheus_client_arch: "{{ansible_architecture}}"
 

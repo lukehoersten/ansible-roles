@@ -4,7 +4,7 @@ After=syslog.target network.target postgresql.service
 
 [Service]
 WorkingDirectory={{dendrite_dir}}/%i/
-ExecStart=/usr/local/bin/dendrite-monolith-server -config "{{dendrite_dir}}/%i/dendrite.yaml" -http-bind-address ":%i"
+ExecStart=/usr/local/bin/dendrite -config "{{dendrite_dir}}/%i/dendrite.yaml" -http-bind-address ":%i"
 Restart=always
 User={{dendrite_user}}
 LimitNOFILE=65535
