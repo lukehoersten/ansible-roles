@@ -46,7 +46,6 @@
   loop:
     - {"src": "dendrite"                , "dest": "dendrite"}
     - {"src": "create-account"          , "dest": "dendrite-create-account"}
-    - {"src": "dendrite-polylith-multi" , "dest": "dendrite-polylith-multi"}
     - {"src": "dendrite-upgrade-tests"  , "dest": "dendrite-upgrade-tests"}
     - {"src": "generate-config"         , "dest": "dendrite-generate-config"}
     - {"src": "generate-keys"           , "dest": "dendrite-generate-keys"}
