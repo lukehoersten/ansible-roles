@@ -8,6 +8,7 @@ ExecStart=/usr/local/bin/dendrite -config "{{dendrite_dir}}/%i/dendrite.yaml" -h
 Restart=always
 User={{dendrite_user}}
 LimitNOFILE=65535
+Environment="GOMEMLIMIT=2750MiB"
 
 [Install]
 WantedBy=multi-user.target

@@ -1,0 +1,23 @@
+---
+
+- name: snap install golang
+  become: yes
+  snap: name="go" classic="yes"
+
+- name: unarchive dendrite
+  unarchive:
+    remote_src: yes
+    src: "{{dendrite_tar}}"
+    dest: "/tmp/"
+    creates: "{{dendrite_build_dir}}"
+
+- name: check if dendrite build exists
+  stat:
+    path: "{{dendrite_build_dir}}/bin"
+  register: build_file
+
+- name: build dendrite
+  command: "{{dendrite_build_dir}}/build.sh"
+  args:
+    chdir: "{{dendrite_build_dir}}"
+  when: not build_file.stat.exists

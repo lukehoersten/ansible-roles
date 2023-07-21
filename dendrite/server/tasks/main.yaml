@@ -4,40 +4,10 @@
   become: yes
   user: name="{{dendrite_user}}" shell="/bin/false" system="yes"
 
-# build
-- name: snap install golang
-  become: yes
-  snap: name="go" classic="yes"
-
-- name: unarchive dendrite
-  become: yes
-  unarchive:
-    remote_src: yes
-    src: "{{dendrite_tar}}"
-    dest: "/tmp/"
-    creates: "{{dendrite_build_dir}}"
-    owner: "{{dendrite_user}}"
-    group: "{{dendrite_user}}"
-
-- name: check if dendrite build exists
-  stat:
-    path: "{{dendrite_build_dir}}/bin"
-  register: build_file
-
-- name: build dendrite
-  become: yes
-  become_user: "{{dendrite_user}}"
-  command: "{{dendrite_build_dir}}/build.sh"
-  args:
-    chdir: "{{dendrite_build_dir}}"
-  when: not build_file.stat.exists
-  notify: restart service
-
-# install
 - name: install dendrite binary
   become: yes
   copy:
-    src: "{{dendrite_build_dir}}/bin/{{item.src}}"
+    src: "{{dendrite_bin_dir}}/{{item.src}}"
     dest: "/usr/local/bin/{{item.dest}}"
     remote_src: yes
     owner: "root"
