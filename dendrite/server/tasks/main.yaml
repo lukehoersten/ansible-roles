@@ -4,10 +4,24 @@
   become: yes
   user: name="{{dendrite_user}}" shell="/bin/false" system="yes"
 
+- name: create unzip dir
+  become: yes
+  file:
+    path: "/tmp/dendrite/"
+    state: "directory"
+    mode: "0755"
+
+- name: unarchive dendrite bins
+  become: yes
+  unarchive:
+    remote_src: yes
+    src: "{{dendrite_tar}}"
+    dest: "/tmp/dendrite/"
+
 - name: install dendrite binary
   become: yes
   copy:
-    src: "{{dendrite_bin_dir}}/{{item.src}}"
+    src: "/tmp/dendrite/{{item.src}}"
     dest: "/usr/local/bin/{{item.dest}}"
     remote_src: yes
     owner: "root"
