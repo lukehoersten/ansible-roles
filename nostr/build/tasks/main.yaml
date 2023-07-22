@@ -1,0 +1,39 @@
+---
+
+- name: install golang
+  become: yes
+  apt: name="golang-go"
+
+- name: unarchive nostr relayer
+  unarchive:
+    remote_src: yes
+    src: "{{relayer_tar}}"
+    dest: "/tmp/"
+    creates: "{{relayer_build_dir}}"
+
+- name: check if relayer build exists
+  stat:
+    path: "{{relayer_build_dir}}/whitelisted/whitelisted"
+  register: build_file
+
+- name: build relayer
+  command: "go build"
+  args:
+    chdir: "{{relayer_build_dir}}/whitelisted"
+  when: not build_file.stat.exists
+
+- name: create build server dir
+  become: yes
+  file:
+    path: "{{relayer_srv_dir}}"
+    mode: "0755"
+    state: "directory"
+  when: not build_file.stat.exists
+
+- name: copy bin to build server dir
+  become: yes
+  copy:
+    remote_src: yes
+    src: "{{relayer_build_dir}}/whitelisted/whitelisted"
+    dest: "{{relayer_srv_dir}}/nostr-relayer-whitelisted"
+  when: not build_file.stat.exists

@@ -13,8 +13,8 @@
 
 - name: install relayer bin
   become: yes
-  copy:
-    src: "whitelisted"
+  get_url:
+    url: "{{relayer_bin_url}}"
     dest: "/usr/local/bin/relayer"
     owner: "root"
     group: "root"
