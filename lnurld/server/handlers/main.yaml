@@ -1,0 +1,5 @@
+---
+
+- name: restart lnurld service
+  become: yes
+  systemd: name="lnurld.service" state="restarted" daemon_reload="yes"

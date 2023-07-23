@@ -1,0 +1,5 @@
+---
+
+lnurld_git: "https://github.com/yanascz/lnurld.git"
+lnurld_build_dir: "/tmp/lnurld"
+lnurld_srv_dir: "/var/www/build"

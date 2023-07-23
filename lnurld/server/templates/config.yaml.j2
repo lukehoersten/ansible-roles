@@ -1,0 +1,18 @@
+listen: {{lnurld_host}}:{{lnurld_port}}
+data-dir: {{lnurld_data_dir}}
+credentials:
+  admin: {{lnurld_admin_pass}}
+lnd:
+  cert-file: {{lnurld_lnd_cert_file}}
+  macaroon-file: {{lnurld_lnd_invoice_macaroon}}
+accounts:
+{% for account in lnurld_accounts %}
+  {{account.name}}:
+    currency: usd
+    description: {{account.desc}}
+    is-also-email: {{account.is_email|default(false)}}
+    comment-allowed: 210
+    min-sendable: 1
+    max-sendable: 1_000_000
+{% else %}  []
+{% endfor %}

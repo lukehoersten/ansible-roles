@@ -1,0 +1,5 @@
+---
+
+lnurld_user: "bitcoin"
+lnurld_host: "127.0.0.1"
+lnurld_port: "8088"

@@ -1,0 +1,37 @@
+---
+
+- name: install golang
+  become: yes
+  apt: name="golang-go"
+
+- name: git checkout lnurld
+  git:
+    repo: "{{lnurld_git}}"
+    dest: "{{lnurld_build_dir}}"
+
+- name: check if build exists
+  stat:
+    path: "{{lnurld_build_dir}}/lnurld"
+  register: build_file
+
+- name: build
+  command: "go build"
+  args:
+    chdir: "/tmp/lnurld/"
+  when: not build_file.stat.exists
+
+- name: create build server dir
+  become: yes
+  file:
+    path: "{{lnurld_srv_dir}}"
+    mode: "0755"
+    state: "directory"
+  when: not build_file.stat.exists
+
+- name: copy bin to build server dir
+  become: yes
+  copy:
+    remote_src: yes
+    src: "{{lnurld_build_dir}}/lnurld"
+    dest: "{{lnurld_srv_dir}}/lnurld"
+  when: not build_file.stat.exists

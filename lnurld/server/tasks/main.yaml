@@ -1,0 +1,50 @@
+---
+
+- name: add lnurld user
+  become: yes
+  user: name="{{lnurld_user}}" shell="/bin/false" system="yes"
+
+- name: install lnurld bin
+  become: yes
+  get_url:
+    url: "{{lnurld_bin_url}}"
+    dest: "/usr/local/bin/lnurld"
+    mode: "0755"
+  notify: restart lnurld service
+
+- name: create lnurld data dir
+  become: yes
+  file:
+    path: "{{lnurld_data_dir}}"
+    mode: "0710"
+    owner: "{{lnurld_user}}"
+    group: "{{lnurld_user}}"
+    state: "directory"
+
+- name: create lnurld etc dir
+  become: yes
+  file:
+    path: "/etc/lnurld/"
+    mode: "0755"
+    state: "directory"
+
+- name: install lnurld config
+  become: yes
+  template:
+    src: "config.yaml.j2"
+    dest: "/etc/lnurld/config.yaml"
+    owner: "{{lnurld_user}}"
+    group: "{{lnurld_user}}"
+    mode: "0600"
+  notify: restart lnurld service
+
+- name: install lnurld systemd service
+  become: yes
+  template:
+    src: "lnurld.service.j2"
+    dest: "/lib/systemd/system/lnurld.service"
+  notify: restart lnurld service
+
+- name: ensure service is started
+  become: yes
+  systemd: name="lnurld.service" enabled="yes" state="started"
