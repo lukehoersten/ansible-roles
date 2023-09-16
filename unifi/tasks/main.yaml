@@ -15,6 +15,10 @@
   become: yes
   apt: deb="http://ports.ubuntu.com/pool/main/o/openssl1.0/libssl1.0.0_1.0.2n-1ubuntu5_arm64.deb"
 
+# To accept codename change:
+# 1. sudo apt update
+# 2. sudo apt-get upgrade -y
+
 - name: add unifi apt key
   become: yes
   get_url:
@@ -24,7 +28,7 @@
 
 - name: add unifi apt repo
   become: yes
-  apt_repository: repo="deb [arch=armhf] https://www.ui.com/downloads/unifi/debian stable ubiquiti"
+  apt_repository: repo="deb [arch=armhf signed-by=/etc/apt/trusted.gpg.d/unifi.asc] https://www.ui.com/downloads/unifi/debian unifi-7.4 ubiquiti"
 
 - name: update apt package cache
   become: yes

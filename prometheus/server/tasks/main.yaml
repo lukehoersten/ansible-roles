@@ -3,13 +3,13 @@
 - name: add grafana apt key
   become: yes
   get_url:
-    url: "https://packages.grafana.com/gpg.key"
+    url: "https://apt.grafana.com/gpg.key"
     dest: "/etc/apt/trusted.gpg.d/grafana.asc"
     mode: "0644"
 
 - name: add grafana apt repo
   become: yes
-  apt_repository: repo="deb [signed-by=/etc/apt/trusted.gpg.d/grafana.asc] https://packages.grafana.com/oss/deb stable main"
+  apt_repository: repo="deb [signed-by=/etc/apt/trusted.gpg.d/grafana.asc] https://apt.grafana.com stable main"
 
 - name: install prometheus and grafana
   become: yes
