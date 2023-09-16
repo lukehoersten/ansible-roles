@@ -15,7 +15,7 @@ minecraft_url: "https://papermc.io/api/v2/projects/paper/versions/{{minecraft_pa
 # https://papermc.io/downloads/paper
 # paper is a spigot derivative
 minecraft_paper_version: "1.20.1"
-minecraft_paper_build: "68"
+minecraft_paper_build: "183"
 
 minecreat_plugins_enabled:
   - "dynmap"
@@ -23,10 +23,10 @@ minecreat_plugins_enabled:
 
 # https://www.reddit.com/r/Dynmap/
 # http://dynmap.us/builds/dynmap/?C=M;O=D
-minecraft_dynmap_version: "3.4"
+minecraft_dynmap_version: "3.6"
 minecraft_dynmap_url: "http://dynmap.us/builds/dynmap/Dynmap-{{minecraft_dynmap_version}}-spigot.jar"
 
 # https://geysermc.org
 # https://ci.opencollab.dev/job/GeyserMC/view/default/builds
-minecraft_geyser_version: "1448"
+minecraft_geyser_version: "1490"
 minecraft_geyser_url: "https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/master/{{minecraft_geyser_version}}/artifact/bootstrap/spigot/build/libs/Geyser-Spigot.jar"
