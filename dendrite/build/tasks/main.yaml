@@ -2,7 +2,15 @@
 
 - name: install golang
   become: yes
-  apt: name="golang-go"
+  apt: name="golang-1.21-go"
+
+- name: link go bin
+  become: yes
+  file:
+    src: "/usr/lib/go-1.21/bin/go"
+    dest: "/usr/bin/go"
+    state: "link"
+    mode: "0755"
 
 - name: unarchive dendrite
   unarchive:

@@ -1,6 +1,6 @@
 ---
 
-dendrite_version: "0.13.3"
+dendrite_version: "0.13.5"
 # https://github.com/matrix-org/dendrite/releases
 dendrite_tar: "https://github.com/matrix-org/dendrite/archive/refs/tags/v{{dendrite_version}}.tar.gz"
 dendrite_build_dir: "/tmp/dendrite-{{dendrite_version}}"
