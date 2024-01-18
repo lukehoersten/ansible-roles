@@ -61,13 +61,12 @@
     shell: "/bin/bash"
     append: yes
 
-- name: authorize admin ssh keys
-  become: yes
-  authorized_key: user="{{admin_user_name}}" key="https://github.com/{{github_user}}.keys"
-
 - name: authorize ssh keys
   become: yes
-  authorized_key: user="{{ansible_user}}" key="https://github.com/{{github_user}}.keys"
+  authorized_key: user="{{item}}" key="https://github.com/{{github_user}}.keys"
+  loop:
+    - "{{admin_user_name}}"
+    - "{{ansible_user}}"
 
 - name: nopasswd sudo for admin user
   become: yes
