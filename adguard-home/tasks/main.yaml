@@ -44,28 +44,11 @@
   template: src="AdGuardHome.yaml.j2" dest="/etc/AdGuardHome/AdGuardHome.yaml"
   notify: restart adguard home
 
-- name: check if resolv.conf exists
-  stat: path="/etc/resolv.conf"
-  register: sym
+- include: enable-dns-bypass.yaml
+  when: adguard_dns_bypass
 
-- name: replace systemd-resolved conf stub
-  become: yes
-  copy:
-    remote_src: yes
-    src:  "/run/systemd/resolve/resolv.conf"
-    dest: "/etc/resolv.conf"
-  when: sym.stat.islnk is defined and sym.stat.islnk
-
-- name: ensure nameserver is self
-  become: yes
-  lineinfile:
-    path: "/etc/resolv.conf"
-    regexp: "^nameserver"
-    line: "nameserver {{ansible_default_ipv4.address}}"
-
-- name: disable systemd-resolved service
-  become: yes
-  systemd: name="systemd-resolved.service" enabled="no" state="stopped"
+- include: disable-dns-bypass.yaml
+  when: not adguard_dns_bypass
 
 - name: ensure adguard home is started
   become: yes
