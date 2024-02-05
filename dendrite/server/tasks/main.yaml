@@ -17,6 +17,7 @@
     remote_src: yes
     src: "{{dendrite_tar}}"
     dest: "/tmp/dendrite/"
+  notify: restart service
 
 - name: install dendrite binary
   become: yes
@@ -34,6 +35,7 @@
     - {"src": "generate-config"         , "dest": "dendrite-generate-config"}
     - {"src": "generate-keys"           , "dest": "dendrite-generate-keys"}
     - {"src": "resolve-state"           , "dest": "dendrite-resolve-state"}
+  notify: restart service
 
 - name: create instance dir
   become: yes

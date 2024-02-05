@@ -1,4 +1,5 @@
-CREATE USER miniflux WITH ENCRYPTED PASSWORD '{{miniflux_db_pass}}';
+CREATE USER miniflux;
+ALTER USER miniflux WITH PASSWORD '{{miniflux_db_pass}}';
 CREATE DATABASE miniflux WITH OWNER miniflux;
 \c miniflux;
 --Extensions made by miniflux that need superuser access

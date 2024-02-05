@@ -22,6 +22,17 @@
     group: "postgres"
   notify: restart postgres
 
+- name: check if postgresql data dir is new
+  become: yes
+  find: path='{{postgresql_data_dir}}'
+  register: filesFound
+
+- name: initialize pg data dir
+  become: yes
+  become_user: "postgres"
+  command: "{{postgresql_initidb_path}} -D {{postgresql_data_dir}}"
+  when: filesFound == 0
+
 - name: ensure postgresql is started
   become: yes
   systemd: name="postgresql" enabled="yes" state="started"

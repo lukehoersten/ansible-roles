@@ -10,6 +10,12 @@
     - "python3-pygments"
   notify: restart uwsgi
 
+- name: make hgweb dir
+  become: yes
+  file:
+    path: "{{mercurial_uwsgi_root}}"
+    state: "directory"
+
 - name: configure hgweb
   become: yes
   template: src="{{item}}.j2" dest="{{mercurial_uwsgi_root}}/{{item}}"

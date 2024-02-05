@@ -13,7 +13,7 @@
 
 - name: install libssl1.1 deb
   become: yes
-  apt: deb="http://ports.ubuntu.com/pool/main/o/openssl1.0/libssl1.0.0_1.0.2n-1ubuntu5_arm64.deb"
+  apt: deb="http://ports.ubuntu.com/pool/main/o/openssl1.0/libssl1.0.0_1.0.2n-1ubuntu5_{{arch}}.deb"
 
 # To accept codename change:
 # 1. sudo apt update
