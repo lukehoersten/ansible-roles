@@ -105,7 +105,7 @@
 
 - name: ensure instance service is stopped
   become: yes
-  systemd: name="dendrite@{{dendrite_instance}}.service" enabled="no" state="stopped" daemon_reload="yes"
+  systemd: name="dendrite@{{dendrite_port}}.service" enabled="no" state="stopped" daemon_reload="yes"
 
 - name: ensure service is started
   become: yes
