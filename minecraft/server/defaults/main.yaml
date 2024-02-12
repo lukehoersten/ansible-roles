@@ -15,7 +15,7 @@ minecraft_url: "https://papermc.io/api/v2/projects/paper/versions/{{minecraft_pa
 # https://papermc.io/downloads/paper
 # paper is a spigot derivative
 minecraft_paper_version: "1.20.4"
-minecraft_paper_build: "389"
+minecraft_paper_build: "423"
 
 minecreat_plugins_enabled:
   - "dynmap"
