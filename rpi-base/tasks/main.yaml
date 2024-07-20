@@ -81,3 +81,7 @@
     regexp: "^PasswordAuthentication"
     insertafter: "^#PasswordAuthentication"
     line: "PasswordAuthentication no"
+
+- name: ensure log2ram service is started
+  become: yes
+  systemd: name="log2ram.service" enabled="yes" state="started"
