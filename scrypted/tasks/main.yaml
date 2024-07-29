@@ -35,6 +35,7 @@
   command: "docker compose pull"
   args:
     chdir: "{{scrypted_dir}}"
+  changed_when: false
 
 - name: docker compose
   become: yes
@@ -42,3 +43,4 @@
   command: "docker compose up -d"
   args:
     chdir: "{{scrypted_dir}}"
+  changed_when: false

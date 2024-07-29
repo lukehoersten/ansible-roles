@@ -10,6 +10,7 @@
     path: "/tmp/dendrite/"
     state: "directory"
     mode: "0755"
+  changed_when: false
 
 - name: unarchive dendrite bins
   become: yes
@@ -17,7 +18,7 @@
     remote_src: yes
     src: "{{dendrite_tar}}"
     dest: "/tmp/dendrite/"
-  notify: restart service
+  changed_when: false
 
 - name: install dendrite binary
   become: yes
@@ -79,6 +80,7 @@
     owner: "postgres"
     group: "postgres"
     mode: "0600"
+  changed_when: false
 
 - name: install db schema psql
   become: yes
@@ -102,10 +104,6 @@
     src: "dendrite@.service.j2"
     dest: "/lib/systemd/system/dendrite@.service"
   notify: restart service
-
-- name: ensure instance service is stopped
-  become: yes
-  systemd: name="dendrite@{{dendrite_port}}.service" enabled="no" state="stopped" daemon_reload="yes"
 
 - name: ensure service is started
   become: yes

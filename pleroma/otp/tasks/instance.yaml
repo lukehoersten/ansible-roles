@@ -31,6 +31,7 @@
     owner: "{{pleroma_db_superuser}}"
     group: "{{pleroma_db_superuser}}"
     mode: "0600"
+  changed_when: false
 
 - name: install pleroma psql
   become: yes

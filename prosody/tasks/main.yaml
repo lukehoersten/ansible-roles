@@ -30,7 +30,7 @@
 - name: run letsencrypt ssl deploy hook
   become: yes
   command: "/etc/letsencrypt/renewal-hooks/deploy/prosody.sh"
-  notify: restart prosody
+  changed_when: false
 
 - name: install db schema file
   become: yes
