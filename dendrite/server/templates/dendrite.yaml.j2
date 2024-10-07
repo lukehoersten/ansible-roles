@@ -38,7 +38,7 @@ global:
   # you must configure the "database" block for each component instead.
   database:
     connection_string: postgresql://{{dendrite_db_user}}:{{dendrite_db_pass}}@localhost/{{dendrite_db}}?sslmode=disable
-    max_open_conns: 90
+    max_open_conns: 25
     max_idle_conns: 5
     conn_max_lifetime: -1
 
@@ -139,9 +139,9 @@ global:
   # Optional DNS cache. The DNS cache may reduce the load on DNS servers if there
   # is no local caching resolver available for use.
   dns_cache:
-    enabled: false
-    cache_size: 256
-    cache_lifetime: "5m" # 5 minutes; https://pkg.go.dev/time@master#ParseDuration
+    enabled: true
+    cache_size: 4096
+    cache_lifetime: "10m" # 10 minutes; https://pkg.go.dev/time@master#ParseDuration
 
 # Configuration for the Appservice API.
 app_service_api:

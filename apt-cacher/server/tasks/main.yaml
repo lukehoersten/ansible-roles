@@ -16,6 +16,9 @@
     - { key: "CacheDir", val: "{{apt_cacher_cache_dir}}" }
     - { key: "LogDir", val: "{{apt_cacher_log_dir}}" }
     - { key: "Port", val: "{{apt_cacher_port}}" }
+    - { key: "DlMaxRetries", val: "{{apt_cacher_max_dl_retries}}" }
+    - { key: "DontCacheResolved", val: ".*InRelease" }
+
   notify: restart apt-cacher-ng
 
 - name: make cache and log dirs

@@ -2,6 +2,7 @@
 
 pleroma_host: "localhost"
 pleroma_port: 4000
+pleroma_metrics_port: 4020
 pleroma_scheme: "http"
 
 pleroma_proxy_pass: "{{pleroma_scheme}}://{{pleroma_host}}:{{pleroma_port}}"

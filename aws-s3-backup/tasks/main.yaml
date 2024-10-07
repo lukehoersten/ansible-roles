@@ -1,12 +1,8 @@
 ---
 
-- name: apt install pip
-  become: yes
-  apt: name="python3-pip"
-
 - name: pip install aws cli packages
   become: yes
-  pip: name="{{aws_s3_backup_pip_packages}}"
+  pip: name="{{aws_s3_backup_pip_packages}}" break_system_packages="true"
 
 - name: create aws config dir for root
   become: yes

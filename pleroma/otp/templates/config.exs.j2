@@ -40,11 +40,20 @@ config :pleroma, Pleroma.Repo,
   pool_size: 10,
   timeout: 60000
 
-config :prometheus, Pleroma.Web.Endpoint.MetricsExporter,
-  enabled: true
-#   ip_whitelist: ["127.0.0.1"],
-#   path: "/api/pleroma/app_metrics",
-#   format: :text
+config :pleroma, Pleroma.PromEx,
+  disabled: false,
+  manual_metrics_start_delay: :no_delay,
+  drop_metrics_groups: [],
+  grafana: [],
+  metrics_server: [
+    port: {{pleroma_metrics_port}},
+    path: "/metrics",
+    protocol: :http,
+    pool_size: 5,
+    cowboy_opts: [],
+    auth_strategy: :none
+  ],
+  datasource: "Prometheus"
 
 config :logger,
   backends: [{ExSyslogger, :ex_syslogger}]

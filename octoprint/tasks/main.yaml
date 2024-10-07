@@ -6,7 +6,7 @@
 
 - name: pip install octoprint
   become: yes
-  pip: name="octoprint" executable="pip3"
+  pip: name="octoprint" executable="pip3" break_system_packages="true"
   notify: restart octoprint
 
 - name: install octoprint systemd service

@@ -9,11 +9,8 @@
   apt: name="{{item}}"
   loop:
     - "libmagic-dev"
-    - "libtinfo5"
-
-- name: install libssl1.1 deb
-  become: yes
-  apt: deb="http://ports.ubuntu.com/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2_{{arch}}.deb"
+    - "libtinfo6"
+    - "libvips42t64"
 
 - name: create pleroma config and data directories
   become: yes

@@ -2,7 +2,10 @@
 
 - name: apt install nginx
   become: yes
-  apt: name="nginx"
+  apt: name="{{item}}"
+  loop:
+    - "nginx"
+    - "libnginx-mod-stream"
   notify: restart nginx
 
 - name: disable default site
