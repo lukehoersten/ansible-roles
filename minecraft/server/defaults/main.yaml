@@ -19,7 +19,7 @@ minecraft_paper_build: "115"
 
 minecreat_plugins_enabled:
   - "dynmap"
-  - "geyser"
+  # - "geyser"
 
 # https://www.reddit.com/r/Dynmap/
 # http://dynmap.us/builds/dynmap/?C=M;O=D

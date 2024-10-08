@@ -6,7 +6,7 @@
 
 - name: install java
   become: yes
-  apt: name="openjdk-17-jre-headless"
+  apt: name="openjdk-21-jre-headless"
 
 - name: create minecraft dir
   become: yes
