@@ -10,12 +10,12 @@ minecraft_whitelist: "true"
 minecraft_view_distance: "10"
 minecraft_world_name: "world"
 minecraft_dir: "{{minecraft_parent_dir}}/minecraft/{{minecraft_world_name}}"
-minecraft_url: "https://papermc.io/api/v2/projects/paper/versions/{{minecraft_paper_version}}/builds/{{minecraft_paper_build}}/downloads/paper-{{minecraft_paper_version}}-{{minecraft_paper_build}}.jar"
+minecraft_url: "https://api.papermc.io/v2/projects/paper/versions/{{minecraft_paper_version}}/builds/{{minecraft_paper_build}}/downloads/paper-{{minecraft_paper_version}}-{{minecraft_paper_build}}.jar"
 
 # https://papermc.io/downloads/paper
 # paper is a spigot derivative
-minecraft_paper_version: "1.21.1"
-minecraft_paper_build: "115"
+minecraft_paper_version: "1.21.3"
+minecraft_paper_build: "82"
 
 minecreat_plugins_enabled:
   - "dynmap"

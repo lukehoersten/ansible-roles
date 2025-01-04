@@ -40,6 +40,16 @@
     - {"k": "Contact:", "v": "{{relayer_admin_contact}}"}
     - {"k": "Version:", "v": "{{relayer_version}}"}
 
+# disable logging of pings
+- name: relayer disable ping logging
+  lineinfile:
+    path: "{{relayer_handler_src}}"
+    regexp: "^(\\s*)(s\\.Log\\.Infof\\(\"pinging.*)$"
+    line: "\\1//\\2"
+    backrefs: yes
+  loop:
+    - {""}
+
 - name: check if relayer build exists
   stat:
     path: "{{relayer_build_dir}}/examples/whitelisted/whitelisted"
