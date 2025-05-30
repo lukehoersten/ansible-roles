@@ -22,8 +22,8 @@
 
 - name: install letsencrypt ssl deploy hook
   become: yes
-  copy:
-    src: "prosody.sh"
+  template:
+    src: "prosody.sh.j2"
     dest: "/etc/letsencrypt/renewal-hooks/deploy/prosody.sh"
     mode: "0755"
 

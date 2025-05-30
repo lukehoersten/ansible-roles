@@ -1,0 +1,3 @@
+#! /bin/bash
+
+prosodyctl --root cert import {{prosody_vhost}} /etc/letsencrypt/live/{{prosody_vhost}}/fullchain.pem
