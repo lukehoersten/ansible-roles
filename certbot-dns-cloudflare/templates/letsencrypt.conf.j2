@@ -1,0 +1,15 @@
+# renew_before_expiry = 30 days
+version = 2.9.0
+archive_dir = /etc/letsencrypt/archive/{{certbot_dns_cloudflare_domain}}
+cert = /etc/letsencrypt/live/{{certbot_dns_cloudflare_domain}}/cert.pem
+privkey = /etc/letsencrypt/live/{{certbot_dns_cloudflare_domain}}/privkey.pem
+chain = /etc/letsencrypt/live/{{certbot_dns_cloudflare_domain}}/chain.pem
+fullchain = /etc/letsencrypt/live/{{certbot_dns_cloudflare_domain}}/fullchain.pem
+
+# Options used in the renewal process
+[renewalparams]
+account = {{certbot_account}}
+authenticator = dns-cloudflare
+dns_cloudflare_credentials = /etc/letsencrypt/cred.conf
+server = https://acme-v02.api.letsencrypt.org/directory
+key_type = ecdsa

@@ -13,20 +13,21 @@
     owner: "root"
     group: "root"
 
-- name: make renewal dir
-  become: yes
-  file:
-    path: "/etc/letsencrypt/renewal/"
-    state: "directory"
+# - name: make renewal dir
+#   become: yes
+#   file:
+#     path: "/etc/letsencrypt/renewal/"
+#     state: "directory"
 
-- name: configure renewal
-  become: yes
-  template:
-    src: "{{certbot_dns_cloudflare_conf}}"
-    dest: "/etc/letsencrypt/renewal/{{certbot_dns_cloudflare_domain}}.conf"
-    mode: "0644"
-    owner: "root"
-    group: "root"
+## I dont think this is needed anymore. I think it get's installed automatically now.
+# - name: configure renewal
+#   become: yes
+#   template:
+#     src: "letsencrypt.conf.j2"
+#     dest: "/etc/letsencrypt/renewal/{{certbot_dns_cloudflare_domain}}.conf"
+#     mode: "0644"
+#     owner: "root"
+#     group: "root"
 
 - name: check if cert exists
   become: yes
