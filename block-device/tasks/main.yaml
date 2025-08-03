@@ -14,4 +14,6 @@
     src:    "{{block_device_uuid}}"
     fstype: "{{block_device_fstype}}"
     opts:   "{{block_device_opts}}"
+    dump:   "0"
+    passno: "2"
     state:  "mounted"
