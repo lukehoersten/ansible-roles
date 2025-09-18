@@ -84,6 +84,15 @@
     insertafter: ",$"
   notify: restart transmission service
 
+- name: Make transmission not wait for sd_notify
+  copy:
+    dest: "/etc/systemd/system/transmission-daemon.service.d/override.conf"
+    mode: "0644"
+    content: |
+      [Service]
+      Type=simple
+  notify: restart transmission service
+
 - name: start transmission service
   become: yes
   systemd: name="transmission-daemon" state="started" daemon_reload="yes"
