@@ -1,4 +1,4 @@
 ---
 
-scrypted_dir: "~/.scrypted"
+scrypted_dir: "/opt/scrypted"
 scrypted_auto_update_port: "10444"

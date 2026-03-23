@@ -1,0 +1,48 @@
+---
+
+- name: add korsync user
+  become: yes
+  user: name="korsync" shell="/bin/false" system="yes" create_home="no" groups="docker"
+
+- name: install docker apt packages
+  become: yes
+  apt: name="docker-ce"
+
+- name: make korsync dir
+  become: yes
+  file:
+    path: "{{item}}"
+    state: "directory"
+    owner: "korsync"
+    group: "korsync"
+    mode: "0755"
+  loop:
+    - "{{korsync_dir}}"
+    - "{{korsync_dir}}/data/redis"
+    - "{{korsync_log_dir}}/redis"
+    - "{{korsync_log_dir}}/app"
+
+- name: configure korsync docker compose
+  become: yes
+  template:
+    src: "docker-compose.yml.j2"
+    dest: "{{korsync_dir}}/docker-compose.yml"
+    owner: "korsync"
+    group: "korsync"
+    mode: "0600"
+
+- name: docker compose pull
+  become: yes
+  become_user: "korsync"
+  command: "docker compose pull"
+  args:
+    chdir: "{{korsync_dir}}"
+  changed_when: false
+
+- name: docker compose
+  become: yes
+  become_user: "korsync"
+  command: "docker compose up -d"
+  args:
+    chdir: "{{korsync_dir}}"
+  changed_when: false

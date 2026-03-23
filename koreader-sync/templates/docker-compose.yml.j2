@@ -1,0 +1,13 @@
+services:
+  korsync:
+    image: koreader/kosync:latest
+    container_name: korsync
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:{{korsync_port}}:17200"
+    environment:
+      - ENABLE_USER_REGISTRATION={{korsync_user_registration}}
+    volumes:
+      - {{korsync_dir}}/data/redis:/var/lib/redis
+      - {{korsync_log_dir}}/redis:/var/log/redis
+      - {{korsync_log_dir}}/app:/app/koreader-sync-server/logs

@@ -1,0 +1,6 @@
+---
+
+korsync_dir: "/opt/korsync"
+korsync_log_dir: "/var/log/korsync"
+korsync_port: "17200"
+korsync_user_registration: "true"
