@@ -85,6 +85,7 @@
   notify: restart transmission service
 
 - name: Make transmission not wait for sd_notify
+  become: yes
   copy:
     dest: "/etc/systemd/system/transmission-daemon.service.d/override.conf"
     mode: "0644"
