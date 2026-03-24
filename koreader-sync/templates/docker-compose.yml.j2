@@ -7,7 +7,7 @@ services:
       - "127.0.0.1:{{korsync_port}}:17200"
     environment:
       - ENABLE_USER_REGISTRATION={{korsync_user_registration}}
+    logging:
+      driver: journald
     volumes:
       - {{korsync_dir}}/data/redis:/var/lib/redis
-      - {{korsync_log_dir}}/redis:/var/log/redis
-      - {{korsync_log_dir}}/app:/app/koreader-sync-server/logs
