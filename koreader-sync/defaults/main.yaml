@@ -2,4 +2,4 @@
 
 korsync_dir: "/opt/korsync"
 korsync_port: "17200"
-korsync_user_registration: "true"
+korsync_user_registration: "false"
