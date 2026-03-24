@@ -26,14 +26,15 @@
 - name: create ergo dirs
   become: yes
   file:
-    path: "{{item}}/ergo"
+    path: "{{item}}"
     owner: "ergo"
     group: "ergo"
     mode: "0755"
     state: "directory"
   loop:
-    - "/etc"
-    - "/var"
+    - "/etc/ergo"
+    - "{{ergo_run_dir}}"
+    - "{{ergo_data_dir}}"
 
 - name: configure ergo
   become: yes
@@ -54,8 +55,8 @@
 
 - name: install ergo service
   become: yes
-  copy:
-    src: "ergo.service"
+  template:
+    src: "ergo.service.j2"
     dest: "/lib/systemd/system/ergo.service"
     mode: "0644"
   notify: restart ergo

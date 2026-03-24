@@ -9,8 +9,6 @@ ExecStart=/usr/local/bin/AdGuardHome -c /etc/AdGuardHome/AdGuardHome.yaml -w {{a
 
 WorkingDirectory={{adguard_home_data_dir}}
 
-StandardOutput=file:/var/log/AdGuardHome.out
-StandardError=file:/var/log/AdGuardHome.err
 Restart=always
 RestartSec=10
 EnvironmentFile=-/etc/sysconfig/AdGuardHome

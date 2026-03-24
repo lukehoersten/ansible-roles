@@ -10,7 +10,7 @@ After=network.target mysql.service
 [Service]
 Type=simple
 User=ergo
-WorkingDirectory=/var/ergo
+WorkingDirectory={{ergo_run_dir}}
 ExecStart=/usr/local/bin/ergo run --conf /etc/ergo/config.yaml
 ExecReload=/bin/kill -HUP $MAINPID
 Restart=on-failure

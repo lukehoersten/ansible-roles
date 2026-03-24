@@ -58,7 +58,7 @@ server:
         #         proxy: false
 
         # Example of a Unix domain socket for proxying:
-        "/var/ergo/socket":
+        "{{ergo_run_dir}}/socket":
 
         # Example of a Tor listener: any connection that comes in on this listener will
         # be considered a Tor connection. It is strongly recommended that this listener
@@ -288,7 +288,7 @@ server:
     # ergo will write files to disk under certain circumstances, e.g.,
     # CPU profiling or data export. by default, these files will be written
     # to the working directory. set this to customize:
-    output-path: "/var/ergo"
+    output-path: "{{ergo_run_dir}}"
 
 # account options
 accounts:
@@ -685,7 +685,7 @@ debug:
 # datastore configuration
 datastore:
     # path to the datastore
-    path: "/var/ergo/ergo.db"
+    path: "{{ergo_data_dir}}/ergo.db"
 
     # if the database schema requires an upgrade, `autoupgrade` will attempt to
     # perform it automatically on startup. the database will be backed

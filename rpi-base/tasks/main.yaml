@@ -40,6 +40,15 @@
   become: yes
   copy: src="20auto-upgrades" dest="/etc/apt/apt.conf.d/20auto-upgrades"
 
+- name: configure logrotate
+  become: yes
+  copy: src="logrotate.conf" dest="/etc/logrotate.conf"
+
+- name: configure journald max size
+  become: yes
+  copy: src="journald.conf" dest="/etc/systemd/journald.conf"
+  notify: restart journald
+
 - name: configure log2ram disk size
   become: yes
   lineinfile:

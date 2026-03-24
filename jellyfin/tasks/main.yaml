@@ -23,6 +23,24 @@
   apt: name="jellyfin"
   notify: restart jellyfin service
 
+- name: create jellyfin data dir
+  become: yes
+  file:
+    path: "{{jellyfin_data_dir}}"
+    state: "directory"
+    owner: "jellyfin"
+    group: "jellyfin"
+    mode: "0755"
+
+- name: configure jellyfin data dir
+  become: yes
+  lineinfile:
+    path: "/etc/jellyfin/jellyfin"
+    regexp: "^JELLYFIN_DATA_DIR="
+    line: "JELLYFIN_DATA_DIR={{jellyfin_data_dir}}"
+    create: yes
+  notify: restart jellyfin service
+
 - name: ensure jellyfin service is running
   become: yes
   systemd: name="jellyfin.service" state="started" daemon_reload="yes"
