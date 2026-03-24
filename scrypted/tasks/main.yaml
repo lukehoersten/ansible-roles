@@ -40,6 +40,10 @@
     group: "scrypted"
     mode: "0600"
 
+- name: ensure docker is started
+  become: yes
+  systemd: name="docker.service" enabled="yes" state="started"
+
 - name: docker compose pull
   become: yes
   become_user: "scrypted"

@@ -1,10 +1,10 @@
 services:
   korsync:
-    image: koreader/kosync:latest
+    image: b1n4ryj4n/koreader-sync:arm
     container_name: korsync
     restart: unless-stopped
     ports:
-      - "127.0.0.1:{{korsync_port}}:17200"
+      - "127.0.0.1:{{korsync_port}}:8081"
     environment:
       - ENABLE_USER_REGISTRATION={{korsync_user_registration}}
     logging:

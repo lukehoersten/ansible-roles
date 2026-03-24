@@ -13,11 +13,11 @@
 
 - name: install docker apt packages
   become: yes
-  apt: name="docker-ce" update_cache="yes"
+  apt: name="docker-ce"
 
 - name: add korsync user
   become: yes
-  user: name="korsync" shell="/bin/false" system="yes" create_home="no" groups="docker"
+  user: name="korsync" shell="/bin/false" system="yes" create_home="yes" groups="docker"
 
 - name: make korsync dir
   become: yes
@@ -39,6 +39,10 @@
     owner: "korsync"
     group: "korsync"
     mode: "0600"
+
+- name: ensure docker is started
+  become: yes
+  systemd: name="docker.service" enabled="yes" state="started"
 
 - name: docker compose pull
   become: yes
