@@ -1,6 +1,6 @@
 ---
 
-bin_version: "2.0.1"
+bin_version: "2.0.2"
 # https://github.com/w4/bin/releases
 bin_tar: "https://github.com/w4/bin/archive/refs/tags/v{{bin_version}}.tar.gz"
 bin_build_dir: "/tmp/bin-{{bin_version}}"

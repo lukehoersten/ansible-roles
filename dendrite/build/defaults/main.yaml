@@ -1,6 +1,6 @@
 ---
 
-dendrite_version: "0.14.1"
+dendrite_version: "0.15.2"
 # https://github.com/element-hq/dendrite/releases
 dendrite_tar: "https://github.com/element-hq/dendrite/archive/refs/tags/v{{dendrite_version}}.tar.gz"
 dendrite_build_dir: "/tmp/dendrite-{{dendrite_version}}"
