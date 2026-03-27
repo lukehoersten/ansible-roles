@@ -18,6 +18,8 @@
     - { key: "Port", val: "{{apt_cacher_port}}" }
     - { key: "DlMaxRetries", val: "{{apt_cacher_max_dl_retries}}" }
     - { key: "DontCacheResolved", val: ".*InRelease" }
+    - { key: "ConnectProto", val: "v4" }
+
 
   notify: restart apt-cacher-ng
 
