@@ -36,7 +36,7 @@
     regexp: '^    "umask":'
     line: '    "umask": 2,'
     insertafter: ",$"
-  notify: restart transmission service
+  changed_when: false
 
 - name: config port
   become: yes

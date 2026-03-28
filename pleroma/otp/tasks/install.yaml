@@ -6,12 +6,20 @@
     src: "{{pleroma_download_url}}"
     dest: "/tmp/"
     remote_src: yes
+  register: pleroma_download
+  ignore_errors: true
+
+- name: warn if pleroma download failed
+  debug:
+    msg: "WARNING: Could not download Pleroma release from {{pleroma_download_url}} — skipping install, existing binary unchanged."
+  when: pleroma_download is failed
 
 - name: delete old pleroma release
   become: yes
   file:
     path: "/opt/pleroma/"
     state: "absent"
+  when: pleroma_download is succeeded
 
 - name: install pleroma release
   become: yes
@@ -21,4 +29,5 @@
     dest: "/opt/pleroma/"
     owner: "pleroma"
     group: "pleroma"
+  when: pleroma_download is succeeded
   notify: restart all pleroma instances

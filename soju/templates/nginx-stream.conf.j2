@@ -1,0 +1,10 @@
+server {
+    listen {{soju_port}} ssl;
+    listen [::]:{{soju_port}} ssl;
+
+    ssl_certificate {{soju_ssl_cert}};
+    ssl_certificate_key {{soju_ssl_privkey}};
+    ssl_protocols TLSv1.2 TLSv1.3;
+
+    proxy_pass 127.0.0.1:{{soju_local_port}};
+}

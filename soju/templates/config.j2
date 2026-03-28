@@ -1,0 +1,5 @@
+listen irc+insecure://127.0.0.1:{{soju_local_port}}
+listen unix+admin:///run/soju/admin
+hostname {{soju_hostname}}
+db postgres "host=/var/run/postgresql dbname=soju"
+message-store db

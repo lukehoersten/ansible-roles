@@ -108,3 +108,4 @@
 - name: ensure service is started
   become: yes
   systemd: name="dendrite@{{dendrite_port}}.service" enabled="yes" state="started"
+

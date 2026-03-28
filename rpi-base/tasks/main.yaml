@@ -30,7 +30,7 @@
 
 - name: update apt package cache
   become: yes
-  apt: upgrade="dist" autoremove="yes" autoclean="yes" update_cache="yes" cache_valid_time="3600"
+  apt: update_cache="yes" cache_valid_time="3600"
 
 - name: install extra apt packages
   become: yes
@@ -94,3 +94,16 @@
 - name: ensure log2ram service is started
   become: yes
   systemd: name="log2ram.service" enabled="yes" state="started"
+
+- name: get local terminfo
+  command: infocmp
+  delegate_to: localhost
+  register: terminfo
+  changed_when: false
+
+- name: install local terminfo on host
+  become: yes
+  shell: "tic -x -"
+  args:
+    stdin: "{{terminfo.stdout}}"
+  changed_when: false

@@ -1,0 +1,9 @@
+---
+
+- name: restart soju
+  become: yes
+  systemd: name="soju.service" state="restarted"
+
+- name: reload nginx
+  become: yes
+  systemd: name="nginx.service" state="reloaded"

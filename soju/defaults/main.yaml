@@ -1,0 +1,6 @@
+---
+
+soju_user: "soju"
+soju_port: "6697"
+soju_local_port: "16667"
+soju_data_dir: "/var/lib/soju"

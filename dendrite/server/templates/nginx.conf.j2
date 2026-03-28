@@ -1,4 +1,4 @@
-limit_req_zone $binary_remote_addr zone=dendrite_reg:10m rate=2r/m;
+limit_req_zone $binary_remote_addr zone=dendrite_reg_{{dendrite_instance}}:10m rate=2r/m;
 
 server {
     listen 80;
@@ -39,7 +39,7 @@ server {
     proxy_read_timeout                 600;
 
     location ~* ^/_matrix/client/[^/]+/register {
-        limit_req zone=dendrite_reg burst=3 nodelay;
+        limit_req zone=dendrite_reg_{{dendrite_instance}} burst=3 nodelay;
         proxy_pass http://127.0.0.1:{{nginx_proxy_port}};
     }
 
