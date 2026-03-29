@@ -53,31 +53,6 @@
   failed_when: soju_create_user.rc != 0 and 'duplicate key' not in soju_create_user.stderr
   no_log: true
 
-- name: create soju networks
-  become: yes
-  become_user: "{{soju_user}}"
-  command: >
-    sojuctl -config /etc/soju/config user run {{soju_admin_user}}
-    network create
-    -addr {{item.addr}}
-    -name {{item.name}}
-    -nick {{item.nick}}
-  loop: "{{soju_networks}}"
-  register: soju_network_create
-  changed_when: soju_network_create.rc == 0
-  failed_when: soju_network_create.rc != 0 and 'already exists' not in soju_network_create.stderr
-  no_log: true
-
-- name: configure soju network sasl
-  become: yes
-  become_user: "{{soju_user}}"
-  command: >
-    sojuctl -config /etc/soju/config user run {{soju_admin_user}}
-    sasl set-plain -network {{item.name}} {{item.sasl_username}} {{item.sasl_password}}
-  loop: "{{soju_networks}}"
-  when: item.sasl_username is defined
-  no_log: true
-
 - name: install nginx stream config
   become: yes
   template:
