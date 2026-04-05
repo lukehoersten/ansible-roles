@@ -1,3 +1,4 @@
+scan-path={{cgit_scan_path}}
 remove-suffix=1
 
 root-title=src.nth.io
@@ -12,7 +13,3 @@ enable-log-linecount=1
 
 source-filter=/usr/lib/cgit/filters/syntax-highlighting.py
 about-filter=/usr/lib/cgit/filters/about-formatting.sh
-
-{% for repo in cgit_repos %}
-repo.path={{cgit_repos_dir}}{{repo}}.git
-{% endfor %}
