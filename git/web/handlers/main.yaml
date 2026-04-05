@@ -1,0 +1,9 @@
+---
+
+- name: restart fcgiwrap
+  systemd: name="fcgiwrap.service" enabled="yes" daemon_reload="yes" state="restarted"
+  become: yes
+
+- name: restart nginx
+  systemd: name="nginx.service" state="restarted"
+  become: yes

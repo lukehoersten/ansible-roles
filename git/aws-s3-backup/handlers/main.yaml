@@ -1,0 +1,5 @@
+---
+
+- name: reload git s3 backup service
+  systemd: name="git-s3-backup@{{git_s3_backup_bucket}}.service" enabled="yes" daemon_reload="yes"
+  become: yes

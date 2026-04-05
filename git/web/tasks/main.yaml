@@ -1,0 +1,33 @@
+---
+
+- name: apt install cgit and fcgiwrap
+  become: yes
+  apt: name="{{item}}"
+  loop:
+    - "cgit"
+    - "fcgiwrap"
+    - "git"
+    - "python3-pygments"
+  notify: restart fcgiwrap
+
+- name: configure cgit
+  become: yes
+  template: src="cgitrc.j2" dest="/etc/cgitrc"
+  notify: restart fcgiwrap
+
+- name: install cgit nginx site
+  become: yes
+  template: src="cgit.nginx.conf.j2" dest="/etc/nginx/sites-available/cgit.conf"
+  notify: restart nginx
+
+- name: enable cgit nginx site
+  become: yes
+  file:
+    src:  "/etc/nginx/sites-available/cgit.conf"
+    dest: "/etc/nginx/sites-enabled/cgit.conf"
+    state: "link"
+  notify: restart nginx
+
+- name: ensure fcgiwrap service is started
+  become: yes
+  systemd: name="fcgiwrap.service" enabled="yes" state="started"

@@ -1,0 +1,18 @@
+remove-suffix=1
+
+root-title=src.nth.io
+root-desc=Git repositories
+
+difftype=ssdiff
+
+enable-http-clone=1
+enable-index-links=1
+enable-log-filecount=1
+enable-log-linecount=1
+
+source-filter=/usr/lib/cgit/filters/syntax-highlighting.py
+about-filter=/usr/lib/cgit/filters/about-formatting.sh
+
+{% for repo in cgit_repos %}
+repo.path={{cgit_repos_dir}}{{repo}}.git
+{% endfor %}
