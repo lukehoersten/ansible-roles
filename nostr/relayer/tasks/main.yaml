@@ -55,6 +55,7 @@
   become_user: "postgres"
   command: "psql -f /tmp/setup_db_relayer.psql"
   changed_when: false
+  no_log: true
 
 - name: ensure service is started
   become: yes
