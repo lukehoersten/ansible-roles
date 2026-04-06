@@ -43,8 +43,9 @@
     dest: "/etc/ergo/config.yaml"
     owner: "ergo"
     group: "ergo"
-    mode: "0644"
+    mode: "0640"
   notify: reload ergo
+  no_log: true
 
 - name: copy motd file
   become: yes

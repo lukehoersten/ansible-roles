@@ -47,6 +47,7 @@
   become_user: "postgres"
   command: "psql -f /tmp/setup_db_{{prosody_db}}.psql"
   changed_when: false
+  no_log: true
 
 - name: enable prosody site
   become: yes

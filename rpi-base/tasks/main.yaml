@@ -69,6 +69,7 @@
     groups: "sudo,users"
     shell: "/bin/bash"
     append: yes
+  no_log: true
 
 - name: authorize ssh keys
   become: yes

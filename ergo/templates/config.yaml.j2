@@ -77,7 +77,7 @@ server:
     # the default is 0775 or 0755, which prevents other users/groups from connecting
     # to the socket. With 0777, it behaves like a normal TCP socket
     # where anyone can connect.
-    unix-bind-mode: 0777
+    unix-bind-mode: 0770
 
     # configure the behavior of Tor listeners (ignored if you didn't enable any):
     tor-listeners:

@@ -38,6 +38,7 @@
   become_user: "{{pleroma_db_superuser}}"
   command: "psql -f /tmp/setup_db_{{pleroma_instance}}.psql"
   changed_when: false
+  no_log: true
 
 - include_tasks: soapbox.yaml
   when: pleroma_soapbox

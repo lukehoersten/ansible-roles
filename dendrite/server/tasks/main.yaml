@@ -87,6 +87,7 @@
   become_user: "postgres"
   command: "psql -f /tmp/setup_db_dendrite_{{dendrite_instance}}.psql"
   changed_when: false
+  no_log: true
 
 - name: configure dendrite
   become: yes

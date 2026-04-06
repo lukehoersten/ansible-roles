@@ -1,7 +1,7 @@
 ---
 
 miniflux_port: "8555"
-miniflux_admin_pass: "admin"
+# miniflux_admin_pass: — required, set in host_vars
 miniflux_arch: "arm64"
 # https://github.com/miniflux/miniflux/releases
 miniflux_version: "2.2.18"

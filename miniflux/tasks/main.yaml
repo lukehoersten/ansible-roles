@@ -11,7 +11,7 @@
     dest: "/usr/local/bin/miniflux"
     owner: "root"
     group: "root"
-    mode: "0755"
+    mode: "0600"
 
 - name: configure miniflux
   become: yes
@@ -20,8 +20,9 @@
     dest: "/etc/miniflux.conf"
     owner: "root"
     group: "root"
-    mode: "0755"
+    mode: "0600"
   notify: restart miniflux service
+  no_log: true
 
 - name: install miniflux schema file
   become: yes
@@ -37,6 +38,7 @@
   become_user: "postgres"
   command: "psql -f /tmp/setup_db_miniflux.psql"
   changed_when: false
+  no_log: true
 
 - name: install systemd service
   become: yes

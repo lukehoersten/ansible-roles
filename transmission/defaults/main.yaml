@@ -2,6 +2,6 @@
 
 transmission_config: "/etc/transmission-daemon/settings.json"
 transmission_port: "9091"
-transmission_passwd: "transmission"
+# transmission_passwd: — required, set in host_vars
 transmission_download_dir: "/var/lib/transmission-daemon/downloads"
 transmission_user: "debian-transmission"
