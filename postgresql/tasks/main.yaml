@@ -36,3 +36,4 @@
 - name: ensure postgresql is started
   become: yes
   systemd: name="postgresql" enabled="yes" state="started"
+

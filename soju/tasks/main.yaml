@@ -53,6 +53,13 @@
   failed_when: soju_create_user.rc != 0 and 'duplicate key' not in soju_create_user.stderr
   no_log: true
 
+- name: update soju admin password
+  become: yes
+  become_user: "{{soju_user}}"
+  shell: "echo '{{soju_admin_password}}' | sojudb -config /etc/soju/config change-password {{soju_admin_user}}"
+  changed_when: false
+  no_log: true
+
 - name: install nginx stream config
   become: yes
   template:
