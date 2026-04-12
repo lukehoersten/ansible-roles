@@ -10,6 +10,23 @@
     groups: "video,input,render"
     append: "yes"
 
+- name: allow doorbell-viewport user to control sysfs backlight
+  become: yes
+  copy:
+    dest: "/etc/udev/rules.d/99-doorbell-viewport-backlight.rules"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+    content: |
+      SUBSYSTEM=="backlight", ACTION=="add", RUN+="/bin/chgrp video /sys/class/backlight/%k/brightness", RUN+="/bin/chmod g+w /sys/class/backlight/%k/brightness"
+
+- name: set backlight brightness writable by video group
+  become: yes
+  file:
+    path: "/sys/class/backlight/rpi_backlight/brightness"
+    group: "video"
+    mode: "0664"
+
 - name: apt install doorbell-viewport dependencies
   become: yes
   apt: name="{{item}}"

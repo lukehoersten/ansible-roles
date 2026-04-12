@@ -392,10 +392,9 @@ class DoorbellViewport:
             "--no-input-default-bindings",
             "--no-config",
             "--really-quiet",
-            "--loop=inf",
+            "--loop=no",
             "--cache=yes",
-            "--cache-secs=3",
-            "--demuxer-max-bytes=50M",
+            "--demuxer-max-bytes=1M",
             "--hwdec=no",
             self.config.rtsp_url,
         ]
