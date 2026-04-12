@@ -10,7 +10,12 @@ doorbell_viewport_display_backend: "vcgencmd"
 doorbell_viewport_orientation: 270
 doorbell_viewport_drm_connector: "HDMI-A-1"
 doorbell_viewport_drm_device: "/dev/dri/card1"
-doorbell_viewport_drm_mode: "848x480"
+doorbell_viewport_drm_mode: ""
+doorbell_viewport_poe_fan: true
+doorbell_viewport_poe_fan_temp0: 60000
+doorbell_viewport_poe_fan_temp1: 70000
+doorbell_viewport_poe_fan_temp2: 80000
+doorbell_viewport_poe_fan_temp3: 85000
 
 # vault_doorbell_viewport_protect_username: — required, set in host_vars
 # vault_doorbell_viewport_protect_password: — required, set in host_vars

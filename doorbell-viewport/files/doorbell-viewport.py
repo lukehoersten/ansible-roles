@@ -30,12 +30,22 @@ import zlib
 from enum import Enum
 from pathlib import Path
 
+import inspect
+
 import evdev
 import requests
 import urllib3
 import websockets
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+# Parameter name for passing headers to websockets.connect() varies by version.
+# Detect it at import time rather than assuming based on version number.
+_WS_HEADERS_KWARG = (
+    "additional_headers"
+    if "additional_headers" in inspect.signature(websockets.connect).parameters
+    else "extra_headers"
+)
 
 logging.basicConfig(
     level=logging.INFO,
@@ -102,7 +112,7 @@ class DisplayController:
         try:
             if self.backend == "vcgencmd":
                 subprocess.run(
-                    ["vcgencmd", "display_power", "1"],
+                    ["/usr/bin/vcgencmd", "display_power", "1"],
                     check=True,
                     capture_output=True,
                 )
@@ -118,7 +128,7 @@ class DisplayController:
         try:
             if self.backend == "vcgencmd":
                 subprocess.run(
-                    ["vcgencmd", "display_power", "0"],
+                    ["/usr/bin/vcgencmd", "display_power", "0"],
                     check=True,
                     capture_output=True,
                 )
@@ -176,6 +186,20 @@ class ProtectClient:
             log.error("Protect: authentication failed: %s", exc)
             return False
 
+    def get_last_update_id(self) -> str | None:
+        try:
+            resp = self.session.get(
+                f"{self.base_url}/proxy/protect/api/bootstrap",
+                timeout=10,
+            )
+            resp.raise_for_status()
+            uid = resp.json().get("lastUpdateId")
+            log.info("Protect: lastUpdateId=%s", uid)
+            return uid
+        except Exception as exc:
+            log.warning("Protect: failed to fetch lastUpdateId: %s", exc)
+            return None
+
     def get_camera_rtsp_url(self) -> str | None:
         log.info("Protect: fetching camera info for id=%s", self.config.camera_id)
         try:
@@ -203,11 +227,12 @@ class ProtectClient:
         return {"Cookie": "; ".join(f"{k}={v}" for k, v in cookies.items())}
 
 
-def decode_protect_packet(data: bytes) -> dict | None:
+def decode_protect_packets(data: bytes) -> list:
     """
-    Decode a binary UniFi Protect WebSocket packet.
+    Decode all binary UniFi Protect WebSocket packets from a single message.
 
-    Header (8 bytes):
+    Each WebSocket message contains one or more concatenated packets.
+    Each packet header (8 bytes):
       [0] packet_type   1=action, 2=data
       [1] payload_format  1=JSON, 2=UTF8, 3=buffer
       [2] deflated      0 or 1
@@ -216,28 +241,34 @@ def decode_protect_packet(data: bytes) -> dict | None:
 
     Followed by payload_size bytes of payload.
     """
-    if len(data) < 8:
-        return None
-    packet_type = data[0]
-    payload_format = data[1]
-    deflated = bool(data[2])
-    payload_size = struct.unpack(">I", data[4:8])[0]
-    payload_bytes = data[8:8 + payload_size]
-    if deflated:
-        try:
-            payload_bytes = zlib.decompress(payload_bytes)
-        except Exception as exc:
-            log.debug("Packet decompression failed: %s", exc)
-            return None
-    if payload_format in (1, 2):
-        try:
-            return {
-                "packet_type": packet_type,
-                "payload": json.loads(payload_bytes),
-            }
-        except Exception:
-            return None
-    return None
+    packets = []
+    offset = 0
+    while offset + 8 <= len(data):
+        packet_type = data[offset]
+        payload_format = data[offset + 1]
+        deflated = bool(data[offset + 2])
+        payload_size = struct.unpack(">I", data[offset + 4:offset + 8])[0]
+        end = offset + 8 + payload_size
+        if end > len(data):
+            break
+        payload_bytes = data[offset + 8:end]
+        if deflated:
+            try:
+                payload_bytes = zlib.decompress(payload_bytes)
+            except Exception as exc:
+                log.debug("Packet decompression failed: %s", exc)
+                offset = end
+                continue
+        if payload_format in (1, 2):
+            try:
+                packets.append({
+                    "packet_type": packet_type,
+                    "payload": json.loads(payload_bytes),
+                })
+            except Exception:
+                pass
+        offset = end
+    return packets
 
 
 class DoorbellViewport:
@@ -269,9 +300,13 @@ class DoorbellViewport:
             log.warning("No RTSP URL at startup; will retry after reconnect")
 
         # Warm prebuffer: mpv starts immediately, rendering to framebuffer
-        # while display remains off — zero-latency activation later
+        # while display remains off — zero-latency activation later.
+        # display.off() is called AFTER start_mpv() because mpv's DRM mode
+        # setting re-enables the HDMI output, overriding any prior vcgencmd state.
         if self.config.prebuffer_mode == "warm" and self.config.rtsp_url:
             await self.start_mpv()
+            await asyncio.sleep(3)  # wait for mpv DRM mode-setting to complete
+            self.display.off()
             log.info("Warm prebuffer active: mpv running, display off")
 
         await asyncio.gather(
@@ -345,11 +380,15 @@ class DoorbellViewport:
             "--vo=drm",
             f"--drm-device={self.config.drm_device}",
             f"--drm-connector={self.config.drm_connector}",
-            f"--drm-mode={self.config.drm_mode}",
+            *(
+                [f"--drm-mode={self.config.drm_mode}"]
+                if self.config.drm_mode else []
+            ),
             f"--video-rotate={self.config.orientation}",
             "--fullscreen",
             "--no-border",
             "--no-osc",
+            "--no-audio",
             "--no-input-default-bindings",
             "--no-config",
             "--really-quiet",
@@ -357,7 +396,7 @@ class DoorbellViewport:
             "--cache=yes",
             "--cache-secs=3",
             "--demuxer-max-bytes=50M",
-            "--hwdec=auto",
+            "--hwdec=no",
             self.config.rtsp_url,
         ]
         log.info("Starting mpv: %s", " ".join(cmd))
@@ -432,12 +471,16 @@ class DoorbellViewport:
         ssl_ctx = ssl.create_default_context()
         ssl_ctx.check_hostname = False
         ssl_ctx.verify_mode = ssl.CERT_NONE
+        loop = asyncio.get_event_loop()
+        last_update_id = await loop.run_in_executor(None, self.protect.get_last_update_id)
         ws_url = f"wss://{self.config.protect_host}/proxy/protect/ws/updates"
+        if last_update_id:
+            ws_url += f"?lastUpdateId={last_update_id}"
         headers = self.protect.ws_headers()
 
         async with websockets.connect(
             ws_url,
-            additional_headers=headers,
+            **{_WS_HEADERS_KWARG: headers},
             ssl=ssl_ctx,
             ping_interval=20,
             ping_timeout=10,
@@ -446,14 +489,13 @@ class DoorbellViewport:
             pending_action = None
             async for msg in ws:
                 if isinstance(msg, bytes):
-                    pkt = decode_protect_packet(msg)
-                    if not pkt:
-                        continue
-                    if pkt["packet_type"] == 1:
-                        pending_action = pkt["payload"]
-                    elif pkt["packet_type"] == 2 and pending_action is not None:
-                        await self._handle_protect_event(pending_action, pkt["payload"])
-                        pending_action = None
+                    packets = decode_protect_packets(msg)
+                    for pkt in packets:
+                        if pkt["packet_type"] == 1:
+                            pending_action = pkt["payload"]
+                        elif pkt["packet_type"] == 2 and pending_action is not None:
+                            await self._handle_protect_event(pending_action, pkt["payload"])
+                            pending_action = None
 
     async def _handle_protect_event(self, action: dict, data: dict):
         if action.get("action") != "add":
@@ -461,7 +503,6 @@ class DoorbellViewport:
         if action.get("modelKey") != "event":
             return
         event_type = data.get("type")
-        # 'camera' field varies by Protect firmware version
         camera = data.get("camera") or data.get("cameraId") or ""
         if event_type == "ring" and camera == self.config.camera_id:
             log.info("Protect: ring event from camera %s", camera)

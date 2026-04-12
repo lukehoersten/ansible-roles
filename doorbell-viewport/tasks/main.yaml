@@ -19,6 +19,7 @@
     - "python3-evdev"
     - "python3-requests"
     - "python3-websockets"
+    - "libraspberrypi-bin"
 
 - name: create doorbell-viewport config dir
   become: yes
@@ -67,6 +68,25 @@
     mode: "0644"
   notify: restart doorbell-viewport
 
+- name: configure PoE HAT fan temperature thresholds
+  become: yes
+  blockinfile:
+    path: "/boot/firmware/config.txt"
+    marker: "# {mark} doorbell-viewport poe fan"
+    block: |
+      dtoverlay=rpi-poe
+      dtparam=poe_fan_temp0={{doorbell_viewport_poe_fan_temp0}},poe_fan_temp0_hyst=5000
+      dtparam=poe_fan_temp1={{doorbell_viewport_poe_fan_temp1}},poe_fan_temp1_hyst=5000
+      dtparam=poe_fan_temp2={{doorbell_viewport_poe_fan_temp2}},poe_fan_temp2_hyst=5000
+      dtparam=poe_fan_temp3={{doorbell_viewport_poe_fan_temp3}},poe_fan_temp3_hyst=5000
+  when: doorbell_viewport_poe_fan
+  register: fan_result
+
+- name: remind to reboot for PoE fan config to take effect
+  debug:
+    msg: "config.txt updated — reboot {{inventory_hostname}} for PoE HAT fan thresholds to take effect"
+  when: fan_result is not skipped and fan_result.changed
+
 - name: enable vc4 KMS DRM driver
   become: yes
   lineinfile:
@@ -77,21 +97,21 @@
 
 - name: remind to reboot for vc4 DRM driver to take effect
   debug:
-    msg: "config.txt updated — reboot {{inventory_hostname}} for dtoverlay=vc4-kms-v3d to take effect"
+    msg: "config.txt updated — reboot {{inventory_hostname}} for dtoverlay=vc4-fkms-v3d to take effect"
   when: vc4_result.changed
 
-- name: disable fbcon on HDMI to free DRM device for mpv
+- name: disable fbcon to free DRM device for mpv
   become: yes
   lineinfile:
     path: "/boot/firmware/cmdline.txt"
     backrefs: yes
-    regexp: "^((?!.*video={{doorbell_viewport_drm_connector}}:D).*)$"
-    line: "\\1 video={{doorbell_viewport_drm_connector}}:D"
+    regexp: "^((?!.*fbcon=map:99).*)$"
+    line: "\\1 fbcon=map:99"
   register: cmdline_result
 
 - name: remind to reboot for cmdline.txt change to take effect
   debug:
-    msg: "cmdline.txt updated — reboot {{inventory_hostname}} for video={{doorbell_viewport_drm_connector}}:D to take effect"
+    msg: "cmdline.txt updated — reboot {{inventory_hostname}} for fbcon=map:99 to take effect"
   when: cmdline_result.changed
 
 - name: ensure doorbell-viewport is started
