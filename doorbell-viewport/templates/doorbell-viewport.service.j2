@@ -1,0 +1,18 @@
+[Unit]
+Description=Doorbell Viewport
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User={{doorbell_viewport_user}}
+Group={{doorbell_viewport_user}}
+EnvironmentFile=/etc/doorbell-viewport/doorbell-viewport.env
+ExecStart=/usr/local/bin/doorbell-viewport
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

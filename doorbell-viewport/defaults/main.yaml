@@ -1,0 +1,16 @@
+---
+
+doorbell_viewport_user: "doorbell-viewport"
+doorbell_viewport_protect_host: ""
+doorbell_viewport_camera_id: ""
+doorbell_viewport_timeout: 45
+doorbell_viewport_touch_match: ""
+doorbell_viewport_prebuffer_mode: "warm"
+doorbell_viewport_display_backend: "vcgencmd"
+doorbell_viewport_orientation: 270
+doorbell_viewport_drm_connector: "HDMI-A-1"
+doorbell_viewport_drm_device: "/dev/dri/card1"
+doorbell_viewport_drm_mode: "848x480"
+
+# vault_doorbell_viewport_protect_username: — required, set in host_vars
+# vault_doorbell_viewport_protect_password: — required, set in host_vars

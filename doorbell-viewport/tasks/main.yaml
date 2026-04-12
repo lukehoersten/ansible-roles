@@ -1,0 +1,99 @@
+---
+
+- name: add doorbell-viewport user
+  become: yes
+  user:
+    name: "{{doorbell_viewport_user}}"
+    shell: "/bin/false"
+    system: "yes"
+    create_home: "no"
+    groups: "video,input,render"
+    append: "yes"
+
+- name: apt install doorbell-viewport dependencies
+  become: yes
+  apt: name="{{item}}"
+  notify: restart doorbell-viewport
+  loop:
+    - "mpv"
+    - "python3-evdev"
+    - "python3-requests"
+    - "python3-websockets"
+
+- name: create doorbell-viewport config dir
+  become: yes
+  file:
+    path: "/etc/doorbell-viewport"
+    owner: "root"
+    group: "{{doorbell_viewport_user}}"
+    mode: "0750"
+    state: "directory"
+
+- name: install doorbell-viewport daemon
+  become: yes
+  copy:
+    src: "doorbell-viewport.py"
+    dest: "/usr/local/bin/doorbell-viewport"
+    owner: "root"
+    group: "root"
+    mode: "0755"
+  notify: restart doorbell-viewport
+
+- name: install doorbell-viewport debug tool
+  become: yes
+  copy:
+    src: "doorbell-viewport-debug"
+    dest: "/usr/local/bin/doorbell-viewport-debug"
+    owner: "root"
+    group: "root"
+    mode: "0755"
+
+- name: configure doorbell-viewport environment
+  become: yes
+  template:
+    src: "doorbell-viewport.env.j2"
+    dest: "/etc/doorbell-viewport/doorbell-viewport.env"
+    owner: "root"
+    group: "{{doorbell_viewport_user}}"
+    mode: "0640"
+  notify: restart doorbell-viewport
+  no_log: true
+
+- name: install doorbell-viewport systemd service
+  become: yes
+  template:
+    src: "doorbell-viewport.service.j2"
+    dest: "/lib/systemd/system/doorbell-viewport.service"
+    mode: "0644"
+  notify: restart doorbell-viewport
+
+- name: enable vc4 KMS DRM driver
+  become: yes
+  lineinfile:
+    path: "/boot/firmware/config.txt"
+    line: "dtoverlay=vc4-fkms-v3d"
+    regexp: "^dtoverlay=vc4-(f?)kms-v3d"
+  register: vc4_result
+
+- name: remind to reboot for vc4 DRM driver to take effect
+  debug:
+    msg: "config.txt updated — reboot {{inventory_hostname}} for dtoverlay=vc4-kms-v3d to take effect"
+  when: vc4_result.changed
+
+- name: disable fbcon on HDMI to free DRM device for mpv
+  become: yes
+  lineinfile:
+    path: "/boot/firmware/cmdline.txt"
+    backrefs: yes
+    regexp: "^((?!.*video={{doorbell_viewport_drm_connector}}:D).*)$"
+    line: "\\1 video={{doorbell_viewport_drm_connector}}:D"
+  register: cmdline_result
+
+- name: remind to reboot for cmdline.txt change to take effect
+  debug:
+    msg: "cmdline.txt updated — reboot {{inventory_hostname}} for video={{doorbell_viewport_drm_connector}}:D to take effect"
+  when: cmdline_result.changed
+
+- name: ensure doorbell-viewport is started
+  become: yes
+  systemd: name="doorbell-viewport.service" enabled="yes" state="started" daemon_reload="yes"

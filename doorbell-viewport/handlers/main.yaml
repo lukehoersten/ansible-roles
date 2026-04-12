@@ -1,0 +1,5 @@
+---
+
+- name: restart doorbell-viewport
+  become: yes
+  systemd: name="doorbell-viewport.service" state="restarted" daemon_reload="yes"
