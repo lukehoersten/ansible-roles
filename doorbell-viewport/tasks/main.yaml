@@ -7,7 +7,7 @@
     shell: "/bin/false"
     system: "yes"
     create_home: "no"
-    groups: "video,input,render"
+    groups: "video,input,render,tty"
     append: "yes"
 
 - name: allow doorbell-viewport user to control sysfs backlight

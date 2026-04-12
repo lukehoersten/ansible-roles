@@ -145,16 +145,17 @@ class DisplayController:
             log.warning("No backlight device found in /sys/class/backlight")
             return
         path = paths[0]
-        log.debug("Backlight device: %s", path)
         if enabled:
             try:
                 max_b = int((path / "max_brightness").read_text().strip())
                 (path / "brightness").write_text(str(max_b))
+                log.info("Backlight %s: brightness -> %d (max)", path.name, max_b)
             except Exception as exc:
                 log.error("Backlight on failed: %s", exc)
         else:
             try:
                 (path / "brightness").write_text("0")
+                log.info("Backlight %s: brightness -> 0", path.name)
             except Exception as exc:
                 log.error("Backlight off failed: %s", exc)
 
@@ -403,7 +404,7 @@ class DoorbellViewport:
             self.mpv_proc = await asyncio.create_subprocess_exec(
                 *cmd,
                 stdout=subprocess.DEVNULL,
-                stderr=subprocess.DEVNULL,
+                stderr=None,  # pass through to journal
             )
             log.info("mpv started (pid=%d)", self.mpv_proc.pid)
             asyncio.create_task(self._watch_mpv())
