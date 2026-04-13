@@ -26,36 +26,22 @@ _load_env() {
 }
 
 _display_on() {
-    case "${DOORBELL_VIEWPORT_DISPLAY_BACKEND:-vcgencmd}" in
-        vcgencmd)
-            vcgencmd display_power 1
-            ;;
-        drm|panel)
-            BACKLIGHT=$(ls /sys/class/backlight/ 2>/dev/null | head -1)
-            if [ -n "$BACKLIGHT" ]; then
-                MAX=$(cat "/sys/class/backlight/$BACKLIGHT/max_brightness")
-                echo "$MAX" > "/sys/class/backlight/$BACKLIGHT/brightness"
-            else
-                echo "No backlight device found" >&2
-            fi
-            ;;
-    esac
+    BACKLIGHT=$(ls /sys/class/backlight/ 2>/dev/null | head -1)
+    if [ -n "$BACKLIGHT" ]; then
+        MAX=$(cat "/sys/class/backlight/$BACKLIGHT/max_brightness")
+        echo "$MAX" > "/sys/class/backlight/$BACKLIGHT/brightness"
+    else
+        echo "No backlight device found" >&2
+    fi
 }
 
 _display_off() {
-    case "${DOORBELL_VIEWPORT_DISPLAY_BACKEND:-vcgencmd}" in
-        vcgencmd)
-            vcgencmd display_power 0
-            ;;
-        drm|panel)
-            BACKLIGHT=$(ls /sys/class/backlight/ 2>/dev/null | head -1)
-            if [ -n "$BACKLIGHT" ]; then
-                echo "0" > "/sys/class/backlight/$BACKLIGHT/brightness"
-            else
-                echo "No backlight device found" >&2
-            fi
-            ;;
-    esac
+    BACKLIGHT=$(ls /sys/class/backlight/ 2>/dev/null | head -1)
+    if [ -n "$BACKLIGHT" ]; then
+        echo "0" > "/sys/class/backlight/$BACKLIGHT/brightness"
+    else
+        echo "No backlight device found" >&2
+    fi
 }
 
 cmd_show() {

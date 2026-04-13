@@ -36,7 +36,6 @@
     - "python3-evdev"
     - "python3-requests"
     - "python3-websockets"
-    - "libraspberrypi-bin"
 
 - name: create doorbell-viewport config dir
   become: yes

@@ -5,7 +5,6 @@ doorbell_viewport_protect_host: ""
 doorbell_viewport_camera_id: ""
 doorbell_viewport_timeout: 45
 doorbell_viewport_touch_match: ""
-doorbell_viewport_display_backend: "vcgencmd"
 doorbell_viewport_orientation: 270
 doorbell_viewport_drm_connector: "HDMI-A-1"
 doorbell_viewport_drm_device: "/dev/dri/card1"
