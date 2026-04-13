@@ -68,7 +68,6 @@ class Config:
         self.camera_id = os.environ["DOORBELL_VIEWPORT_CAMERA_ID"]
         self.timeout = int(os.environ.get("DOORBELL_VIEWPORT_TIMEOUT", "45"))
         self.touch_match = os.environ.get("DOORBELL_VIEWPORT_TOUCH_MATCH", "")
-        self.prebuffer_mode = os.environ.get("DOORBELL_VIEWPORT_PREBUFFER_MODE", "warm")
         self.display_backend = os.environ.get("DOORBELL_VIEWPORT_DISPLAY_BACKEND", "vcgencmd")
         self.orientation = int(os.environ.get("DOORBELL_VIEWPORT_ORIENTATION", "270"))
         self.drm_device = os.environ.get("DOORBELL_VIEWPORT_DRM_DEVICE", "/dev/dri/card1")
@@ -79,12 +78,11 @@ class Config:
     def log_config(self):
         log.info(
             "Config: protect_host=%s camera_id=%s timeout=%ds "
-            "prebuffer_mode=%s display_backend=%s orientation=%d "
+            "display_backend=%s orientation=%d "
             "drm_device=%s drm_connector=%s drm_mode=%s",
             self.protect_host,
             self.camera_id,
             self.timeout,
-            self.prebuffer_mode,
             self.display_backend,
             self.orientation,
             self.drm_device,
@@ -300,16 +298,6 @@ class DoorbellViewport:
         if not self.config.rtsp_url:
             log.warning("No RTSP URL at startup; will retry after reconnect")
 
-        # Warm prebuffer: mpv starts immediately, rendering to framebuffer
-        # while display remains off — zero-latency activation later.
-        # display.off() is called AFTER start_mpv() because mpv's DRM mode
-        # setting re-enables the HDMI output, overriding any prior vcgencmd state.
-        if self.config.prebuffer_mode == "warm" and self.config.rtsp_url:
-            await self.start_mpv()
-            await asyncio.sleep(3)  # wait for mpv DRM mode-setting to complete
-            self.display.off()
-            log.info("Warm prebuffer active: mpv running, display off")
-
         await asyncio.gather(
             self.protect_listener(),
             self.touch_listener(),
@@ -327,12 +315,8 @@ class DoorbellViewport:
 
         if was_idle:
             log.info("State: IDLE -> ACTIVE")
-            if self.config.prebuffer_mode == "warm":
-                # mpv already buffering; just enable the display
-                self.display.on()
-            else:
-                await self.start_mpv()
-                self.display.on()
+            await self.start_mpv()
+            self.display.on()
         else:
             log.info("State: ACTIVE -> timer extended")
 
@@ -349,8 +333,7 @@ class DoorbellViewport:
         self.timer_task = None
 
         self.display.off()
-        if self.config.prebuffer_mode != "warm":
-            await self.stop_mpv()
+        await self.stop_mpv()
 
     async def on_ring(self):
         log.info("Event: doorbell ring")
@@ -439,7 +422,7 @@ class DoorbellViewport:
             if self.mpv_proc is proc:
                 self.mpv_proc = None
             await asyncio.sleep(2)
-            if self.config.prebuffer_mode == "warm" or self.state == State.ACTIVE:
+            if self.state == State.ACTIVE:
                 log.info("Restarting mpv after unexpected exit")
                 await self.start_mpv()
 
@@ -463,8 +446,6 @@ class DoorbellViewport:
                 url = await loop.run_in_executor(None, self.protect.get_camera_rtsp_url)
                 if url:
                     self.config.rtsp_url = url
-                    if self.config.prebuffer_mode == "warm":
-                        await self.start_mpv()
 
     async def _connect_protect_ws(self):
         log.info("Protect: connecting to WebSocket")
