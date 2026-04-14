@@ -17,7 +17,6 @@ Transitions:
 """
 
 import asyncio
-import inspect
 import json
 import logging
 import os
@@ -38,13 +37,9 @@ import websockets
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-# Parameter name for passing headers to websockets.connect() varies by version.
-# Detect it at import time rather than assuming based on version number.
-_WS_HEADERS_KWARG = (
-    "additional_headers"
-    if "additional_headers" in inspect.signature(websockets.connect).parameters
-    else "extra_headers"
-)
+_SSL_CTX = ssl.create_default_context()
+_SSL_CTX.check_hostname = False
+_SSL_CTX.verify_mode = ssl.CERT_NONE
 
 logging.basicConfig(
     level=logging.INFO,
@@ -179,7 +174,7 @@ class ProtectClient:
             log.error("Protect: failed to fetch camera info: %s", exc)
             return None
 
-    def ws_headers(self) -> dict:
+    def cookie_header(self) -> dict:
         cookies = self.session.cookies.get_dict()
         return {"Cookie": "; ".join(f"{k}={v}" for k, v in cookies.items())}
 
@@ -392,9 +387,6 @@ class DoorbellViewport:
 
     async def _connect_protect_ws(self):
         log.info("Protect: connecting to WebSocket")
-        ssl_ctx = ssl.create_default_context()
-        ssl_ctx.check_hostname = False
-        ssl_ctx.verify_mode = ssl.CERT_NONE
         last_update_id = await asyncio.to_thread(self.protect.get_last_update_id)
         ws_url = f"wss://{self.config.protect_host}/proxy/protect/ws/updates"
         if last_update_id:
@@ -402,8 +394,8 @@ class DoorbellViewport:
 
         async with websockets.connect(
             ws_url,
-            **{_WS_HEADERS_KWARG: self.protect.ws_headers()},
-            ssl=ssl_ctx,
+            extra_headers=self.protect.cookie_header(),
+            ssl=_SSL_CTX,
             ping_interval=20,
             ping_timeout=10,
         ) as ws:
