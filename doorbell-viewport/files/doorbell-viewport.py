@@ -91,15 +91,12 @@ class DisplayController:
     """Controls display backlight via /sys/class/backlight sysfs (DRM/KMS)."""
 
     def on(self):
-        self._set(True)
+        log.info("Display: ON")
+        self._sysfs_set(True)
 
     def off(self):
-        self._set(False)
-
-    def _set(self, enabled: bool):
-        state = "ON" if enabled else "OFF"
-        log.info("Display power: %s", state)
-        self._sysfs_set(enabled)
+        log.info("Display: OFF")
+        self._sysfs_set(False)
 
     def _sysfs_set(self, enabled: bool):
         paths = sorted(Path("/sys/class/backlight").glob("*"))
@@ -290,10 +287,6 @@ class DoorbellViewport:
         self.display.off()
         await self.stop_mpv()
 
-    async def on_ring(self):
-        log.info("Event: doorbell ring")
-        await self.activate()
-
     async def on_touch(self):
         log.info("Event: touch input (state=%s)", self.state.value)
         if self.state == State.IDLE:
@@ -435,7 +428,7 @@ class DoorbellViewport:
         camera = data.get("camera") or data.get("cameraId") or ""
         if event_type == "ring" and camera == self.config.camera_id:
             log.info("Protect: ring event from camera %s", camera)
-            await self.on_ring()
+            await self.activate()
 
     async def touch_listener(self):
         """Monitor evdev touch input with automatic device re-discovery."""
@@ -482,14 +475,14 @@ class DoorbellViewport:
             async for event in dev.async_read_loop():
                 if not self._running:
                     break
-                triggered = False
-                if event.type == evdev.ecodes.EV_ABS:
-                    if (event.code == evdev.ecodes.ABS_MT_TRACKING_ID
-                            and event.value >= 0):
-                        triggered = True
-                elif event.type == evdev.ecodes.EV_KEY:
-                    if event.code == evdev.ecodes.BTN_TOUCH and event.value == 1:
-                        triggered = True
+                triggered = (
+                    (event.type == evdev.ecodes.EV_ABS
+                     and event.code == evdev.ecodes.ABS_MT_TRACKING_ID
+                     and event.value >= 0)
+                    or (event.type == evdev.ecodes.EV_KEY
+                        and event.code == evdev.ecodes.BTN_TOUCH
+                        and event.value == 1)
+                )
                 if triggered:
                     now = time.monotonic()
                     if now - last_touch_time > 0.5:  # 500ms debounce
