@@ -1,14 +1,14 @@
 [Unit]
-Description=Doorbell Viewport
+Description=UniFi Protect Viewport
 After=network-online.target
 Wants=network-online.target
 
 [Service]
 Type=simple
-User={{doorbell_viewport_user}}
-Group={{doorbell_viewport_user}}
-EnvironmentFile=/etc/doorbell-viewport/doorbell-viewport.env
-ExecStart=/usr/local/bin/doorbell-viewport
+User={{unifi_protect_viewport_user}}
+Group={{unifi_protect_viewport_user}}
+EnvironmentFile=/etc/unifi-protect-viewport/unifi-protect-viewport.env
+ExecStart=/usr/local/bin/unifi-protect-viewport
 Restart=always
 RestartSec=5
 StandardOutput=journal

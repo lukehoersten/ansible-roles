@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-doorbell-viewport: UniFi Protect doorbell display daemon
+unifi-protect-viewport: UniFi Protect doorbell display daemon
 
 Connects to UniFi Protect, listens for doorbell ring events, and manages
 display power + video playback on a Raspberry Pi portrait touchscreen.
@@ -13,7 +13,7 @@ Transitions:
   ring event    : IDLE -> ACTIVE (or extend timer if already ACTIVE)
   touch (idle)  : IDLE -> ACTIVE
   touch (active): ACTIVE -> IDLE (immediate)
-  timeout       : ACTIVE -> IDLE (after doorbell_viewport_timeout seconds)
+  timeout       : ACTIVE -> IDLE (after unifi_protect_viewport_timeout seconds)
 """
 
 import asyncio
@@ -46,7 +46,7 @@ logging.basicConfig(
     format="%(asctime)s %(levelname)s %(message)s",
     stream=sys.stdout,
 )
-log = logging.getLogger("doorbell-viewport")
+log = logging.getLogger("unifi-protect-viewport")
 
 
 class State(Enum):
@@ -56,16 +56,16 @@ class State(Enum):
 
 class Config:
     def __init__(self):
-        self.protect_host = os.environ["DOORBELL_VIEWPORT_PROTECT_HOST"]
-        self.protect_username = os.environ["DOORBELL_VIEWPORT_PROTECT_USERNAME"]
-        self.protect_password = os.environ["DOORBELL_VIEWPORT_PROTECT_PASSWORD"]
-        self.camera_id = os.environ["DOORBELL_VIEWPORT_CAMERA_ID"]
-        self.timeout = int(os.environ.get("DOORBELL_VIEWPORT_TIMEOUT", "45"))
-        self.touch_match = os.environ.get("DOORBELL_VIEWPORT_TOUCH_MATCH", "")
-        self.orientation = int(os.environ.get("DOORBELL_VIEWPORT_ORIENTATION", "270"))
-        self.drm_device = os.environ.get("DOORBELL_VIEWPORT_DRM_DEVICE", "/dev/dri/card1")
-        self.drm_connector = os.environ.get("DOORBELL_VIEWPORT_DRM_CONNECTOR", "HDMI-A-1")
-        self.drm_mode = os.environ.get("DOORBELL_VIEWPORT_DRM_MODE", "")
+        self.protect_host = os.environ["UNIFI_PROTECT_VIEWPORT_PROTECT_HOST"]
+        self.protect_username = os.environ["UNIFI_PROTECT_VIEWPORT_PROTECT_USERNAME"]
+        self.protect_password = os.environ["UNIFI_PROTECT_VIEWPORT_PROTECT_PASSWORD"]
+        self.camera_id = os.environ["UNIFI_PROTECT_VIEWPORT_CAMERA_ID"]
+        self.timeout = int(os.environ.get("UNIFI_PROTECT_VIEWPORT_TIMEOUT", "45"))
+        self.touch_match = os.environ.get("UNIFI_PROTECT_VIEWPORT_TOUCH_MATCH", "")
+        self.orientation = int(os.environ.get("UNIFI_PROTECT_VIEWPORT_ORIENTATION", "270"))
+        self.drm_device = os.environ.get("UNIFI_PROTECT_VIEWPORT_DRM_DEVICE", "/dev/dri/card1")
+        self.drm_connector = os.environ.get("UNIFI_PROTECT_VIEWPORT_DRM_CONNECTOR", "HDMI-A-1")
+        self.drm_mode = os.environ.get("UNIFI_PROTECT_VIEWPORT_DRM_MODE", "")
         self.rtsp_url = None
 
     def log_config(self):
@@ -231,7 +231,7 @@ class DoorbellViewport:
         self._running = True
 
     async def run(self):
-        log.info("doorbell-viewport starting")
+        log.info("unifi-protect-viewport starting")
         self.config.log_config()
 
         self.display.off()
@@ -511,7 +511,7 @@ async def main():
         log.info("Shutting down")
         await viewport.stop_mpv()
         viewport.display.off()
-        log.info("doorbell-viewport stopped")
+        log.info("unifi-protect-viewport stopped")
 
 
 if __name__ == "__main__":

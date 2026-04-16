@@ -1,4 +1,4 @@
-# doorbell-viewport
+# unifi-protect-viewport
 
 Raspberry Pi 4 portrait touchscreen that shows a live UniFi Protect doorbell
 stream when the doorbell is pressed or the screen is touched. Display backlight
@@ -37,7 +37,7 @@ will not work.
 1. In UniFi OS, go to **OS Settings → Admins & Users → Users**
 2. Click **Add User**
 3. Fill in:
-   - **Username**: choose a service account name (e.g. `doorbell-viewport`)
+   - **Username**: choose a service account name (e.g. `unifi-protect-viewport`)
    - **Password**: generate a strong password (store in Ansible Vault)
    - **Account Type**: Local Access Only
 4. Click **Add**
@@ -63,7 +63,7 @@ Run these two commands from any machine that can reach the Protect host:
 ```bash
 curl -sk -c /tmp/prot.cookies \
   -H 'Content-Type: application/json' \
-  -d '{"username":"doorbell-viewport","password":"YOUR_PASSWORD"}' \
+  -d '{"username":"unifi-protect-viewport","password":"YOUR_PASSWORD"}' \
   https://YOUR_PROTECT_HOST/api/auth/login
 ```
 
@@ -76,14 +76,14 @@ Output looks like:
 aabbcc1122334455aabbcc00 UVC-G4-Doorbell  Front Door
 ```
 
-Copy the ID of the doorbell camera and set it as `doorbell_viewport_camera_id`.
+Copy the ID of the doorbell camera and set it as `unifi_protect_viewport_camera_id`.
 
 ### Verify access
 
 Once the role is deployed:
 
 ```bash
-doorbell-viewport-debug test-protect
+unifi-protect-viewport-debug test-protect
 ```
 
 ---
@@ -117,16 +117,16 @@ Edit the file on the Pi:
 sudo sed -i 's/$/ video=HDMI-A-1:D/' /boot/firmware/cmdline.txt
 ```
 
-The connector name (`HDMI-A-1`) is configurable via `doorbell_viewport_drm_connector` if your hardware uses a different name. The Ansible role manages this automatically.
+The connector name (`HDMI-A-1`) is configurable via `unifi_protect_viewport_drm_connector` if your hardware uses a different name. The Ansible role manages this automatically.
 
 Then reboot. The HDMI output will be dark at the console from that point on,
 which is exactly what you want — the display is managed entirely by
-doorbell-viewport.
+unifi-protect-viewport.
 
 Verify mpv can open the DRM device after reboot:
 
 ```bash
-sudo -u doorbell-viewport mpv --vo=drm --length=3 /dev/zero
+sudo -u unifi-protect-viewport mpv --vo=drm --length=3 /dev/zero
 ```
 
 If it exits without a "device busy" error, DRM access is working.
@@ -138,23 +138,23 @@ If it exits without a "device busy" error, DRM access is working.
 ### host_vars (plain)
 
 ```yaml
-doorbell_viewport_protect_host: "unifi.lan.example.com"  # or IP address
-doorbell_viewport_camera_id: "abcdef1234567890abcdef12"
-doorbell_viewport_timeout: 45
-doorbell_viewport_touch_match: ""          # substring match on evdev device name
-doorbell_viewport_prebuffer_mode: "warm"   # warm | cold
-doorbell_viewport_display_backend: "vcgencmd"  # vcgencmd | drm | panel
-doorbell_viewport_orientation: 270         # degrees: 90 | 180 | 270
-doorbell_viewport_drm_device: "/dev/dri/card1"   # RPi4: card1; RPi3: card0
-doorbell_viewport_drm_connector: "HDMI-A-1"
-doorbell_viewport_drm_mode: "848x480"      # nearest mode advertised by your display
+unifi_protect_viewport_protect_host: "unifi.lan.example.com"  # or IP address
+unifi_protect_viewport_camera_id: "abcdef1234567890abcdef12"
+unifi_protect_viewport_timeout: 45
+unifi_protect_viewport_touch_match: ""          # substring match on evdev device name
+unifi_protect_viewport_prebuffer_mode: "warm"   # warm | cold
+unifi_protect_viewport_display_backend: "vcgencmd"  # vcgencmd | drm | panel
+unifi_protect_viewport_orientation: 270         # degrees: 90 | 180 | 270
+unifi_protect_viewport_drm_device: "/dev/dri/card1"   # RPi4: card1; RPi3: card0
+unifi_protect_viewport_drm_connector: "HDMI-A-1"
+unifi_protect_viewport_drm_mode: "848x480"      # nearest mode advertised by your display
 ```
 
 ### host_vars (vault)
 
 ```yaml
-vault_doorbell_viewport_protect_username: "doorbell-viewport"
-vault_doorbell_viewport_protect_password: "secret"
+vault_unifi_protect_viewport_protect_username: "unifi-protect-viewport"
+vault_unifi_protect_viewport_protect_password: "secret"
 ```
 
 Create and encrypt the vault file:
@@ -173,7 +173,7 @@ Uses `vcgencmd display_power 0/1` (Raspberry Pi firmware command).
 Cuts the HDMI signal. Displays that support DPMS will cut their backlight.
 
 ```yaml
-doorbell_viewport_display_backend: "vcgencmd"
+unifi_protect_viewport_display_backend: "vcgencmd"
 ```
 
 ### drm
@@ -182,7 +182,7 @@ Writes `0` / `max_brightness` to the first device under `/sys/class/backlight/`.
 Use when the display exposes a sysfs backlight node.
 
 ```yaml
-doorbell_viewport_display_backend: "drm"
+unifi_protect_viewport_display_backend: "drm"
 ```
 
 Check available devices on the Pi: `ls /sys/class/backlight/`
@@ -195,7 +195,7 @@ label would be confusing.
 ### Testing
 
 ```bash
-doorbell-viewport-debug test-display   # on -> 3s -> off
+unifi-protect-viewport-debug test-display   # on -> 3s -> off
 ```
 
 ---
@@ -209,7 +209,7 @@ framebuffer while the display stays off. Activation just turns on the backlight
 — essentially zero latency. The live frame is already there.
 
 ```yaml
-doorbell_viewport_prebuffer_mode: "warm"
+unifi_protect_viewport_prebuffer_mode: "warm"
 ```
 
 ### cold
@@ -219,7 +219,7 @@ activation latency (stream connect + first keyframe decode). Use as fallback if
 warm mode causes problems (power draw, memory pressure).
 
 ```yaml
-doorbell_viewport_prebuffer_mode: "cold"
+unifi_protect_viewport_prebuffer_mode: "cold"
 ```
 
 ---
@@ -229,14 +229,14 @@ doorbell_viewport_prebuffer_mode: "cold"
 The daemon discovers the touch device via evdev at startup and re-discovers it
 automatically if it disappears and re-enumerates (e.g. USB replug).
 
-If `doorbell_viewport_touch_match` is set, the daemon matches on any device
+If `unifi_protect_viewport_touch_match` is set, the daemon matches on any device
 whose name contains that substring (case-insensitive). Otherwise it finds the
 first device advertising `ABS_MT_POSITION_X` (multitouch absolute position).
 
 To find the right match string for your display:
 
 ```bash
-doorbell-viewport-debug test-touch
+unifi-protect-viewport-debug test-touch
 ```
 
 Example output:
@@ -245,7 +245,7 @@ Example output:
 ```
 
 ```yaml
-doorbell_viewport_touch_match: "waveshare"
+unifi_protect_viewport_touch_match: "waveshare"
 ```
 
 ---
@@ -253,12 +253,12 @@ doorbell_viewport_touch_match: "waveshare"
 ## Debug Commands
 
 ```bash
-doorbell-viewport-debug show           # turn display on
-doorbell-viewport-debug hide           # turn display off
-doorbell-viewport-debug test-display   # power cycle: on -> 3s -> off
-doorbell-viewport-debug test-touch     # list touch devices
-doorbell-viewport-debug test-stream    # fetch RTSP URL and play via mpv
-doorbell-viewport-debug test-protect   # verify Protect API + camera info
+unifi-protect-viewport-debug show           # turn display on
+unifi-protect-viewport-debug hide           # turn display off
+unifi-protect-viewport-debug test-display   # power cycle: on -> 3s -> off
+unifi-protect-viewport-debug test-touch     # list touch devices
+unifi-protect-viewport-debug test-stream    # fetch RTSP URL and play via mpv
+unifi-protect-viewport-debug test-protect   # verify Protect API + camera info
 ```
 
 ---
@@ -266,7 +266,7 @@ doorbell-viewport-debug test-protect   # verify Protect API + camera info
 ## Logs
 
 ```bash
-journalctl -u doorbell-viewport -f
+journalctl -u unifi-protect-viewport -f
 ```
 
 ---

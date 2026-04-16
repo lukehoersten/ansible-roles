@@ -1,19 +1,19 @@
 ---
 
-- name: add doorbell-viewport user
+- name: add unifi-protect-viewport user
   become: yes
   user:
-    name: "{{doorbell_viewport_user}}"
+    name: "{{unifi_protect_viewport_user}}"
     shell: "/bin/false"
     system: "yes"
     create_home: "no"
     groups: "video,input,render,tty"
     append: "yes"
 
-- name: allow doorbell-viewport user to control sysfs backlight
+- name: allow unifi-protect-viewport user to control sysfs backlight
   become: yes
   copy:
-    dest: "/etc/udev/rules.d/99-doorbell-viewport-backlight.rules"
+    dest: "/etc/udev/rules.d/99-unifi-protect-viewport-backlight.rules"
     owner: "root"
     group: "root"
     mode: "0644"
@@ -27,75 +27,75 @@
     group: "video"
     mode: "0664"
 
-- name: apt install doorbell-viewport dependencies
+- name: apt install unifi-protect-viewport dependencies
   become: yes
   apt: name="{{item}}"
-  notify: restart doorbell-viewport
+  notify: restart unifi-protect-viewport
   loop:
     - "mpv"
     - "python3-evdev"
     - "python3-requests"
     - "python3-websockets"
 
-- name: create doorbell-viewport config dir
+- name: create unifi-protect-viewport config dir
   become: yes
   file:
-    path: "/etc/doorbell-viewport"
+    path: "/etc/unifi-protect-viewport"
     owner: "root"
-    group: "{{doorbell_viewport_user}}"
+    group: "{{unifi_protect_viewport_user}}"
     mode: "0750"
     state: "directory"
 
-- name: install doorbell-viewport daemon
+- name: install unifi-protect-viewport daemon
   become: yes
   copy:
-    src: "doorbell-viewport.py"
-    dest: "/usr/local/bin/doorbell-viewport"
+    src: "unifi-protect-viewport.py"
+    dest: "/usr/local/bin/unifi-protect-viewport"
     owner: "root"
     group: "root"
     mode: "0755"
-  notify: restart doorbell-viewport
+  notify: restart unifi-protect-viewport
 
-- name: install doorbell-viewport debug tool
+- name: install unifi-protect-viewport debug tool
   become: yes
   copy:
-    src: "doorbell-viewport-debug"
-    dest: "/usr/local/bin/doorbell-viewport-debug"
+    src: "unifi-protect-viewport-debug"
+    dest: "/usr/local/bin/unifi-protect-viewport-debug"
     owner: "root"
     group: "root"
     mode: "0755"
 
-- name: configure doorbell-viewport environment
+- name: configure unifi-protect-viewport environment
   become: yes
   template:
-    src: "doorbell-viewport.env.j2"
-    dest: "/etc/doorbell-viewport/doorbell-viewport.env"
+    src: "unifi-protect-viewport.env.j2"
+    dest: "/etc/unifi-protect-viewport/unifi-protect-viewport.env"
     owner: "root"
-    group: "{{doorbell_viewport_user}}"
+    group: "{{unifi_protect_viewport_user}}"
     mode: "0640"
-  notify: restart doorbell-viewport
+  notify: restart unifi-protect-viewport
   no_log: true
 
-- name: install doorbell-viewport systemd service
+- name: install unifi-protect-viewport systemd service
   become: yes
   template:
-    src: "doorbell-viewport.service.j2"
-    dest: "/lib/systemd/system/doorbell-viewport.service"
+    src: "unifi-protect-viewport.service.j2"
+    dest: "/lib/systemd/system/unifi-protect-viewport.service"
     mode: "0644"
-  notify: restart doorbell-viewport
+  notify: restart unifi-protect-viewport
 
 - name: configure PoE HAT fan temperature thresholds
   become: yes
   blockinfile:
     path: "/boot/firmware/config.txt"
-    marker: "# {mark} doorbell-viewport poe fan"
+    marker: "# {mark} unifi-protect-viewport poe fan"
     block: |
       dtoverlay=rpi-poe
-      dtparam=poe_fan_temp0={{doorbell_viewport_poe_fan_temp0}},poe_fan_temp0_hyst=5000
-      dtparam=poe_fan_temp1={{doorbell_viewport_poe_fan_temp1}},poe_fan_temp1_hyst=5000
-      dtparam=poe_fan_temp2={{doorbell_viewport_poe_fan_temp2}},poe_fan_temp2_hyst=5000
-      dtparam=poe_fan_temp3={{doorbell_viewport_poe_fan_temp3}},poe_fan_temp3_hyst=5000
-  when: doorbell_viewport_poe_fan
+      dtparam=poe_fan_temp0={{unifi_protect_viewport_poe_fan_temp0}},poe_fan_temp0_hyst=5000
+      dtparam=poe_fan_temp1={{unifi_protect_viewport_poe_fan_temp1}},poe_fan_temp1_hyst=5000
+      dtparam=poe_fan_temp2={{unifi_protect_viewport_poe_fan_temp2}},poe_fan_temp2_hyst=5000
+      dtparam=poe_fan_temp3={{unifi_protect_viewport_poe_fan_temp3}},poe_fan_temp3_hyst=5000
+  when: unifi_protect_viewport_poe_fan
   register: fan_result
 
 - name: remind to reboot for PoE fan config to take effect
@@ -130,6 +130,6 @@
     msg: "cmdline.txt updated — reboot {{inventory_hostname}} for fbcon=map:99 to take effect"
   when: cmdline_result.changed
 
-- name: ensure doorbell-viewport is started
+- name: ensure unifi-protect-viewport is started
   become: yes
-  systemd: name="doorbell-viewport.service" enabled="yes" state="started" daemon_reload="yes"
+  systemd: name="unifi-protect-viewport.service" enabled="yes" state="started" daemon_reload="yes"

@@ -1,5 +1,5 @@
 ---
 
-- name: restart doorbell-viewport
+- name: restart unifi-protect-viewport
   become: yes
-  systemd: name="doorbell-viewport.service" state="restarted" daemon_reload="yes"
+  systemd: name="unifi-protect-viewport.service" state="restarted" daemon_reload="yes"

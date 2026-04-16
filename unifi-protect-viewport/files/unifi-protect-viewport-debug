@@ -1,5 +1,5 @@
 #!/bin/bash
-# doorbell-viewport-debug: CLI debug tool
+# unifi-protect-viewport-debug: CLI debug tool
 #
 # Commands:
 #   show           Turn display on
@@ -11,7 +11,7 @@
 
 set -e
 
-ENV_FILE="/etc/doorbell-viewport/doorbell-viewport.env"
+ENV_FILE="/etc/unifi-protect-viewport/unifi-protect-viewport.env"
 CMD="${1:-help}"
 
 _load_env() {
@@ -100,19 +100,19 @@ PYEOF
 
 cmd_test_stream() {
     _load_env
-    if [ -z "$DOORBELL_VIEWPORT_PROTECT_HOST" ]; then
-        echo "Error: DOORBELL_VIEWPORT_PROTECT_HOST not set" >&2
+    if [ -z "$UNIFI_PROTECT_VIEWPORT_PROTECT_HOST" ]; then
+        echo "Error: UNIFI_PROTECT_VIEWPORT_PROTECT_HOST not set" >&2
         exit 1
     fi
 
-    echo "Fetching RTSP URL from $DOORBELL_VIEWPORT_PROTECT_HOST..."
+    echo "Fetching RTSP URL from $UNIFI_PROTECT_VIEWPORT_PROTECT_HOST..."
     RTSP_URL=$(python3 - <<PYEOF
 import os, sys, requests, urllib3
 urllib3.disable_warnings()
-host = os.environ['DOORBELL_VIEWPORT_PROTECT_HOST']
-user = os.environ['DOORBELL_VIEWPORT_PROTECT_USERNAME']
-passwd = os.environ['DOORBELL_VIEWPORT_PROTECT_PASSWORD']
-camera_id = os.environ['DOORBELL_VIEWPORT_CAMERA_ID']
+host = os.environ['UNIFI_PROTECT_VIEWPORT_PROTECT_HOST']
+user = os.environ['UNIFI_PROTECT_VIEWPORT_PROTECT_USERNAME']
+passwd = os.environ['UNIFI_PROTECT_VIEWPORT_PROTECT_PASSWORD']
+camera_id = os.environ['UNIFI_PROTECT_VIEWPORT_CAMERA_ID']
 s = requests.Session()
 s.verify = False
 r = s.post(f'https://{host}/api/auth/login',
@@ -138,7 +138,7 @@ PYEOF
     echo "(press q to quit)"
     mpv \
         --vo=drm \
-        "--video-rotate=${DOORBELL_VIEWPORT_ORIENTATION:-270}" \
+        "--video-rotate=${UNIFI_PROTECT_VIEWPORT_ORIENTATION:-270}" \
         --fullscreen \
         --no-border \
         --no-osc \
@@ -149,18 +149,18 @@ PYEOF
 
 cmd_test_protect() {
     _load_env
-    if [ -z "$DOORBELL_VIEWPORT_PROTECT_HOST" ]; then
-        echo "Error: DOORBELL_VIEWPORT_PROTECT_HOST not set" >&2
+    if [ -z "$UNIFI_PROTECT_VIEWPORT_PROTECT_HOST" ]; then
+        echo "Error: UNIFI_PROTECT_VIEWPORT_PROTECT_HOST not set" >&2
         exit 1
     fi
 
     python3 - <<PYEOF
 import os, requests, urllib3
 urllib3.disable_warnings()
-host = os.environ['DOORBELL_VIEWPORT_PROTECT_HOST']
-user = os.environ['DOORBELL_VIEWPORT_PROTECT_USERNAME']
-passwd = os.environ['DOORBELL_VIEWPORT_PROTECT_PASSWORD']
-camera_id = os.environ['DOORBELL_VIEWPORT_CAMERA_ID']
+host = os.environ['UNIFI_PROTECT_VIEWPORT_PROTECT_HOST']
+user = os.environ['UNIFI_PROTECT_VIEWPORT_PROTECT_USERNAME']
+passwd = os.environ['UNIFI_PROTECT_VIEWPORT_PROTECT_PASSWORD']
+camera_id = os.environ['UNIFI_PROTECT_VIEWPORT_CAMERA_ID']
 s = requests.Session()
 s.verify = False
 
@@ -193,7 +193,7 @@ case "$CMD" in
     test-stream)   cmd_test_stream ;;
     test-protect)  cmd_test_protect ;;
     help|*)
-        echo "Usage: doorbell-viewport-debug <command>"
+        echo "Usage: unifi-protect-viewport-debug <command>"
         echo ""
         echo "Commands:"
         echo "  show           Turn display on"

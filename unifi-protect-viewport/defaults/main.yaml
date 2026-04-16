@@ -1,19 +1,19 @@
 ---
 
-doorbell_viewport_user: "doorbell-viewport"
-doorbell_viewport_protect_host: ""
-doorbell_viewport_camera_id: ""
-doorbell_viewport_timeout: 45
-doorbell_viewport_touch_match: ""
-doorbell_viewport_orientation: 270
-doorbell_viewport_drm_connector: "HDMI-A-1"
-doorbell_viewport_drm_device: "/dev/dri/card1"
-doorbell_viewport_drm_mode: ""
-doorbell_viewport_poe_fan: true
-doorbell_viewport_poe_fan_temp0: 60000
-doorbell_viewport_poe_fan_temp1: 70000
-doorbell_viewport_poe_fan_temp2: 80000
-doorbell_viewport_poe_fan_temp3: 85000
+unifi_protect_viewport_user: "unifi-protect-viewport"
+unifi_protect_viewport_protect_host: ""
+unifi_protect_viewport_camera_id: ""
+unifi_protect_viewport_timeout: 45
+unifi_protect_viewport_touch_match: ""
+unifi_protect_viewport_orientation: 270
+unifi_protect_viewport_drm_connector: "HDMI-A-1"
+unifi_protect_viewport_drm_device: "/dev/dri/card1"
+unifi_protect_viewport_drm_mode: ""
+unifi_protect_viewport_poe_fan: true
+unifi_protect_viewport_poe_fan_temp0: 60000
+unifi_protect_viewport_poe_fan_temp1: 70000
+unifi_protect_viewport_poe_fan_temp2: 80000
+unifi_protect_viewport_poe_fan_temp3: 85000
 
-# vault_doorbell_viewport_protect_username: — required, set in host_vars
-# vault_doorbell_viewport_protect_password: — required, set in host_vars
+# vault_unifi_protect_viewport_protect_username: — required, set in host_vars
+# vault_unifi_protect_viewport_protect_password: — required, set in host_vars
