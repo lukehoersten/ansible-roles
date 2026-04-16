@@ -73,7 +73,7 @@ curl -sk -b /tmp/prot.cookies https://YOUR_PROTECT_HOST/proxy/protect/api/camera
 
 Output looks like:
 ```
-695c1aa2002a1103e4003559 UVC-G4-Doorbell  Front Door
+aabbcc1122334455aabbcc00 UVC-G4-Doorbell  Front Door
 ```
 
 Copy the ID of the doorbell camera and set it as `doorbell_viewport_camera_id`.
