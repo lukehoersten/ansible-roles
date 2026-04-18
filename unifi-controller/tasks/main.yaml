@@ -36,4 +36,4 @@
 
 - name: install unifi apt packages
   become: yes
-  apt: name="{{unifi_apt_packages}}"
+  apt: name="{{unifi_controller_apt_packages}}"

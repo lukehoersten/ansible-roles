@@ -1,4 +1,4 @@
-# Unifi Controller on ARM64
+# UniFi Controller on ARM64
 
 This role is for setting up a Ubiquiti Unifi Controller on ARM64 Ubuntu building on the [official docs](https://help.ui.com/hc/en-us/articles/220066768-UniFi-How-to-Install-and-Update-via-APT-on-Debian-or-Ubuntu)
 
