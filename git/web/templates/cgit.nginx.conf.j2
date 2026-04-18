@@ -25,6 +25,11 @@ server {
 
     root /usr/share/cgit;
 
+    # Redirect old Mercurial-style paths to cgit equivalents
+    rewrite ^/([^/]+)/file/tip/(.*)$ /$1/tree/$2 permanent;
+    rewrite ^/([^/]+)/file/tip$      /$1/tree    permanent;
+    rewrite ^/([^/]+)/file$          /$1/tree    permanent;
+
     try_files $uri @cgit;
 
     location @cgit {
