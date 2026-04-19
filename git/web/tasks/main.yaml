@@ -41,24 +41,12 @@
 - name: set cgit repo owners
   become: yes
   shell: |
-    for repo in {{cgit_scan_path}}*/; do
-      git config --file "${repo}config" gitweb.owner "{{cgit_owner}}"
+    find {{cgit_scan_path}} -maxdepth 2 -name HEAD -type f | while read headfile; do
+      repodir=$(dirname "$headfile")
+      git config --file "${repodir}/config" gitweb.owner "{{cgit_owner}}"
     done
   when: cgit_owner is defined
   changed_when: true
-
-- name: install cgit nginx site
-  become: yes
-  template: src="cgit.nginx.conf.j2" dest="/etc/nginx/sites-available/cgit.conf"
-  notify: restart nginx
-
-- name: enable cgit nginx site
-  become: yes
-  file:
-    src:  "/etc/nginx/sites-available/cgit.conf"
-    dest: "/etc/nginx/sites-enabled/cgit.conf"
-    state: "link"
-  notify: restart nginx
 
 - name: ensure fcgiwrap service is started
   become: yes
