@@ -15,6 +15,38 @@
   template: src="cgitrc.j2" dest="/etc/cgitrc"
   notify: restart fcgiwrap
 
+- name: make /etc/cgit dir
+  become: yes
+  file: path="/etc/cgit" state="directory"
+  when: cgit_header_src is defined or cgit_footer_src is defined
+
+- name: install cgit custom css
+  become: yes
+  copy: src="{{cgit_css_src}}" dest="/usr/share/cgit/cgit-custom.css"
+  when: cgit_css_src is defined
+  notify: restart nginx
+
+- name: install cgit header
+  become: yes
+  copy: src="{{cgit_header_src}}" dest="/etc/cgit/header.html"
+  when: cgit_header_src is defined
+  notify: restart fcgiwrap
+
+- name: install cgit footer
+  become: yes
+  copy: src="{{cgit_footer_src}}" dest="/etc/cgit/footer.html"
+  when: cgit_footer_src is defined
+  notify: restart fcgiwrap
+
+- name: set cgit repo owners
+  become: yes
+  shell: |
+    for repo in {{cgit_scan_path}}*/; do
+      git config --file "${repo}config" gitweb.owner "{{cgit_owner}}"
+    done
+  when: cgit_owner is defined
+  changed_when: true
+
 - name: install cgit nginx site
   become: yes
   template: src="cgit.nginx.conf.j2" dest="/etc/nginx/sites-available/cgit.conf"

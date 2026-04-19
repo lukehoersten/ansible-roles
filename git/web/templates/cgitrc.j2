@@ -1,12 +1,22 @@
-scan-path={{cgit_scan_path}}
 remove-suffix=1
 virtual-root=/
 
 root-title={{cgit_root_title}}
 root-desc={{cgit_root_desc}}
 
+{% if cgit_css_src is defined %}
+css=/cgit-custom.css
+{% endif %}
+{% if cgit_header_src is defined %}
+header=/etc/cgit/header.html
+{% endif %}
+{% if cgit_footer_src is defined %}
+footer=/etc/cgit/footer.html
+{% endif %}
+
 difftype=ssdiff
 
+enable-git-config=1
 enable-http-clone=1
 enable-index-links=1
 enable-log-filecount=1
@@ -14,3 +24,5 @@ enable-log-linecount=1
 
 source-filter=/usr/lib/cgit/filters/syntax-highlighting.py
 about-filter=/usr/lib/cgit/filters/about-formatting.sh
+
+scan-path={{cgit_scan_path}}
