@@ -41,7 +41,10 @@
 
 - name: copy root files
   become: yes
-  synchronize: src="{{nginx_root_src}}" dest="{{nginx_root_dest}}/"
+  synchronize:
+    src: "{{nginx_root_src}}"
+    dest: "{{nginx_root_dest}}/"
+    checksum: yes
   when: nginx_root
 
 - name: enable nginx service
