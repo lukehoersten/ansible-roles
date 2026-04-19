@@ -32,6 +32,11 @@
   when: cgit_css_src is defined
   notify: restart nginx
 
+- name: install cgit favicon
+  become: yes
+  copy: src="{{cgit_favicon_src}}" dest="/usr/share/cgit/favicon.ico"
+  when: cgit_favicon_src is defined
+
 - name: install cgit header
   become: yes
   copy: src="{{cgit_header_src}}" dest="/etc/cgit/header.html"
