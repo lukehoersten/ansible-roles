@@ -20,6 +20,12 @@
   file: path="/etc/cgit" state="directory"
   when: cgit_header_src is defined or cgit_footer_src is defined
 
+- name: install cgit custom source filter
+  become: yes
+  copy: src="{{cgit_source_filter_src}}" dest="{{cgit_source_filter_path}}" mode="0755"
+  when: cgit_source_filter_src is defined
+  notify: restart fcgiwrap
+
 - name: install cgit custom css
   become: yes
   copy: src="{{cgit_css_src}}" dest="/usr/share/cgit/cgit-custom.css"

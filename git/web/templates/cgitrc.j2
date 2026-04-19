@@ -22,7 +22,7 @@ enable-index-links=1
 enable-log-filecount=1
 enable-log-linecount=1
 
-source-filter=/usr/lib/cgit/filters/syntax-highlighting.py
+source-filter={{cgit_source_filter_path | default('/usr/lib/cgit/filters/syntax-highlighting.py')}}
 about-filter=/usr/lib/cgit/filters/about-formatting.sh
 
 scan-path={{cgit_scan_path}}
