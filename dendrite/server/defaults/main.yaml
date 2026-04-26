@@ -1,5 +1,6 @@
 ---
 
+dendrite_version: "0.15.2"
 dendrite_user: "dendrite"
 dendrite_old_key: false
 dendrite_registration_disabled: "true"

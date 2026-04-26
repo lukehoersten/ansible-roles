@@ -48,6 +48,7 @@
     owner: "{{minecraft_user}}"
     group: "{{minecraft_user}}"
   when: minecraft_ops_file is defined
+  changed_when: false
   notify: restart minecraft
 
 - name: configure minecraft whitelist

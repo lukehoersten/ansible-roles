@@ -1,4 +1,5 @@
 ---
 
+bin_version: "2.0.1"
 bin_user: "pastebin"
 bin_port: 8820

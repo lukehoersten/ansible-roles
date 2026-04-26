@@ -27,7 +27,7 @@
 
 - name: check if dendrite build exists
   stat:
-    path: "{{dendrite_build_dir}}/bin/dendrite"
+    path: "{{dendrite_srv_dir}}/dendrite-{{dendrite_version}}.tar.gz"
   register: build_file
 
 - name: build dendrite
@@ -42,7 +42,6 @@
     path: "{{dendrite_srv_dir}}"
     mode: "0755"
     state: "directory"
-  when: not build_file.stat.exists
 
 - name: create a gz archive of dendrite bins
   become: yes
@@ -52,6 +51,6 @@
       - "{{dendrite_build_dir}}/bin/dendrite-demo-pinecone"
       - "{{dendrite_build_dir}}/bin/dendrite-demo-yggdrasil"
       - "{{dendrite_build_dir}}/bin/furl"
-    dest: "{{dendrite_srv_dir}}/dendrite.tar.gz"
+    dest: "{{dendrite_srv_dir}}/dendrite-{{dendrite_version}}.tar.gz"
     format: "gz"
   when: not build_file.stat.exists

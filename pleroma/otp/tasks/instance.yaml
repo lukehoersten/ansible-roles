@@ -22,6 +22,8 @@
     - "{{pleroma_data_dir}}/{{pleroma_instance}}"
     - "{{pleroma_data_dir}}/{{pleroma_instance}}/uploads"
     - "{{pleroma_data_dir}}/{{pleroma_instance}}/static"
+    - "{{pleroma_data_dir}}/{{pleroma_instance}}/static/static"
+    - "{{pleroma_data_dir}}/{{pleroma_instance}}/static/static/themes"
 
 - name: install pleroma db schema file
   become: yes
@@ -40,8 +42,25 @@
   changed_when: false
   no_log: true
 
-- include_tasks: soapbox.yaml
-  when: pleroma_soapbox
+- name: install pleroma fe theme
+  become: yes
+  copy:
+    src: "files/{{pleroma_link_host}}/{{pleroma_fe_theme}}.json"
+    dest: "{{pleroma_data_dir}}/{{pleroma_instance}}/static/static/themes/{{pleroma_fe_theme}}.json"
+    owner: "pleroma"
+    group: "pleroma"
+    mode: "0644"
+  when: pleroma_fe_theme is defined
+
+- name: install pleroma styles index
+  become: yes
+  copy:
+    src: "files/{{pleroma_link_host}}/styles.json"
+    dest: "{{pleroma_data_dir}}/{{pleroma_instance}}/static/styles.json"
+    owner: "pleroma"
+    group: "pleroma"
+    mode: "0644"
+  when: pleroma_fe_theme is defined
 
 - name: ensure pleroma instance is enabled and started
   become: yes
@@ -49,7 +68,6 @@
 
 - name: migrate db
   become: yes
-  become_user: "pleroma"
   command: "/opt/pleroma/bin/pleroma_ctl migrate"
   args:
     chdir: "/opt/pleroma/"

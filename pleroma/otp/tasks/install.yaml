@@ -1,25 +1,24 @@
 ---
 
+- name: check if pleroma version already installed
+  stat:
+    path: "/opt/pleroma/releases/{{pleroma_version}}"
+  register: installed_version
+
 - name: download and unarchive pleroma release
   become: yes
   unarchive:
     src: "{{pleroma_download_url}}"
     dest: "/tmp/"
     remote_src: yes
-  register: pleroma_download
-  ignore_errors: true
-
-- name: warn if pleroma download failed
-  debug:
-    msg: "WARNING: Could not download Pleroma release from {{pleroma_download_url}} — skipping install, existing binary unchanged."
-  when: pleroma_download is failed
+  when: not installed_version.stat.exists
 
 - name: delete old pleroma release
   become: yes
   file:
     path: "/opt/pleroma/"
     state: "absent"
-  when: pleroma_download is succeeded
+  when: not installed_version.stat.exists
 
 - name: install pleroma release
   become: yes
@@ -27,7 +26,5 @@
     remote_src: true
     src: "/tmp/release/"
     dest: "/opt/pleroma/"
-    owner: "pleroma"
-    group: "pleroma"
-  when: pleroma_download is succeeded
+  when: not installed_version.stat.exists
   notify: restart all pleroma instances

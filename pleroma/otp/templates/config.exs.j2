@@ -55,6 +55,11 @@ config :pleroma, Pleroma.PromEx,
   ],
   datasource: "Prometheus"
 
+{% if pleroma_fe_theme is defined %}
+config :pleroma, :frontend_configurations,
+  pleroma_fe: %{theme: "{{pleroma_fe_theme}}"}
+{% endif %}
+
 config :logger,
   backends: [{ExSyslogger, :ex_syslogger}]
 

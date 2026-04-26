@@ -13,7 +13,7 @@
 
 - name: check if bin build exists
   stat:
-    path: "{{bin_build_dir}}/target/release/bin"
+    path: "{{bin_srv_dir}}/bin-{{bin_version}}.tar.gz"
   register: build_file
 
 - name: build bin
@@ -29,9 +29,10 @@
     mode: "0755"
     state: "directory"
 
-- name: copy bin to build server dir
+- name: create gz archive of bin
   become: yes
-  copy:
-    remote_src: yes
-    src: "{{bin_build_dir}}/target/release/bin"
-    dest: "{{bin_srv_dir}}/bin"
+  archive:
+    path: "{{bin_build_dir}}/target/release/bin"
+    dest: "{{bin_srv_dir}}/bin-{{bin_version}}.tar.gz"
+    format: "gz"
+  when: not build_file.stat.exists

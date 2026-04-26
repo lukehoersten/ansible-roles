@@ -46,6 +46,12 @@
   become: yes
   systemd: name="grafana-server.service" enabled="yes" state="started"
 
+- name: wait for grafana to be ready
+  wait_for:
+    port: 3000
+    host: localhost
+    timeout: 30
+
 ### TODO: This is broken and not sure why. Started having errors one day. I
 ### supect bug with anisble module
 # - name: install grafana prometheus data source

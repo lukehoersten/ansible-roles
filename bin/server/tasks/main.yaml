@@ -6,10 +6,11 @@
 
 - name: install bin binary
   become: yes
-  get_url:
-    url: "{{bin_url}}"
-    dest: "/usr/local/bin/bin"
-    mode: "0755"
+  unarchive:
+    remote_src: yes
+    src: "{{bin_url}}"
+    dest: "/usr/local/bin/"
+  changed_when: false
   notify: restart service
 
 - name: install systemd service

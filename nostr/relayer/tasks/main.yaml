@@ -13,12 +13,11 @@
 
 - name: install relayer bin
   become: yes
-  get_url:
-    url: "{{relayer_bin_url}}"
-    dest: "/usr/local/bin/relayer"
-    owner: "root"
-    group: "root"
-    mode: "0755"
+  unarchive:
+    remote_src: yes
+    src: "{{relayer_bin_url}}"
+    dest: "/usr/local/bin/"
+  changed_when: false
   notify: restart relayer service
 
 - name: create relayer dirs

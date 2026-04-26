@@ -30,11 +30,6 @@
     dest: "/lib/systemd/system/pleroma@.service"
   notify: restart pleroma instance
 
-- name: check if pleroma release exists
-  stat: path="/tmp/release/"
-  register: release
-
 - include_tasks: install.yaml
-  when: not release.stat.exists
 
 - include_tasks: instance.yaml

@@ -1,6 +1,7 @@
 ---
 
 # https://github.com/fiatjaf/relayer/releases
+relayer_version: "2.2.8"
 relayer_user: "relayer"
 relayer_pubkey: ""
 relayer_port: "7447"

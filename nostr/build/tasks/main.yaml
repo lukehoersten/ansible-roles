@@ -52,7 +52,7 @@
 
 - name: check if relayer build exists
   stat:
-    path: "{{relayer_build_dir}}/examples/whitelisted/whitelisted"
+    path: "{{relayer_srv_dir}}/nostr-relayer-whitelisted-{{relayer_version}}.tar.gz"
   register: build_file
 
 - name: build relayer
@@ -67,12 +67,19 @@
     path: "{{relayer_srv_dir}}"
     mode: "0755"
     state: "directory"
-  when: not build_file.stat.exists
 
-- name: copy bin to build server dir
-  become: yes
+- name: stage relayer binary
   copy:
     remote_src: yes
     src: "{{relayer_build_dir}}/examples/whitelisted/whitelisted"
-    dest: "{{relayer_srv_dir}}/nostr-relayer-whitelisted"
+    dest: "/tmp/relayer"
+    mode: "0755"
+  when: not build_file.stat.exists
+
+- name: create gz archive of relayer
+  become: yes
+  archive:
+    path: "/tmp/relayer"
+    dest: "{{relayer_srv_dir}}/nostr-relayer-whitelisted-{{relayer_version}}.tar.gz"
+    format: "gz"
   when: not build_file.stat.exists

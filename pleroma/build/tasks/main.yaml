@@ -1,0 +1,88 @@
+---
+
+- name: install elixir build dependencies
+  become: yes
+  apt:
+    name:
+      - erlang
+      - erlang-dev
+      - build-essential
+      - cmake
+      - libmagic-dev
+      - libvips-dev
+
+# TODO: Ubuntu Noble (24.04) only ships Elixir 1.14, which is too old for Pleroma.
+# When the next Ubuntu LTS (26.04) is available, check if elixir >=1.15 is in the
+# official repos and replace the two tasks below with a simple apt install.
+- name: download elixir release
+  become: yes
+  get_url:
+    url: "https://github.com/elixir-lang/elixir/releases/download/v{{pleroma_elixir_version}}/elixir-otp-{{pleroma_erlang_otp_version}}.zip"
+    dest: "/tmp/elixir-{{pleroma_elixir_version}}.zip"
+    force: false
+
+- name: install elixir
+  become: yes
+  unarchive:
+    remote_src: yes
+    src: "/tmp/elixir-{{pleroma_elixir_version}}.zip"
+    dest: "/usr/local"
+    creates: "/usr/local/bin/elixir"
+
+- name: install hex package manager
+  command: mix local.hex --force
+  changed_when: false
+
+- name: install rebar
+  command: mix local.rebar --force
+  changed_when: false
+
+- name: unarchive pleroma source
+  unarchive:
+    remote_src: yes
+    src: "{{pleroma_tar}}"
+    dest: "/tmp/"
+    creates: "{{pleroma_build_dir}}"
+
+- name: check if pleroma release exists
+  stat:
+    path: "{{pleroma_srv_dir}}/pleroma-{{pleroma_version}}.tar.gz"
+  register: build_file
+
+- name: fetch mix dependencies
+  command: mix deps.get --only prod
+  args:
+    chdir: "{{pleroma_build_dir}}"
+  environment:
+    MIX_ENV: prod
+  when: not build_file.stat.exists
+
+- name: build pleroma release
+  command: mix release
+  args:
+    chdir: "{{pleroma_build_dir}}"
+  environment:
+    MIX_ENV: prod
+  when: not build_file.stat.exists
+
+- name: create build server dir
+  become: yes
+  file:
+    path: "{{pleroma_srv_dir}}"
+    mode: "0755"
+    state: "directory"
+
+- name: copy release to staging directory
+  copy:
+    remote_src: yes
+    src: "{{pleroma_build_dir}}/_build/prod/rel/pleroma/"
+    dest: "/tmp/release/"
+  when: not build_file.stat.exists
+
+- name: create gz archive of pleroma release
+  become: yes
+  archive:
+    path: "/tmp/release"
+    dest: "{{pleroma_srv_dir}}/pleroma-{{pleroma_version}}.tar.gz"
+    format: "gz"
+  when: not build_file.stat.exists
