@@ -1,2 +1,4 @@
-dns_cloudflare_email = {{certbot_dns_cloudflare_email}}
-dns_cloudflare_api_key = {{certbot_dns_cloudflare_api_key}}
+# Cloudflare credentials for the certbot DNS-01 challenge.
+# Scoped API Token (Zone:DNS:Edit on the relevant zones) — see the
+# "TLS / SSL Certificates" section of the rpi playbook README.
+dns_cloudflare_api_token = {{certbot_dns_cloudflare_api_token}}

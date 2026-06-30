@@ -1,3 +1,20 @@
-#! /bin/bash
+#!/bin/bash
+#
+# certbot deploy hook — import the renewed Let's Encrypt cert into prosody's store.
+#
+# Hooks in renewal-hooks/deploy/ run after *every* lineage renewal, so when certbot
+# renews some other domain (e.g. haskell.social, etracapital.com) this script would
+# still try to import {{prosody_vhost}} and exit 1 with "No certificate for host
+# found :(" — harmless, but it makes `certbot renew` report a scary hook error.
+#
+# Gate on certbot's $RENEWED_LINEAGE so we only act on the prosody vhost's renewal.
+# When invoked manually with no $RENEWED_LINEAGE (e.g. ansible provisioning), import.
 
-prosodyctl --root cert import {{prosody_vhost}} /etc/letsencrypt/live/{{prosody_vhost}}/
+set -eu
+
+if [ -n "${RENEWED_LINEAGE:-}" ] \
+   && [ "${RENEWED_LINEAGE}" != "/etc/letsencrypt/live/{{prosody_vhost}}" ]; then
+    exit 0
+fi
+
+prosodyctl --root cert import {{prosody_vhost}} "/etc/letsencrypt/live/{{prosody_vhost}}/"
