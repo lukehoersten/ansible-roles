@@ -7,6 +7,9 @@ root-desc={{cgit_root_desc}}
 {% if cgit_css_src is defined %}
 css=/cgit-custom.css
 {% endif %}
+{% if cgit_head_include_src is defined %}
+head-include=/etc/cgit/head-include.html
+{% endif %}
 {% if cgit_header_src is defined %}
 header=/etc/cgit/header.html
 {% endif %}
