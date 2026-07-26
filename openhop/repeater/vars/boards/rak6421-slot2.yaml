@@ -1,0 +1,15 @@
+---
+# RAK6421 WisMesh Pi HAT — RAK13302 (SX1262 + 1W SKY66122 FEM) in SLOT 2.
+# Source: meshtastic/firmware bin/config.d/lora-RAK6421-13302-slot2.yaml
+repeater_sx1262_bus_id: 0            # spidev0.1
+repeater_sx1262_cs_id: 1            # CE1 (BCM 7)
+repeater_sx1262_cs_pin: 7
+repeater_sx1262_reset_pin: 24
+repeater_sx1262_busy_pin: 19
+repeater_sx1262_irq_pin: 18          # DIO1
+repeater_sx1262_use_dio3_tcxo: true
+repeater_sx1262_dio3_tcxo_voltage: 1.8
+repeater_sx1262_use_dio2_rf: true
+repeater_sx1262_txen_pin: 26         # SKY66122 FEM enable (verify TX vs RX)
+repeater_sx1262_rxen_pin: 23         # SKY66122 FEM enable (verify TX vs RX)
+repeater_sx1262_is_waveshare: false

@@ -1,0 +1,12 @@
+---
+# MeshCore EU 863-870 MHz preset.
+# WARNING: every node on your mesh MUST share identical frequency / bandwidth /
+#          spreading_factor / coding_rate. Confirm these against your local
+#          MeshCore EU community settings, and respect the sub-band duty-cycle /
+#          power limits before deploying.
+repeater_frequency_hz: 869525000     # 869.525 MHz
+repeater_bandwidth_hz: 250000
+repeater_spreading_factor: 11        # 7-12
+repeater_coding_rate: 5              # 5-8
+repeater_preamble_length: 32
+repeater_tx_power_dbm: 14            # keep within the chosen EU sub-band limit

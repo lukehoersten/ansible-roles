@@ -1,0 +1,102 @@
+---
+
+- name: load board pin preset
+  include_vars: "boards/{{repeater_board}}.yaml"
+
+- name: load RF region preset
+  include_vars: "rf/{{repeater_rf_preset}}.yaml"
+
+- name: enable SPI for the LoRa HAT
+  become: yes
+  lineinfile:
+    path: "/boot/firmware/config.txt"
+    line: "dtparam=spi=on"
+    regexp: "^#?dtparam=spi="
+  register: spi_result
+
+- name: remind to reboot for SPI to take effect
+  debug:
+    msg: "config.txt updated — reboot {{inventory_hostname}} for dtparam=spi=on to take effect"
+  when: spi_result.changed
+
+- name: apt install openhop repeater dependencies
+  become: yes
+  apt:
+    name:
+      - "git"
+      - "python3-venv"
+      - "python3-dev"
+      - "build-essential"
+
+- name: add openhop repeater user
+  become: yes
+  user:
+    name: "{{repeater_user}}"
+    system: "yes"
+    shell: "/bin/false"
+    home: "{{repeater_data_dir}}"
+    create_home: "no"
+    groups: "spi,gpio"
+    append: "yes"
+
+- name: create openhop repeater directories
+  become: yes
+  file:
+    path: "{{item.path}}"
+    state: "directory"
+    owner: "{{item.owner}}"
+    group: "{{item.owner}}"
+    mode: "{{item.mode}}"
+  loop:
+    - { path: "/opt/openhop_repeater", owner: "root", mode: "0755" }
+    - { path: "{{repeater_config_dir}}", owner: "root", mode: "0755" }
+    - { path: "{{repeater_data_dir}}", owner: "{{repeater_user}}", mode: "0750" }
+
+- name: check installed openhop_repeater version
+  become: yes
+  stat:
+    path: "{{repeater_venv_dir}}/.installed-{{repeater_version}}"
+  register: repeater_installed
+
+- name: install openhop_repeater into venv
+  become: yes
+  pip:
+    name: "git+{{repeater_repo}}@{{repeater_version}}"
+    virtualenv: "{{repeater_venv_dir}}"
+    virtualenv_command: "python3 -m venv"
+  when: not repeater_installed.stat.exists
+  notify: restart openhop-repeater
+
+- name: stamp installed openhop_repeater version
+  become: yes
+  copy:
+    dest: "{{repeater_venv_dir}}/.installed-{{repeater_version}}"
+    content: "{{repeater_version}}\n"
+    mode: "0644"
+  when: not repeater_installed.stat.exists
+
+- name: configure openhop repeater
+  become: yes
+  template:
+    src: "config.yaml.j2"
+    dest: "{{repeater_config_dir}}/config.yaml"
+    owner: "root"
+    group: "{{repeater_user}}"
+    mode: "0640"
+  notify: restart openhop-repeater
+
+- name: install openhop-repeater systemd service
+  become: yes
+  template:
+    src: "openhop-repeater.service.j2"
+    dest: "/lib/systemd/system/openhop-repeater.service"
+    mode: "0644"
+  notify: restart openhop-repeater
+
+- name: ensure openhop-repeater service is started
+  become: yes
+  systemd:
+    name: "openhop-repeater.service"
+    enabled: "yes"
+    state: "started"
+    daemon_reload: "yes"

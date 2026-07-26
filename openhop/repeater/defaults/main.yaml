@@ -1,0 +1,38 @@
+---
+
+repeater_version: "1.1.1"
+# https://github.com/openhop-dev/openhop_repeater/tags
+# openhop_repeater is NOT on PyPI, so it installs from this git tag.
+# Its dependency openhop_core[hardware] resolves from PyPI automatically.
+repeater_repo: "https://github.com/openhop-dev/openhop_repeater"
+
+# Service layout — mirrors upstream's own systemd unit and docs.
+repeater_user: "repeater"
+repeater_venv_dir: "/opt/openhop_repeater/venv"
+repeater_config_dir: "/etc/openhop_repeater"
+repeater_data_dir: "/var/lib/openhop_repeater"
+
+# --- Node identity ---
+repeater_node_name: "{{inventory_hostname}}"
+repeater_latitude: 0.0
+repeater_longitude: 0.0
+repeater_owner_info: ""
+# Path to the node's identity file (its MeshCore public/private keypair). The
+# daemon generates one here on first boot and reuses it thereafter, so pointing
+# this at persistent storage keeps a stable identity across reinstalls. Null
+# lets the daemon generate an ephemeral identity each run.
+repeater_identity_file: null
+
+# --- Hardware + RF presets (loaded by name from the role's vars/ dir) ---
+# WARNING: the RAK13302 has a 1W SKY66122 PA. NEVER power the HAT without the
+#          antenna connected, or you risk destroying the radio front-end.
+#
+# repeater_board -> loads the pin map from vars/boards/<name>.yaml
+#   available: rak6421-slot1, rak6421-slot2
+#   (add a new board by dropping another file in vars/boards/)
+repeater_board: "rak6421-slot1"
+#
+# repeater_rf_preset -> loads the RF params from vars/rf/<name>.yaml
+#   available: us, eu
+#   (every node on a mesh must share the same RF preset)
+repeater_rf_preset: "us"

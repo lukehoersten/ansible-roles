@@ -1,0 +1,53 @@
+# Managed by Ansible (openhop/repeater role) — do not edit by hand.
+
+repeater:
+  node_name: "{{ repeater_node_name }}"
+  latitude: {{ repeater_latitude }}
+  longitude: {{ repeater_longitude }}
+  identity_file: {{ ('"' + repeater_identity_file + '"') if repeater_identity_file else 'null' }}
+  owner_info: "{{ repeater_owner_info }}"
+  cache_ttl: 3600
+  max_flood_hops: 64
+  use_score_for_tx: false
+  score_threshold: 0.3
+  send_advert_interval_hours: 10
+  allow_discovery: true
+
+radio_type: sx1262
+
+sx1262:
+  bus_id: {{ repeater_sx1262_bus_id }}
+  cs_id: {{ repeater_sx1262_cs_id }}
+  cs_pin: {{ repeater_sx1262_cs_pin }}
+  reset_pin: {{ repeater_sx1262_reset_pin }}
+  busy_pin: {{ repeater_sx1262_busy_pin }}
+  irq_pin: {{ repeater_sx1262_irq_pin }}
+  txen_pin: {{ repeater_sx1262_txen_pin }}
+  rxen_pin: {{ repeater_sx1262_rxen_pin }}
+  en_pin: -1
+  txled_pin: -1
+  rxled_pin: -1
+  use_dio3_tcxo: {{ repeater_sx1262_use_dio3_tcxo | string | lower }}
+  dio3_tcxo_voltage: {{ repeater_sx1262_dio3_tcxo_voltage }}
+  use_dio2_rf: {{ repeater_sx1262_use_dio2_rf | string | lower }}
+  is_waveshare: {{ repeater_sx1262_is_waveshare | string | lower }}
+
+radio:
+  frequency: {{ repeater_frequency_hz }}
+  tx_power: {{ repeater_tx_power_dbm }}
+  bandwidth: {{ repeater_bandwidth_hz }}
+  spreading_factor: {{ repeater_spreading_factor }}
+  coding_rate: {{ repeater_coding_rate }}
+  preamble_length: {{ repeater_preamble_length }}
+  implicit_header: false
+
+# Observer/telemetry disabled — repeater-only deployment.
+mqtt_brokers:
+  iata_code: "Test"
+  status_interval: 300
+  brokers: []
+
+glass:
+  enabled: false
+  base_url: "http://localhost:8080"
+  inform_interval_seconds: 30

@@ -1,0 +1,18 @@
+[Unit]
+Description=openHop MeshCore Repeater
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User={{repeater_user}}
+Group={{repeater_user}}
+WorkingDirectory={{repeater_data_dir}}
+ExecStart={{repeater_venv_dir}}/bin/python -m repeater.main --config {{repeater_config_dir}}/config.yaml
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

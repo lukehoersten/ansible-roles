@@ -1,0 +1,8 @@
+---
+
+- name: restart openhop-repeater
+  become: yes
+  systemd:
+    name: "openhop-repeater.service"
+    state: "restarted"
+    daemon_reload: "yes"
