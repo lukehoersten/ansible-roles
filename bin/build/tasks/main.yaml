@@ -35,4 +35,7 @@
     path: "{{bin_build_dir}}/target/release/bin"
     dest: "{{bin_srv_dir}}/bin-{{bin_version}}.tar.gz"
     format: "gz"
+    # force a real tar for the single binary; the module otherwise gzips a lone
+    # file into a bare .gz that the server's unarchive can't extract.
+    force_archive: true
   when: not build_file.stat.exists

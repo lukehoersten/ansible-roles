@@ -82,4 +82,7 @@
     path: "{{relayer_build_dir}}/relayer"
     dest: "{{relayer_srv_dir}}/nostr-relayer-whitelisted-{{relayer_version}}.tar.gz"
     format: "gz"
+    # force a real tar for the single binary; the module otherwise gzips a lone
+    # file into a bare .gz that the server's unarchive can't extract.
+    force_archive: true
   when: not build_file.stat.exists
