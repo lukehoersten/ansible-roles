@@ -1,5 +1,14 @@
 ---
 
+- name: ensure build work dir exists
+  become: yes
+  file:
+    path: "{{build_work_dir}}"
+    state: "directory"
+    owner: "{{ansible_user}}"
+    group: "{{ansible_user}}"
+    mode: "0755"
+
 - name: install golang
   become: yes
   apt: name="golang-1.21-go"
@@ -34,6 +43,11 @@
   command: "go build -o bin/ ./cmd/..."
   args:
     chdir: "{{dendrite_build_dir}}"
+  # Keep the Go caches on build_work_dir (the SSD) instead of the SD card.
+  environment:
+    GOPATH: "{{build_work_dir}}/.go"
+    GOCACHE: "{{build_work_dir}}/.go-cache"
+    GOMODCACHE: "{{build_work_dir}}/.go-mod"
   when: not build_file.stat.exists
 
 - name: create build server dir
