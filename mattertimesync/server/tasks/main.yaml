@@ -1,0 +1,80 @@
+---
+
+- name: add mattertimesync user
+  become: yes
+  user:
+    name: "{{mattertimesync_user}}"
+    system: "yes"
+    shell: "/usr/sbin/nologin"
+    home: "{{mattertimesync_storage_path}}"
+    create_home: "no"
+
+- name: create mattertimesync directories
+  become: yes
+  file:
+    path: "{{item.path}}"
+    state: "directory"
+    owner: "{{item.owner}}"
+    group: "{{item.owner}}"
+    mode: "{{item.mode}}"
+  loop:
+    - { path: "{{mattertimesync_install_dir}}", owner: "root", mode: "0755" }
+    - { path: "{{mattertimesync_config_dir}}", owner: "root", mode: "0755" }
+    - { path: "{{mattertimesync_storage_path}}", owner: "{{mattertimesync_user}}", mode: "0700" }
+
+- name: check installed mattertimesync version
+  become: yes
+  stat:
+    path: "{{mattertimesync_install_dir}}/.installed-{{mattertimesync_version}}"
+  register: mattertimesync_installed
+
+- name: install mattertimesync bundle
+  become: yes
+  unarchive:
+    remote_src: yes
+    src: "{{mattertimesync_bin_url}}"
+    dest: "{{mattertimesync_install_dir}}/"
+    owner: "root"
+    group: "root"
+  when: not mattertimesync_installed.stat.exists
+
+- name: stamp installed mattertimesync version
+  become: yes
+  copy:
+    dest: "{{mattertimesync_install_dir}}/.installed-{{mattertimesync_version}}"
+    content: "{{mattertimesync_version}}\n"
+    mode: "0644"
+  when: not mattertimesync_installed.stat.exists
+
+- name: configure mattertimesync
+  become: yes
+  template:
+    src: "config.json.j2"
+    dest: "{{mattertimesync_config_dir}}/config.json"
+    owner: "root"
+    group: "{{mattertimesync_user}}"
+    mode: "0640"
+
+- name: install mattertimesync systemd service
+  become: yes
+  template:
+    src: "mattertimesync.service.j2"
+    dest: "/etc/systemd/system/mattertimesync.service"
+    mode: "0644"
+  notify: reload systemd
+
+- name: install mattertimesync systemd timer
+  become: yes
+  template:
+    src: "mattertimesync.timer.j2"
+    dest: "/etc/systemd/system/mattertimesync.timer"
+    mode: "0644"
+  notify: reload systemd
+
+- name: enable mattertimesync timer
+  become: yes
+  systemd:
+    name: "mattertimesync.timer"
+    enabled: "yes"
+    state: "started"
+    daemon_reload: "yes"

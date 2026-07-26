@@ -1,0 +1,41 @@
+---
+
+- name: unarchive mattertimesync source
+  unarchive:
+    remote_src: yes
+    src: "{{mattertimesync_tar}}"
+    dest: "/tmp/"
+    creates: "{{mattertimesync_build_dir}}"
+
+- name: check if mattertimesync build exists
+  stat:
+    path: "{{mattertimesync_srv_dir}}/mattertimesync-{{mattertimesync_version}}.tar.gz"
+  register: build_file
+
+- name: install mattertimesync build dependencies
+  command: "npm ci"
+  args:
+    chdir: "{{mattertimesync_build_dir}}"
+  when: not build_file.stat.exists
+
+- name: bundle mattertimesync
+  command: "npm run bundle"
+  args:
+    chdir: "{{mattertimesync_build_dir}}"
+    creates: "{{mattertimesync_build_dir}}/mattertimesync.mjs"
+  when: not build_file.stat.exists
+
+- name: create build server dir
+  become: yes
+  file:
+    path: "{{mattertimesync_srv_dir}}"
+    mode: "0755"
+    state: "directory"
+
+- name: create gz archive of mattertimesync bundle
+  become: yes
+  archive:
+    path: "{{mattertimesync_build_dir}}/mattertimesync.mjs"
+    dest: "{{mattertimesync_srv_dir}}/mattertimesync-{{mattertimesync_version}}.tar.gz"
+    format: "gz"
+  when: not build_file.stat.exists
