@@ -16,7 +16,7 @@
   unarchive:
     remote_src: yes
     src: "{{dendrite_tar}}"
-    dest: "/tmp/"
+    dest: "{{build_work_dir}}/"
     creates: "{{dendrite_build_dir}}"
 
 - name: create build dir

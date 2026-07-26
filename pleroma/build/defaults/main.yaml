@@ -5,5 +5,5 @@ pleroma_elixir_version: "1.18.3"
 pleroma_erlang_otp_version: "25"
 # https://git.pleroma.social/pleroma/pleroma/releases
 pleroma_tar: "https://git.pleroma.social/pleroma/pleroma/archive/v{{pleroma_version}}.tar.gz"
-pleroma_build_dir: "/tmp/pleroma"
+pleroma_build_dir: "{{build_work_dir}}/pleroma"
 pleroma_srv_dir: "{{build_srv_dir}}"

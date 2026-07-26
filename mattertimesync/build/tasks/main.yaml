@@ -4,7 +4,7 @@
   unarchive:
     remote_src: yes
     src: "{{mattertimesync_tar}}"
-    dest: "/tmp/"
+    dest: "{{build_work_dir}}/"
     creates: "{{mattertimesync_build_dir}}"
 
 - name: check if mattertimesync build exists

@@ -8,7 +8,7 @@
   unarchive:
     remote_src: yes
     src: "{{bin_tar}}"
-    dest: "/tmp/"
+    dest: "{{build_work_dir}}/"
     creates: "{{bin_build_dir}}"
 
 - name: check if bin build exists

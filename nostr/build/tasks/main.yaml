@@ -16,7 +16,7 @@
   unarchive:
     remote_src: yes
     src: "{{relayer_tar}}"
-    dest: "/tmp/"
+    dest: "{{build_work_dir}}/"
     creates: "{{relayer_build_dir}}"
 
 # update name
@@ -72,14 +72,14 @@
   copy:
     remote_src: yes
     src: "{{relayer_build_dir}}/examples/whitelisted/whitelisted"
-    dest: "/tmp/relayer"
+    dest: "{{relayer_build_dir}}/relayer"
     mode: "0755"
   when: not build_file.stat.exists
 
 - name: create gz archive of relayer
   become: yes
   archive:
-    path: "/tmp/relayer"
+    path: "{{relayer_build_dir}}/relayer"
     dest: "{{relayer_srv_dir}}/nostr-relayer-whitelisted-{{relayer_version}}.tar.gz"
     format: "gz"
   when: not build_file.stat.exists

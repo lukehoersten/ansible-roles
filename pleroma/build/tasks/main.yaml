@@ -18,14 +18,14 @@
   become: yes
   get_url:
     url: "https://github.com/elixir-lang/elixir/releases/download/v{{pleroma_elixir_version}}/elixir-otp-{{pleroma_erlang_otp_version}}.zip"
-    dest: "/tmp/elixir-{{pleroma_elixir_version}}.zip"
+    dest: "{{build_work_dir}}/elixir-{{pleroma_elixir_version}}.zip"
     force: false
 
 - name: install elixir
   become: yes
   unarchive:
     remote_src: yes
-    src: "/tmp/elixir-{{pleroma_elixir_version}}.zip"
+    src: "{{build_work_dir}}/elixir-{{pleroma_elixir_version}}.zip"
     dest: "/usr/local"
     creates: "/usr/local/bin/elixir"
 
@@ -41,7 +41,7 @@
   unarchive:
     remote_src: yes
     src: "{{pleroma_tar}}"
-    dest: "/tmp/"
+    dest: "{{build_work_dir}}/"
     creates: "{{pleroma_build_dir}}"
 
 - name: check if pleroma release exists
@@ -76,13 +76,13 @@
   copy:
     remote_src: yes
     src: "{{pleroma_build_dir}}/_build/prod/rel/pleroma/"
-    dest: "/tmp/release/"
+    dest: "{{pleroma_build_dir}}/release/"
   when: not build_file.stat.exists
 
 - name: create gz archive of pleroma release
   become: yes
   archive:
-    path: "/tmp/release"
+    path: "{{pleroma_build_dir}}/release"
     dest: "{{pleroma_srv_dir}}/pleroma-{{pleroma_version}}.tar.gz"
     format: "gz"
   when: not build_file.stat.exists
