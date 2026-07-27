@@ -14,6 +14,7 @@ mattertimesync_storage_path: "/var/lib/mattertimesync"
 # IANA time-zone name (never a fixed UTC offset; DST is derived from it).
 mattertimesync_timezone: "America/Chicago"
 mattertimesync_log_level: "info"   # debug, info, warn, error
+mattertimesync_fabric_label: "Matter Time Sync"
 
 # --- systemd timer schedule ---
 mattertimesync_on_boot_sec: "2min"
