@@ -1,0 +1,16 @@
+---
+
+mattertimectl_version: "0.1.0"
+# https://github.com/lukehoersten/mattertimectl/tags
+# Rust project: cargo build --release produces one self-contained binary
+# (all runtime deps are pure Rust), so the target only needs the binary to
+# run it. The source tarball must point at the Rust implementation.
+mattertimectl_tar: "https://github.com/{{github_user}}/mattertimectl/archive/refs/tags/v{{mattertimectl_version}}.tar.gz"
+mattertimectl_build_dir: "{{build_work_dir}}/mattertimectl-{{mattertimectl_version}}"
+mattertimectl_srv_dir: "{{build_srv_dir}}"
+
+# Keep cargo's registry cache, the rustup toolchains, and the build output
+# on build_work_dir (the SSD), not the SD card.
+mattertimectl_cargo_home: "{{build_work_dir}}/.cargo"
+mattertimectl_rustup_home: "{{build_work_dir}}/.rustup"
+mattertimectl_cargo_target_dir: "{{build_work_dir}}/.cargo-target"

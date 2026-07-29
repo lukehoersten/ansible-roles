@@ -1,9 +1,0 @@
----
-
-mattertimesync_version: "0.1.0"
-# https://github.com/lukehoersten/mattertimesync/tags
-# Pure-JS project: npm run bundle produces one self-contained mattertimesync.mjs
-# (no native modules), so the target only needs node to run it.
-mattertimesync_tar: "https://github.com/{{github_user}}/mattertimesync/archive/refs/tags/v{{mattertimesync_version}}.tar.gz"
-mattertimesync_build_dir: "{{build_work_dir}}/mattertimesync-{{mattertimesync_version}}"
-mattertimesync_srv_dir: "{{build_srv_dir}}"

@@ -1,0 +1,15 @@
+[Unit]
+Description=Matter device clock synchronization
+Wants=network-online.target
+After=network-online.target time-sync.target
+
+[Service]
+Type=oneshot
+User={{mattertimectl_user}}
+Group={{mattertimectl_user}}
+ExecStart={{mattertimectl_install_dir}}/mattertimectl --config {{mattertimectl_config_dir}}/config.json sync
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths={{mattertimectl_storage_path}}

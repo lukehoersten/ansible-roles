@@ -1,0 +1,25 @@
+---
+
+# https://github.com/lukehoersten/mattertimectl/tags
+mattertimectl_version: "0.1.0"
+
+mattertimectl_user: "mattertimectl"
+mattertimectl_install_dir: "/opt/mattertimectl"
+mattertimectl_config_dir: "/etc/mattertimectl"
+# Persistent Matter fabric state: holds the controller's private keys and
+# operational certs, so it stays mode 0700 and owned by the service user.
+mattertimectl_storage_path: "/var/lib/mattertimectl"
+
+# --- config.json ---
+# IANA time-zone name (never a fixed UTC offset; DST is derived from it).
+mattertimectl_timezone: "America/Chicago"
+mattertimectl_log_level: "info"   # debug, info, warn, error
+mattertimectl_fabric_label: "Matter Time Controller"
+
+# --- systemd timer schedule ---
+mattertimectl_on_boot_sec: "2min"
+mattertimectl_on_active_sec: "1h"
+mattertimectl_randomized_delay_sec: "5min"
+
+# mattertimectl_bin_url: required, set in host_vars, e.g.
+#   http://{{build_server_host}}:{{build_server_port}}/mattertimectl-{{mattertimectl_version}}.tar.gz

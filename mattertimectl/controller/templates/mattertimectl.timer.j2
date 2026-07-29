@@ -1,0 +1,10 @@
+[Unit]
+Description=Periodic Matter device clock synchronization
+
+[Timer]
+OnBootSec={{mattertimectl_on_boot_sec}}
+OnUnitActiveSec={{mattertimectl_on_active_sec}}
+RandomizedDelaySec={{mattertimectl_randomized_delay_sec}}
+
+[Install]
+WantedBy=timers.target

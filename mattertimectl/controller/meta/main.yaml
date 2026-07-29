@@ -1,0 +1,5 @@
+---
+
+# No runtime dependency: the Rust build is a single self-contained binary,
+# so the target needs no node or other runtime.
+dependencies: []
