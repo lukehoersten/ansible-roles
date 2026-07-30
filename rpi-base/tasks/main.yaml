@@ -96,11 +96,15 @@
   become: yes
   systemd: name="log2ram.service" enabled="yes" state="started"
 
+# Push the controller's terminal type to the host so ssh sessions work from
+# niche terminals. Skipped when the controller has no terminfo entry for the
+# current TERM (e.g. running ansible from emacs eshell, TERM=emacs).
 - name: get local terminfo
   command: infocmp
   delegate_to: localhost
   register: terminfo
   changed_when: false
+  failed_when: false
 
 - name: install local terminfo on host
   become: yes
@@ -108,3 +112,4 @@
   args:
     stdin: "{{terminfo.stdout}}"
   changed_when: false
+  when: terminfo.rc == 0
