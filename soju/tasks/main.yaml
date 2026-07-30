@@ -37,9 +37,28 @@
     mode: "0644"
   notify: restart soju
 
+# The packaged unit only orders after network-online; without postgres
+# ordering soju races the postgres socket at boot and stays failed.
+- name: create soju service override dir
+  become: yes
+  file:
+    path: "/etc/systemd/system/soju.service.d"
+    state: "directory"
+    mode: "0755"
+
+- name: order soju after postgresql
+  become: yes
+  copy:
+    dest: "/etc/systemd/system/soju.service.d/override.conf"
+    mode: "0644"
+    content: |
+      [Unit]
+      After=postgresql.service
+  notify: restart soju
+
 - name: enable soju service
   become: yes
-  systemd: name="soju.service" enabled="yes" state="started"
+  systemd: name="soju.service" enabled="yes" state="started" daemon_reload="yes"
 
 - name: flush handlers to ensure soju is restarted with latest config
   meta: flush_handlers

@@ -1,6 +1,9 @@
 [Unit]
 Description=relayer nostr relay
 Requires=network.target postgresql.service
+# Requires= alone doesn't order startup; without After= relayer races the
+# postgres socket at boot
+After=network.target postgresql.service
 Before=nginx.service
 
 [Service]
