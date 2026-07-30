@@ -14,22 +14,14 @@
     path: "{{mattertimectl_srv_dir}}/mattertimectl-{{mattertimectl_version}}.tar.gz"
   register: build_file
 
-# NOTE: rustup is used only because rs-matter requires a newer rustc than
-# Ubuntu 24.04's apt ships (apt rustc is 1.75; rs-matter needs >= 1.87). Once
-# the build host runs an Ubuntu whose apt rustc/cargo are new enough, drop
-# rustup and the toolchain tasks below and just `apt install rustc cargo`.
-- name: install rustup
+# rs-matter needs rustc >= 1.87; 26.04's apt ships 1.93, so the distro
+# toolchain suffices. 24.04 builds needed rustup instead (see git history).
+- name: install rustc and cargo
   become: yes
   apt:
-    name: "rustup"
-    state: "present"
-
-- name: install a current stable rust toolchain
-  command: "rustup toolchain install stable"
-  environment:
-    CARGO_HOME: "{{mattertimectl_cargo_home}}"
-    RUSTUP_HOME: "{{mattertimectl_rustup_home}}"
-  when: not build_file.stat.exists
+    name:
+      - "rustc"
+      - "cargo"
 
 - name: unarchive mattertimectl source
   unarchive:
@@ -39,15 +31,12 @@
     creates: "{{mattertimectl_build_dir}}"
 
 - name: build mattertimectl release binary
-  # rustup run stable dispatches cargo through the toolchain regardless of
-  # the apt rustup package's proxy layout or the configured default.
-  command: "rustup run stable cargo build --release"
+  command: "cargo build --release"
   args:
     chdir: "{{mattertimectl_build_dir}}"
     creates: "{{mattertimectl_cargo_target_dir}}/release/mattertimectl"
   environment:
     CARGO_HOME: "{{mattertimectl_cargo_home}}"
-    RUSTUP_HOME: "{{mattertimectl_rustup_home}}"
     CARGO_TARGET_DIR: "{{mattertimectl_cargo_target_dir}}"
   when: not build_file.stat.exists
 

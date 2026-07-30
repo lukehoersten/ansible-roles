@@ -1,5 +1,4 @@
 ---
 
-# No role dependency: the Rust toolchain is installed inline via rustup
-# (the distro rustc is too old for this crate's Rust edition).
+# No role dependency: rustc/cargo are installed inline from apt.
 dependencies: []
