@@ -31,7 +31,7 @@
   become: yes
   become_user: "postgres"
   command: "{{postgresql_initidb_path}} -D {{postgresql_data_dir}}"
-  when: filesFound == 0
+  when: filesFound.matched == 0
 
 - name: ensure postgresql is started
   become: yes
