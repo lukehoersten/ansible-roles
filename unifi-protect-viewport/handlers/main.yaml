@@ -1,5 +1,0 @@
----
-
-- name: restart unifi-protect-viewport
-  become: yes
-  systemd: name="unifi-protect-viewport.service" state="restarted" daemon_reload="yes"
