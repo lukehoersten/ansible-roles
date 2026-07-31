@@ -123,6 +123,9 @@ services:
             - WATCHTOWER_HTTP_API_TOKEN={{scrypted_auth_key}}
             - WATCHTOWER_HTTP_API_UPDATE=true
             - WATCHTOWER_SCOPE=scrypted
+            # watchtower (last released 2023) defaults to docker api 1.25;
+            # docker.io 29 dropped everything below 1.44
+            - DOCKER_API_VERSION=1.44
             # remove the following line to never allow docker to auto update.
             # this is not recommended.
             - WATCHTOWER_HTTP_API_PERIODIC_POLLS=true
