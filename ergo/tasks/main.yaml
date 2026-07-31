@@ -4,6 +4,13 @@
   become: yes
   user: name="ergo" shell="/bin/false" system="yes" create_home="no"
 
+# nginx terminates tls on 6697 and proxies to ergo's unix socket, created
+# 0770 ergo:ergo; without this group the workers get EACCES and clients see
+# tls handshake then silence.
+- name: add the nginx user to the ergo group
+  become: yes
+  user: name="www-data" groups="ergo" append="yes"
+
 - name: download ergo
   become: yes
   unarchive:
