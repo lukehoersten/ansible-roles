@@ -9,34 +9,18 @@
     group: "{{ansible_user}}"
     mode: "0755"
 
+# 26.04 ships elixir 1.15+, new enough for Pleroma; no more upstream zips.
 - name: install elixir build dependencies
   become: yes
   apt:
     name:
       - erlang
       - erlang-dev
+      - elixir
       - build-essential
       - cmake
       - libmagic-dev
       - libvips-dev
-
-# TODO: Ubuntu Noble (24.04) only ships Elixir 1.14, which is too old for Pleroma.
-# When the next Ubuntu LTS (26.04) is available, check if elixir >=1.15 is in the
-# official repos and replace the two tasks below with a simple apt install.
-- name: download elixir release
-  become: yes
-  get_url:
-    url: "https://github.com/elixir-lang/elixir/releases/download/v{{pleroma_elixir_version}}/elixir-otp-{{pleroma_erlang_otp_version}}.zip"
-    dest: "{{build_work_dir}}/elixir-{{pleroma_elixir_version}}.zip"
-    force: false
-
-- name: install elixir
-  become: yes
-  unarchive:
-    remote_src: yes
-    src: "{{build_work_dir}}/elixir-{{pleroma_elixir_version}}.zip"
-    dest: "/usr/local"
-    creates: "/usr/local/bin/elixir"
 
 - name: install hex package manager
   command: mix local.hex --force
