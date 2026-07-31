@@ -1,6 +1,9 @@
 ---
 
-pleroma_host: "localhost"
+# 127.0.0.1, not localhost: nginx expands localhost to [::1] too, but the
+# endpoint binds only 127.0.0.1 (config.exs), so every request first burns a
+# refused ipv6 connect and floods the error log.
+pleroma_host: "127.0.0.1"
 pleroma_port: 4000
 pleroma_metrics_port: 4020
 pleroma_scheme: "http"
