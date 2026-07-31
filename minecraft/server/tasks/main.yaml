@@ -17,16 +17,21 @@
     mode: "0755"
     state: "directory"
 
+# papermc sunset the v2 api in july 2026; fill v3 returns the download url
+# and sha256 directly.
 - name: get minecraft download info
   uri:
-    url: "https://api.papermc.io/v2/projects/paper/versions/{{minecraft_paper_version}}/builds/{{minecraft_paper_build}}"
+    url: "https://fill.papermc.io/v3/projects/paper/versions/{{minecraft_paper_version}}/builds/{{minecraft_paper_build}}"
     return_content: yes
   register: minecraft_build_info
 
+# The checksum makes version bumps take effect: without it, get_url skips
+# the download whenever server.jar already exists.
 - name: download minecraft
   become: yes
   get_url:
-    url: "https://fill-data.papermc.io/v1/objects/{{minecraft_build_info.json.downloads.application.sha256}}/paper-{{minecraft_paper_version}}-{{minecraft_paper_build}}.jar"
+    url: "{{minecraft_build_info.json.downloads['server:default'].url}}"
+    checksum: "sha256:{{minecraft_build_info.json.downloads['server:default'].checksums.sha256}}"
     dest: "{{minecraft_dir}}/server.jar"
     mode: "0755"
   notify: restart minecraft
