@@ -9,17 +9,11 @@
     group: "{{ansible_user}}"
     mode: "0755"
 
+# The unversioned package tracks the release default (1.26 on 26.04) and
+# provides /usr/bin/go itself, so no pinned version or hand symlink.
 - name: install golang
   become: yes
-  apt: name="golang-1.21-go"
-
-- name: link go bin
-  become: yes
-  file:
-    src: "/usr/lib/go-1.21/bin/go"
-    dest: "/usr/bin/go"
-    state: "link"
-    mode: "0755"
+  apt: name="golang-go"
 
 - name: unarchive dendrite
   unarchive:

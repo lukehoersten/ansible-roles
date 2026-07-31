@@ -8,14 +8,22 @@
   become: yes
   systemd: name="prometheus-node-exporter.service" enabled="yes" state="started"
 
+# Optional per-service exporters, both in 26.04 apt (verified: nginx 1.5.1,
+# postgres 0.19.0). Uncomment to deploy.
+
 #   # Nginx
 # - name: check if running nginx
 #   stat: path="/etc/nginx/"
 #   register: stat_nginx_conf
 
-# - name: install prometheus-nginx-exporter
+# - name: install prometheus nginx exporter
 #   become: yes
 #   apt: name="prometheus-nginx-exporter"
+#   when: stat_nginx_conf.stat.exists
+
+# - name: ensure prometheus nginx exporter is started
+#   become: yes
+#   systemd: name="prometheus-nginx-exporter.service" enabled="yes" state="started"
 #   when: stat_nginx_conf.stat.exists
 
 #   # PostgreSQL
@@ -23,7 +31,12 @@
 #   stat: path="/etc/postgresql/"
 #   register: stat_postgresql_conf
 
-# - name: install prometheus-postgresql-exporter
+# - name: install prometheus postgres exporter
 #   become: yes
 #   apt: name="prometheus-postgres-exporter"
+#   when: stat_postgresql_conf.stat.exists
+
+# - name: ensure prometheus postgres exporter is started
+#   become: yes
+#   systemd: name="prometheus-postgres-exporter.service" enabled="yes" state="started"
 #   when: stat_postgresql_conf.stat.exists

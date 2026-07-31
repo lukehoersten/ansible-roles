@@ -1,6 +1,7 @@
 ---
 
 aws_s3_backup_region: "us-east-1"
-aws_s3_backup_pip_packages:
+# apt awscli is v2 (the old pip package was v1); the s3/s3api commands the
+# backup scripts use behave the same. boto3 was dropped: nothing used it.
+aws_s3_backup_apt_packages:
   - "awscli"
-  - "boto3"

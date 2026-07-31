@@ -9,17 +9,6 @@
   become: yes
   apt: state="absent" name="dphys-swapfile"
 
-- name: add log2ram apt key
-  become: yes
-  get_url:
-    url: "https://azlux.fr/repo.gpg.key"
-    dest: "/etc/apt/trusted.gpg.d/log2ram.asc"
-    mode: "0644"
-
-- name: add log2ram apt repo
-  become: yes
-  apt_repository: repo="deb [signed-by=/etc/apt/trusted.gpg.d/log2ram.asc] https://packages.azlux.fr/debian/ buster main"
-
 - name: set timezone
   become: yes
   timezone: name="{{rpi_base_timezone}}"

@@ -1,19 +1,14 @@
 ---
 
-- name: add docker apt key
-  become: yes
-  get_url:
-    url: "https://download.docker.com/linux/ubuntu/gpg"
-    dest: "/etc/apt/trusted.gpg.d/docker.asc"
-    mode: "0644"
-
-- name: add docker apt repo
-  become: yes
-  apt_repository: repo="deb [arch=arm64 signed-by=/etc/apt/trusted.gpg.d/docker.asc] https://download.docker.com/linux/ubuntu noble stable"
-
+# 26.04 ships a current docker, so no more docker.com repo. Migrating a
+# host off docker-ce needs cleanup-third-party.yaml first: docker.io cannot
+# install while docker-ce holds the same files.
 - name: install docker apt packages
   become: yes
-  apt: name="docker-ce"
+  apt:
+    name:
+      - "docker.io"
+      - "docker-compose-v2"
 
 - name: add korsync user
   become: yes
