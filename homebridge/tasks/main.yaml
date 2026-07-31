@@ -1,31 +1,38 @@
 ---
 
-- name: add homebridge apt key
+# 26.04 ships nodejs 22 in apt, so no repo.homebridge.io vendor repo (its
+# package bundled a private node runtime). homebridge itself is an npm
+# package; apt npm puts global installs under /usr/local.
+- name: install nodejs
   become: yes
-  get_url:
-    url: "https://repo.homebridge.io/KEY.gpg"
-    dest: "/etc/apt/trusted.gpg.d/homebridge.asc"
-    mode: "0644"
+  apt:
+    name:
+      - "nodejs"
+      - "npm"
 
-- name: add homebridge apt repo
+- name: add homebridge user
   become: yes
-  apt_repository: repo="deb [signed-by=/etc/apt/trusted.gpg.d/homebridge.asc] https://repo.homebridge.io stable main"
+  user: name="homebridge" shell="/bin/false" system="yes" create_home="no"
 
-- name: apt install homebridge
+- name: create homebridge dir
   become: yes
-  apt: name="homebridge"
+  file:
+    path: "{{homebridge_dir}}"
+    state: "directory"
+    owner: "homebridge"
+    group: "homebridge"
+    mode: "0755"
+
+- name: npm install homebridge
+  become: yes
+  npm: name="homebridge" global="yes"
   notify: restart homebridge service
 
-- name: install homebridge apt deps
+- name: install platform accessories
   become: yes
-  apt: name="{{homebridge_apt_packages}}"
+  npm: name="{{item}}" global="yes"
+  loop: "{{homebridge_npm_packages}}"
   notify: restart homebridge service
-
-# - name: install platform accessories
-#   become: yes
-#   npm: name="{{item}}" global="yes"
-#   loop: "{{homebridge_npm_packages}}"
-#   notify: restart homebridge service
 
 # - name: configure homebridge
 #   become: yes
@@ -34,6 +41,13 @@
 #     dest: "{{homebridge_dir}}/config.json"
 #   notify: restart homebridge service
 
+- name: install systemd service
+  become: yes
+  template:
+    src: "homebridge.service.j2"
+    dest: "/lib/systemd/system/homebridge.service"
+  notify: restart homebridge service
+
 - name: ensure homebridge is started
   become: yes
-  systemd: name="homebridge.service" enabled="yes" state="started"
+  systemd: name="homebridge.service" enabled="yes" state="started" daemon_reload="yes"

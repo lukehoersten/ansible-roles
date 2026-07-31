@@ -2,3 +2,5 @@
 
 homebridge_pin: "031-45-154"
 homebridge_port: "51900"
+homebridge_dir: "/var/lib/homebridge"
+homebridge_npm_packages: []
