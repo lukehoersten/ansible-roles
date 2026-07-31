@@ -33,6 +33,15 @@
   become: yes
   copy: src="logrotate.conf" dest="/etc/logrotate.conf"
 
+# 26.04 ships the same snippet from both cloud-init and cloud-init-base,
+# and the duplicate log entry makes every logrotate run exit 1. Keep the
+# base one; dpkg remembers conffile deletions across package upgrades.
+- name: drop the duplicate cloud-init logrotate config
+  become: yes
+  file:
+    path: "/etc/logrotate.d/cloud-init"
+    state: absent
+
 - name: configure journald max size
   become: yes
   copy: src="journald.conf" dest="/etc/systemd/journald.conf"
