@@ -4,6 +4,9 @@ rpi_base_enable_wifi: True
 rpi_base_timezone: "America/Chicago"
 rpi_base_log_size: "100M"
 rpi_base_apt_packages:
+  # setfacl is required for ansible become_user with an unprivileged user
+  # (e.g. postgres tasks); 26.04 no longer ships it by default
+  - "acl"
   - "mosh"
   - "avahi-daemon"
   - "log2ram"
