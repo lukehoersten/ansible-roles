@@ -63,24 +63,35 @@
 - name: flush handlers to ensure soju is restarted with latest config
   meta: flush_handlers
 
+# stdin instead of an echo pipeline: /bin/sh is dash, whose echo interprets
+# backslash escapes and silently mangles passwords containing them.
 - name: create soju admin user
   become: yes
   become_user: "{{soju_user}}"
-  shell: "echo '{{soju_admin_password}}' | sojudb -config /etc/soju/config create-user {{soju_admin_user}} -admin"
+  command: "sojudb -config /etc/soju/config create-user {{soju_admin_user}} -admin"
+  args:
+    stdin: "{{soju_admin_password}}"
   register: soju_create_user
   changed_when: soju_create_user.rc == 0
   failed_when: soju_create_user.rc != 0 and 'duplicate key' not in soju_create_user.stderr
   no_log: true
+  notify: restart soju
 
 # Gated: an unconditional reset re-keys the account on every run, clobbering
 # any password changed in-band and locking out logged-in clients.
+# sojudb writes the database behind the running daemon's back and soju
+# authenticates against its in-memory copy, so the restart notify is what
+# makes the new password actually take effect.
 - name: update soju admin password
   become: yes
   become_user: "{{soju_user}}"
-  shell: "echo '{{soju_admin_password}}' | sojudb -config /etc/soju/config change-password {{soju_admin_user}}"
+  command: "sojudb -config /etc/soju/config change-password {{soju_admin_user}}"
+  args:
+    stdin: "{{soju_admin_password}}"
   changed_when: true
   no_log: true
   when: soju_reset_password | default(false) | bool
+  notify: restart soju
 
 - name: install nginx stream config
   become: yes
