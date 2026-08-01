@@ -5,7 +5,7 @@ mattertimectl_version: "0.1.0"
 # Rust project: cargo build --release produces one self-contained binary
 # (all runtime deps are pure Rust), so the target only needs the binary to
 # run it. The source tarball must point at the Rust implementation.
-mattertimectl_tar: "https://github.com/{{github_user}}/mattertimectl/archive/refs/tags/v{{mattertimectl_version}}.tar.gz"
+mattertimectl_tar: "https://github.com/lukehoersten/mattertimectl/archive/refs/tags/v{{mattertimectl_version}}.tar.gz"
 mattertimectl_build_dir: "{{build_work_dir}}/mattertimectl-{{mattertimectl_version}}"
 mattertimectl_srv_dir: "{{build_srv_dir}}"
 
