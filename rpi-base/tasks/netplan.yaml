@@ -1,0 +1,25 @@
+---
+
+# One role-owned netplan file replaces cloud-init's render: eth0 always,
+# wifi when enabled. cloud-init only re-renders on a new instance_id, so
+# the deletion below sticks across reboots.
+#
+# RESCUE a dark pi: on the card's FAT partition, edit network-config (a
+# phone hotspot entry works) and bump instance_id in meta-data, then
+# boot. The re-rendered 50-cloud-init.yaml sorts after 40-net.yaml and
+# overrides it; the next playbook run deletes it again.
+- name: install netplan config
+  become: yes
+  template: src="40-net.yaml.j2" dest="/etc/netplan/40-net.yaml" mode="0600"
+  notify: apply netplan
+
+- name: remove the cloud-init netplan config
+  become: yes
+  file: path="/etc/netplan/50-cloud-init.yaml" state="absent"
+  notify: apply netplan
+
+# A rescue instance_id bump re-runs cloud-init's ssh module, which by
+# default deletes and regenerates the host keys; keep them.
+- name: keep ssh host keys on cloud-init re-runs
+  become: yes
+  copy: src="10-rpi-base.cfg" dest="/etc/cloud/cloud.cfg.d/10-rpi-base.cfg"

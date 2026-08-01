@@ -1,0 +1,20 @@
+// Ansible managed (rpi-base). The whole auto-update config: the periodic
+// switches conventionally kept in the debconf-owned 20auto-upgrades, plus
+// local policy over the stock 50unattended-upgrades (left a pristine
+// distro conffile). This file sorts after both; apt gives later files the
+// last word on scalars and appends list entries, so 20auto-upgrades can
+// never disable these switches and Allowed-Origins keeps its security
+// entries while gaining -updates.
+APT::Periodic::Update-Package-Lists "1";
+APT::Periodic::Download-Upgradeable-Packages "1";
+APT::Periodic::AutocleanInterval "7";
+APT::Periodic::Unattended-Upgrade "1";
+
+// security (from 50) plus regular bugfix updates
+Unattended-Upgrade::Allowed-Origins {
+        "${distro_id}:${distro_codename}-updates";
+};
+
+// reboot at night when an installed update requires it
+Unattended-Upgrade::Automatic-Reboot "true";
+Unattended-Upgrade::Automatic-Reboot-Time "04:00";

@@ -13,9 +13,8 @@
   become: yes
   timezone: name="{{rpi_base_timezone}}"
 
-- name: setup wifi
-  become: yes
-  template: src="wpa_supplicant.conf.j2" dest="/etc/wpa_supplicant/wpa_supplicant.conf" mode="0600"
+- include_tasks: netplan.yaml
+  when: ansible_distribution == "Ubuntu"
 
 - name: update apt package cache
   become: yes
@@ -25,9 +24,12 @@
   become: yes
   apt: name="{{rpi_base_apt_packages}}" state="latest"
 
+# Periodic switches plus local policy in one file; the stock
+# 50unattended-upgrades (security-only, no reboot) stays pristine and the
+# debconf-owned 20auto-upgrades is left alone (52 sorts later and wins).
 - name: configure auto upgrades
   become: yes
-  copy: src="20auto-upgrades" dest="/etc/apt/apt.conf.d/20auto-upgrades"
+  copy: src="52unattended-upgrades-local" dest="/etc/apt/apt.conf.d/52unattended-upgrades-local"
 
 - name: configure logrotate
   become: yes
@@ -69,9 +71,12 @@
     append: yes
   no_log: true
 
-- name: authorize ssh keys
+- name: authorize ssh key
   become: yes
-  authorized_key: user="{{item}}" key="https://github.com/{{github_user}}.keys"
+  authorized_key:
+    user: "{{item}}"
+    key: "{{ lookup('file', rpi_base_ssh_public_key_file) }}"
+    exclusive: yes
   loop:
     - "{{admin_user_name}}"
     - "{{ansible_user}}"

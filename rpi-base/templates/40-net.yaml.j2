@@ -1,0 +1,18 @@
+# {{ansible_managed}}
+
+network:
+  version: 2
+  ethernets:
+    eth0:
+      dhcp4: true
+      optional: true
+{% if rpi_base_enable_wifi %}
+  wifis:
+    wlan0:
+      regulatory-domain: "US"
+      dhcp4: true
+      optional: true
+      access-points:
+        "{{rpi_base_wifi_ssid}}":
+          password: "{{rpi_base_wifi_password}}"
+{% endif %}

@@ -1,6 +1,10 @@
 ---
 
 rpi_base_enable_wifi: True
+# Public key file on the controller, authorized for the admin and ansible
+# users on every host. EXCLUSIVE: every other key gets removed from
+# authorized_keys, so this must be the key used to reach the hosts.
+rpi_base_ssh_public_key_file: "~/.ssh/id_ed25519.pub"
 rpi_base_timezone: "America/Chicago"
 rpi_base_log_size: "100M"
 rpi_base_apt_packages:
