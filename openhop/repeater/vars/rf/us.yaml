@@ -1,11 +1,12 @@
 ---
-# MeshCore US 902-928 MHz preset.
+# MeshCore "USA/Canada (Recommended)" community preset: 910.525 / SF7 / BW62.5
+# / CR5. The wide alternate is SF11 / BW250 / CR5.
 # WARNING: every node on your mesh MUST share identical frequency / bandwidth /
 #          spreading_factor / coding_rate. Confirm these against your local
 #          MeshCore US community settings before deploying.
 repeater_frequency_hz: 910525000     # 910.525 MHz
-repeater_bandwidth_hz: 250000
-repeater_spreading_factor: 11        # 7-12
+repeater_bandwidth_hz: 62500
+repeater_spreading_factor: 7         # 7-12
 repeater_coding_rate: 5              # 5-8
 repeater_preamble_length: 32
 repeater_tx_power_dbm: 22            # SX1262 register max; SKY66122 boosts to ~1W

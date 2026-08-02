@@ -3,13 +3,23 @@
 # Source: meshtastic/firmware bin/config.d/lora-RAK6421-13302-slot1.yaml
 repeater_sx1262_bus_id: 0            # spidev0.0
 repeater_sx1262_cs_id: 0            # CE0 (BCM 8)
-repeater_sx1262_cs_pin: 8
+# -1 = hardware CS via spidev. The kernel spi driver owns the CE line, so a
+# manual cs_pin here fails with EBUSY; manual CS is only for boards whose NSS
+# is wired to a non-CE GPIO (e.g. Waveshare).
+repeater_sx1262_cs_pin: -1
 repeater_sx1262_reset_pin: 16
 repeater_sx1262_busy_pin: 24
 repeater_sx1262_irq_pin: 22          # DIO1
 repeater_sx1262_use_dio3_tcxo: true
 repeater_sx1262_dio3_tcxo_voltage: 1.8
 repeater_sx1262_use_dio2_rf: true
-repeater_sx1262_txen_pin: 12         # SKY66122 FEM enable (verify TX vs RX)
-repeater_sx1262_rxen_pin: 13         # SKY66122 FEM enable (verify TX vs RX)
+# Per upstream's hardware catalog for this board: both SKY66122 FEM enables are
+# asserted together via en_pins and DIO2 does the actual TX/RX switching.
+repeater_sx1262_txen_pin: -1
+repeater_sx1262_rxen_pin: -1
+repeater_sx1262_en_pins: [12, 13]
+repeater_sx1262_use_gpiod_backend: true
+# Upstream's catalog says gpio_chip 1, but on a Pi 4 the 40-pin header is
+# gpiochip0 (chip 1 is the 8-line firmware expansion GPIO).
+repeater_sx1262_gpio_chip: 0
 repeater_sx1262_is_waveshare: false

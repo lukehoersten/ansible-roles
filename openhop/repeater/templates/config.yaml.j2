@@ -12,6 +12,20 @@ repeater:
   score_threshold: 0.3
   send_advert_interval_hours: 10
   allow_discovery: true
+{% if repeater_admin_password or repeater_jwt_secret %}
+  security:
+{% if repeater_admin_password %}
+    admin_password: "{{ repeater_admin_password }}"
+{% endif %}
+{% if repeater_jwt_secret %}
+    jwt_secret: "{{ repeater_jwt_secret }}"
+{% endif %}
+{% endif %}
+
+# The daemon defaults its auth DB and telemetry to /var/lib/openhop_repeater
+# regardless of other paths, so point it at the role-managed data dir.
+storage:
+  storage_dir: "{{ repeater_data_dir }}"
 
 radio_type: sx1262
 
@@ -24,6 +38,9 @@ sx1262:
   irq_pin: {{ repeater_sx1262_irq_pin }}
   txen_pin: {{ repeater_sx1262_txen_pin }}
   rxen_pin: {{ repeater_sx1262_rxen_pin }}
+  en_pins: {{ repeater_sx1262_en_pins | to_json }}
+  gpio_chip: {{ repeater_sx1262_gpio_chip }}
+  use_gpiod_backend: {{ repeater_sx1262_use_gpiod_backend | string | lower }}
   en_pin: -1
   txled_pin: -1
   rxled_pin: -1
@@ -41,11 +58,10 @@ radio:
   preamble_length: {{ repeater_preamble_length }}
   implicit_header: false
 
-# Observer/telemetry disabled — repeater-only deployment.
-mqtt_brokers:
-  iata_code: "Test"
-  status_interval: 300
-  brokers: []
+# Observer/telemetry disabled: repeater-only deployment. The daemon enables
+# its MQTT pusher whenever an mqtt_brokers/letsmesh/mqtt key is present, even
+# with an empty broker list (and then warns on every noise-floor sample), so
+# the section must be omitted entirely.
 
 glass:
   enabled: false

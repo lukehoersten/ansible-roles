@@ -12,6 +12,13 @@ repeater_venv_dir: "/opt/openhop_repeater/venv"
 repeater_config_dir: "/etc/openhop_repeater"
 repeater_data_dir: "/var/lib/openhop_repeater"
 
+# --- Web UI credentials (set from vaulted host_vars) ---
+# When null the daemon generates a jwt_secret at startup and requires its setup
+# wizard before login; anything the wizard writes into config.yaml is lost on
+# the next re-template, so real deployments should set both here.
+repeater_admin_password: null
+repeater_jwt_secret: null
+
 # --- Node identity ---
 repeater_node_name: "{{inventory_hostname}}"
 repeater_latitude: 0.0

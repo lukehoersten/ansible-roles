@@ -28,6 +28,32 @@
       - "python3-dev"
       - "build-essential"
 
+# Raspberry Pi OS ships the spi/gpio groups and udev rules via
+# raspberrypi-sys-mods; Ubuntu images have neither, so create them here.
+- name: create spi and gpio device access groups
+  become: yes
+  group:
+    name: "{{item}}"
+    system: "yes"
+  loop:
+    - "spi"
+    - "gpio"
+
+- name: grant spi and gpio groups access to their devices
+  become: yes
+  copy:
+    dest: "/etc/udev/rules.d/90-spi-gpio-groups.rules"
+    content: |
+      SUBSYSTEM=="spidev", GROUP="spi", MODE="0660"
+      SUBSYSTEM=="gpio", GROUP="gpio", MODE="0660"
+    mode: "0644"
+  register: udev_result
+
+- name: apply udev rules to existing devices
+  become: yes
+  shell: "udevadm control --reload-rules && udevadm trigger --subsystem-match=spidev --subsystem-match=gpio"
+  when: udev_result.changed
+
 - name: add openhop repeater user
   become: yes
   user:
@@ -67,6 +93,22 @@
   when: not repeater_installed.stat.exists
   notify: restart openhop-repeater
 
+# The pip package does not ship these repo-root files, but the web UI's setup
+# wizard reads them from the storage dir; without them the hardware step lists
+# no options and cannot proceed.
+- name: install web UI radio settings and presets
+  become: yes
+  get_url:
+    url: "{{repeater_repo}}/raw/{{repeater_version}}/{{item}}"
+    dest: "{{repeater_data_dir}}/{{item}}"
+    owner: "{{repeater_user}}"
+    group: "{{repeater_user}}"
+    mode: "0644"
+    force: "{{not repeater_installed.stat.exists}}"
+  loop:
+    - "radio-settings.json"
+    - "radio-presets.json"
+
 - name: stamp installed openhop_repeater version
   become: yes
   copy:
@@ -75,6 +117,9 @@
     mode: "0644"
   when: not repeater_installed.stat.exists
 
+# Group-writable so the daemon can persist its generated jwt_secret and the
+# setup-wizard credentials back into the config. Note the trade-off: every
+# re-template wipes those daemon-written keys and restarts the service.
 - name: configure openhop repeater
   become: yes
   template:
@@ -82,8 +127,21 @@
     dest: "{{repeater_config_dir}}/config.yaml"
     owner: "root"
     group: "{{repeater_user}}"
-    mode: "0640"
+    mode: "0660"
   notify: restart openhop-repeater
+
+# The web UI restarts the daemon after config changes via
+# "sudo --non-interactive systemctl restart openhop-repeater"; the daemon's
+# code expects exactly this sudoers file to exist.
+- name: allow repeater user to restart its own service
+  become: yes
+  copy:
+    dest: "/etc/sudoers.d/openhop-repeater"
+    content: |
+      {{repeater_user}} ALL=(root) NOPASSWD: /usr/bin/systemctl restart openhop-repeater
+      {{repeater_user}} ALL=(root) NOPASSWD: /usr/bin/systemctl restart openhop-repeater.service
+    mode: "0440"
+    validate: "visudo -cf %s"
 
 - name: install openhop-repeater systemd service
   become: yes
