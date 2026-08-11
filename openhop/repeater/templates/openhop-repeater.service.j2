@@ -2,6 +2,11 @@
 Description=openHop MeshCore Repeater
 After=network-online.target
 Wants=network-online.target
+# Block startup until the storage backing the data dir (and thus the node
+# identity file) is mounted, so the daemon loads the real keypair instead of
+# generating a fresh one onto the bare mountpoint. Resolves to the root mount
+# (harmless) when the data dir lives on the SD card.
+RequiresMountsFor={{repeater_data_dir}}
 
 [Service]
 Type=simple
