@@ -1,6 +1,6 @@
 ---
 
-# https://github.com/lukehoersten/mattertimectl/tags
+# version-check: https://github.com/lukehoersten/mattertimectl/tags
 mattertimectl_version: "0.1.0"
 
 mattertimectl_user: "mattertimectl"

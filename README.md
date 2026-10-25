@@ -43,3 +43,20 @@ pleroma_db_passwd: "pleDbPass123"
 pleroma_db_superpass: "dbpass123"
 pleroma_secret_key: "secret123"
 ```
+
+## Dependency Version Checks
+
+Roles that pin an upstream dependency's version carry a comment directly above the `_version`
+variable in `defaults/main.yaml`, pointing at the page where the current upstream version can be
+confirmed:
+
+```yaml
+# version-check: https://github.com/fiatjaf/relayer/releases
+relayer_version: "2.3.1"
+```
+
+Find every instance across the repo with:
+
+```sh
+grep -rn "# version-check:" --include="*.yaml" .
+```

@@ -1,7 +1,7 @@
 ---
 
-pleroma_version: "2.10.0"
-# https://git.pleroma.social/pleroma/pleroma/releases
+# version-check: https://git.pleroma.social/pleroma/pleroma/releases
+pleroma_version: "2.11.0"
 pleroma_tar: "https://git.pleroma.social/pleroma/pleroma/archive/v{{pleroma_version}}.tar.gz"
 pleroma_build_dir: "{{build_work_dir}}/pleroma"
 pleroma_srv_dir: "{{build_srv_dir}}"
