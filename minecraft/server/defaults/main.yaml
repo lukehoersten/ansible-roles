@@ -12,6 +12,13 @@ minecraft_world_name: "world"
 minecraft_dir: "{{minecraft_parent_dir}}/minecraft/{{minecraft_world_name}}"
 # paper is a spigot derivative
 # version-check: https://papermc.io/downloads/paper
+### TODO: Minecraft moved to year.minor versioning (26.x); latest stable is
+### 26.3 (Paper build 226 as of 2026-10-26), a full major version ahead of
+### this pin. Held off upgrading: dynmap's 26.x support merged upstream
+### (webbukkit/dynmap#4279, 2026-10-10) but its build server
+### (dynmap.us/builds/dynmap/) hasn't published anything since 2026-09-26,
+### so there's no official downloadable build with the fix yet. Check that
+### site's most recent file date before attempting this bump again.
 minecraft_paper_version: "1.21.11"
 minecraft_paper_build: "132"
 
