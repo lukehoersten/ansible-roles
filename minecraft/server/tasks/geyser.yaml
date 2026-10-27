@@ -9,10 +9,19 @@
     mode: "0755"
     state: "directory"
 
+- name: get geyser download info
+  uri:
+    url: "https://download.geysermc.org/v2/projects/geyser/versions/{{minecraft_geyser_version}}/builds/{{minecraft_geyser_build}}"
+    return_content: yes
+  register: minecraft_geyser_build_info
+
+# The checksum makes version bumps take effect: without it, get_url skips
+# the download whenever geyser.jar already exists.
 - name: download geyser
   become: yes
   get_url:
-    url: "{{minecraft_geyser_url}}"
+    url: "https://download.geysermc.org/v2/projects/geyser/versions/{{minecraft_geyser_version}}/builds/{{minecraft_geyser_build}}/downloads/spigot"
+    checksum: "sha256:{{minecraft_geyser_build_info.json.downloads.spigot.sha256}}"
     dest: "{{minecraft_dir}}/plugins/geyser.jar"
     mode: "0755"
   notify: restart minecraft
