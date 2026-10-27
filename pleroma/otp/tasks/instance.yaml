@@ -24,6 +24,7 @@
     - "{{pleroma_data_dir}}/{{pleroma_instance}}/static"
     - "{{pleroma_data_dir}}/{{pleroma_instance}}/static/static"
     - "{{pleroma_data_dir}}/{{pleroma_instance}}/static/static/themes"
+    - "{{pleroma_data_dir}}/{{pleroma_instance}}/tzdata"
 
 - name: install pleroma db schema file
   become: yes
