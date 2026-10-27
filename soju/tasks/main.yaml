@@ -77,8 +77,23 @@
   no_log: true
   notify: restart soju
 
-# Gated: an unconditional reset re-keys the account on every run, clobbering
-# any password changed in-band and locking out logged-in clients.
+# The vault is the only source of truth for this password (no in-band IRC
+# changes), so re-apply whenever it differs from what was last applied,
+# rather than requiring a manually-passed flag that's easy to forget after
+# a vault rotation (soju kept authenticating against a pre-rotation
+# password for 7 months because of exactly that - nothing ever set the
+# flag). The marker tracks a hash, not the password itself, so re-running
+# with an unchanged password is a no-op and doesn't restart (and
+# disconnect) a live bouncer.
+- name: track applied soju admin password
+  become: yes
+  copy:
+    content: "{{ soju_admin_password | hash('sha256') }}"
+    dest: "/etc/soju/.admin_password_applied"
+    mode: "0600"
+  register: soju_password_marker
+  no_log: true
+
 # sojudb writes the database behind the running daemon's back and soju
 # authenticates against its in-memory copy, so the restart notify is what
 # makes the new password actually take effect.
@@ -88,9 +103,8 @@
   command: "sojudb -config /etc/soju/config change-password {{soju_admin_user}}"
   args:
     stdin: "{{soju_admin_password}}"
-  changed_when: true
   no_log: true
-  when: soju_reset_password | default(false) | bool
+  when: soju_password_marker is changed
   notify: restart soju
 
 - name: install nginx stream config
