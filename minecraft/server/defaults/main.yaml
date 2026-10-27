@@ -10,8 +10,8 @@ minecraft_whitelist: "true"
 minecraft_view_distance: "10"
 minecraft_world_name: "world"
 minecraft_dir: "{{minecraft_parent_dir}}/minecraft/{{minecraft_world_name}}"
-# https://papermc.io/downloads/paper
 # paper is a spigot derivative
+# version-check: https://papermc.io/downloads/paper
 minecraft_paper_version: "1.21.11"
 minecraft_paper_build: "69"
 
@@ -20,11 +20,11 @@ minecreat_plugins_enabled:
   # - "geyser"
 
 # https://www.reddit.com/r/Dynmap/
-# http://dynmap.us/builds/dynmap/?C=M;O=D
+# version-check: http://dynmap.us/builds/dynmap/?C=M;O=D
 minecraft_dynmap_version: "3.8"
 minecraft_dynmap_url: "http://dynmap.us/builds/dynmap/Dynmap-{{minecraft_dynmap_version}}-spigot.jar"
 
 # https://geysermc.org
-# https://ci.opencollab.dev/job/GeyserMC/view/default/builds
+# version-check: https://ci.opencollab.dev/job/GeyserMC/view/default/builds
 minecraft_geyser_version: "1538"
 minecraft_geyser_url: "https://ci.opencollab.dev/job/GeyserMC/job/Geyser/job/master/{{minecraft_geyser_version}}/artifact/bootstrap/spigot/build/libs/Geyser-Spigot.jar"

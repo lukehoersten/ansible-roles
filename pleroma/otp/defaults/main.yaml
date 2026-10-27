@@ -27,6 +27,7 @@ pleroma_db: "pleroma_{{pleroma_instance}}"
 pleroma_db_user: "pleroma_{{pleroma_instance}}"
 pleroma_data_dir: "/var/lib/pleroma/instance_data"
 
+# version-check: must match pleroma_version in pleroma/build/defaults/main.yaml
 pleroma_version: "2.11.0"
 pleroma_download_url: "http://{{build_server_host}}:{{build_server_port}}/pleroma-{{pleroma_version}}.tar.gz"
 

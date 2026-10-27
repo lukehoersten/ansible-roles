@@ -55,6 +55,16 @@ confirmed:
 relayer_version: "2.3.1"
 ```
 
+Some roles are split into a `build` role (compiles/downloads the pinned version) and a consuming
+role (`server`/`otp`) that downloads the resulting artifact at the same version from the build
+server. The consuming role's copy of the variable isn't an independent upstream pin, so its marker
+points at the build role's file instead of a URL:
+
+```yaml
+# version-check: must match bin_version in bin/build/defaults/main.yaml
+bin_version: "2.0.2"
+```
+
 Find every instance across the repo with:
 
 ```sh

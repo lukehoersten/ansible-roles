@@ -1,5 +1,6 @@
 ---
 
+# version-check: must match bin_version in bin/build/defaults/main.yaml
 bin_version: "2.0.2"
 bin_user: "pastebin"
 bin_port: 8820

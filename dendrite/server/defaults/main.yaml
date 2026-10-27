@@ -1,5 +1,6 @@
 ---
 
+# version-check: must match dendrite_version in dendrite/build/defaults/main.yaml
 dendrite_version: "0.15.2"
 dendrite_user: "dendrite"
 dendrite_old_key: false
