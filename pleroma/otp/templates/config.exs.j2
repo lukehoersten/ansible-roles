@@ -71,3 +71,11 @@ config :logger,
 
 config :logger, :ex_syslogger,
   level: :critical
+
+# The above only sets the ex_syslogger backend's level. Logger's separate
+# default console handler (stdout, captured by journald) has no level set
+# and prints everything: info-level telemetry attach notices, every SQL
+# debug query, etc. This caps it at warnings and errors without losing the
+# crash/error output journalctl is actually useful for.
+config :logger,
+  level: :warning

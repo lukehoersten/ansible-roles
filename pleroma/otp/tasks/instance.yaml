@@ -63,10 +63,16 @@
     mode: "0644"
   when: pleroma_fe_theme is defined
 
-- name: ensure pleroma instance is enabled and started
-  become: yes
-  systemd: name="pleroma@{{pleroma_instance}}.service" enabled="yes" state="started"
-
+# Always, not just on a fresh install: /opt/pleroma's release binary is
+# shared across every pleroma instance on a host, but each instance has its
+# own database. installed_version (install.yaml) only reflects whether THIS
+# run installed a new shared release, not whether THIS instance's db has
+# been migrated against it, so gating migrate on that skipped it for every
+# instance but whichever one's play happened to run first after an upgrade,
+# leaving the others crash-looping on "Unapplied Migrations detected".
+# pleroma_ctl migrate is a no-op when nothing's pending, so there's no
+# reason to skip it. Runs before starting the service so an upgrade doesn't
+# briefly crash-loop before migrating.
 - name: check if pleroma binary is present
   stat:
     path: "/opt/pleroma/bin/pleroma_ctl"
@@ -79,4 +85,9 @@
     chdir: "/opt/pleroma/"
   environment:
     PLEROMA_CONFIG_PATH: "/etc/pleroma/{{pleroma_instance}}.config.exs"
-  when: pleroma_binary.stat.exists and not installed_version.stat.exists
+  when: pleroma_binary.stat.exists
+  changed_when: false
+
+- name: ensure pleroma instance is enabled and started
+  become: yes
+  systemd: name="pleroma@{{pleroma_instance}}.service" enabled="yes" state="started"
