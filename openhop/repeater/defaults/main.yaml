@@ -1,10 +1,13 @@
 ---
 
 # version-check: https://github.com/openhop-dev/openhop_repeater/tags
-### TODO: before deploying this 1.1.4 bump to the live mesh node (lp1.chi.gdn),
-### review upstream PRs 1.1.2-1.1.4 titled "refactor identity validation" /
-### "relaxed identity guard" against the stale-UID identity bug fixed there
-### on 2026-08-10.
+# Reviewed the 1.1.2-1.1.4 "identity validation"/"identity guard" PRs against
+# the stale-UID identity bug fixed on lp1.chi.gdn 2026-08-10: unrelated, they
+# only cover collision checks between multiple identities configured on one
+# node. The actual function (config.py's _load_or_create_identity_key) is
+# unchanged; a read failure on the identity file still just logs a warning
+# and silently generates a fresh identity instead of failing loudly. Not
+# introduced or fixed by this bump, still latent upstream.
 repeater_version: "1.1.4"
 # openhop_repeater is NOT on PyPI, so it installs from this git tag.
 # Its dependency openhop_core[hardware] resolves from PyPI automatically.
